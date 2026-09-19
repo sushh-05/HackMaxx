@@ -1,23 +1,34 @@
 import type { MaxxingPlan } from "@hackmaxx/shared";
 
+const EFFORT_NOTE = { Low: "minor tweaks", Medium: "moderate rework", High: "heavy rework" } as const;
+
 export function MaxxingStrategyPanel({ strategy, plan }: { strategy: string; plan?: MaxxingPlan }) {
   return (
-    <section style={{ background: "#111827", color: "white", borderRadius: 12, padding: 16 }}>
-      <h2 style={{ marginTop: 0 }}>Maxxing strategy</h2>
-      <p>{strategy}</p>
+    <section className="strategy">
+      <h2>🎯 Maxxing strategy</h2>
+      <p className="headline">{strategy}</p>
       {plan && plan.steps.length > 0 && (
         <>
-          <ol style={{ paddingLeft: 20, margin: "12px 0" }}>
-            {plan.steps.map((s) => (
-              <li key={s.hackathon_id} style={{ marginBottom: 6 }}>
-                <a href={s.url} target="_blank" rel="noreferrer" style={{ color: "#93c5fd" }}>{s.title}</a>{" "}
-                — <strong>{s.days_left}d left</strong> · EV ₹{s.expected_value_inr.toLocaleString("en-IN")} · {s.effort} effort
+          <ol className="plan-steps">
+            {plan.steps.map((s, i) => (
+              <li key={s.hackathon_id} style={{ animationDelay: `${i * 50}ms` }}>
+                <div className="plan-step-main">
+                  <div className="t">
+                    <a href={s.url} target="_blank" rel="noreferrer">{s.title}</a>
+                  </div>
+                  <div className="s">
+                    {s.days_left}d left · EV ₹{s.expected_value_inr.toLocaleString("en-IN")} ·{" "}
+                    {s.effort} effort ({EFFORT_NOTE[s.effort]})
+                  </div>
+                </div>
+                <span className="badge badge-tag">Worth {s.worth}</span>
               </li>
             ))}
           </ol>
-          <p style={{ margin: 0, opacity: 0.85 }}>
-            Total expected value: <strong>₹{plan.total_expected_value_inr.toLocaleString("en-IN")}</strong>
-          </p>
+          <div className="plan-total">
+            <span>Total expected value across the run</span>
+            <strong>₹{plan.total_expected_value_inr.toLocaleString("en-IN")}</strong>
+          </div>
         </>
       )}
     </section>

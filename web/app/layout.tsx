@@ -1,17 +1,26 @@
-export const metadata = { title: "HackMaxx", description: "Maxx your hackathon ROI" };
+import "./globals.css";
+import { Nav } from "../components/Nav";
+
+export const metadata = {
+  title: "HackMaxx — Maxx your hackathon ROI",
+  description:
+    "Paste your project idea → find the best upcoming hackathons to reuse it in, ranked by Worth Score, with a submission plan that maxxes total expected value.",
+};
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body style={{ fontFamily: "system-ui", maxWidth: 960, margin: "0 auto", padding: 24 }}>
-        <header style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <h1 style={{ margin: 0 }}>HackMaxx</h1>
-          <nav style={{ display: "flex", gap: 12 }}>
-            <a href="/">Explore</a>
-            <a href="/maxx">Maxx My Project</a>
-          </nav>
-        </header>
-        <main style={{ marginTop: 24 }}>{children}</main>
+      <body>
+        <div className="wrap">
+          <header className="site-header">
+            <a className="logo" href="/">
+              <span className="logo-mark">⚡</span>
+              Hack<em>Maxx</em>
+            </a>
+            <Nav />
+          </header>
+          <main>{children}</main>
+        </div>
       </body>
     </html>
   );

@@ -2,8 +2,12 @@ import type { Hackathon, ProjectInput, RecommendResponse } from "@hackmaxx/share
 
 const BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:3011";
 
-export async function fetchHackathons(q = ""): Promise<Hackathon[]> {
-  const r = await fetch(`${BASE}/hackathons${q ? `?q=${encodeURIComponent(q)}` : ""}`, { cache: "no-store" });
+export async function fetchHackathons(q = "", mode = ""): Promise<Hackathon[]> {
+  const params = new URLSearchParams();
+  if (q) params.set("q", q);
+  if (mode && mode !== "all") params.set("mode", mode);
+  const qs = params.toString();
+  const r = await fetch(`${BASE}/hackathons${qs ? `?${qs}` : ""}`, { cache: "no-store" });
   if (!r.ok) throw new Error("failed to load hackathons");
   return r.json();
 }
