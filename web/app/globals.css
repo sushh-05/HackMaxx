@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @plugin "daisyui" {
-  themes: hackmaxx --default;
+  themes: hackmaxx --default, hackmaxx-light;
 }
 
 @plugin "daisyui/theme" {
@@ -9,92 +9,241 @@
   default: true;
   prefersdark: true;
   color-scheme: dark;
-  --color-base-100: #0a0e17;
-  --color-base-200: #111827;
-  --color-base-300: #141c2b;
-  --color-base-content: #e5e9f0;
-  --color-primary: #22d3ee;
-  --color-primary-content: #06121a;
-  --color-secondary: #a78bfa;
-  --color-secondary-content: #0a0616;
-  --color-accent: #fbbf24;
+  --color-base-100: #07090e;
+  --color-base-200: #0d121e;
+  --color-base-300: #131b2e;
+  --color-base-content: #f1f5f9;
+  --color-primary: #06b6d4;
+  --color-primary-content: #04121a;
+  --color-secondary: #6366f1;
+  --color-secondary-content: #ffffff;
+  --color-accent: #f59e0b;
   --color-accent-content: #1a1204;
-  --color-neutral: #1f2a3d;
-  --color-neutral-content: #e5e9f0;
-  --color-info: #60a5fa;
+  --color-neutral: #1a2234;
+  --color-neutral-content: #cbd5e1;
+  --color-info: #38bdf8;
   --color-info-content: #04101f;
-  --color-success: #34d399;
-  --color-success-content: #04140e;
-  --color-warning: #fbbf24;
+  --color-success: #10b981;
+  --color-success-content: #021a0e;
+  --color-warning: #f59e0b;
   --color-warning-content: #1a1204;
-  --color-error: #f87171;
-  --color-error-content: #1c0606;
+  --color-error: #f43f5e;
+  --color-error-content: #ffffff;
+  --radius-selector: 0.75rem;
+  --radius-field: 0.625rem;
+  --radius-box: 0.875rem;
+}
+
+@plugin "daisyui/theme" {
+  name: hackmaxx-light;
+  default: false;
+  prefersdark: false;
+  color-scheme: light;
+  --color-base-100: #f8fafc;
+  --color-base-200: #ffffff;
+  --color-base-300: #f1f5f9;
+  --color-base-content: #0f172a;
+  --color-primary: #0891b2;
+  --color-primary-content: #ffffff;
+  --color-secondary: #4f46e5;
+  --color-secondary-content: #ffffff;
+  --color-accent: #d97706;
+  --color-accent-content: #ffffff;
+  --color-neutral: #e2e8f0;
+  --color-neutral-content: #1e293b;
+  --color-info: #0284c7;
+  --color-info-content: #ffffff;
+  --color-success: #059669;
+  --color-success-content: #ffffff;
+  --color-warning: #d97706;
+  --color-warning-content: #ffffff;
+  --color-error: #e11d48;
+  --color-error-content: #ffffff;
   --radius-selector: 0.75rem;
   --radius-field: 0.625rem;
   --radius-box: 0.875rem;
 }
 
 @theme {
-  --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-heading), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-body), "Inter Tight", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-display: var(--font-body), "Inter Tight", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-serif), "Instrument Serif", ui-serif, Georgia, Cambria, serif;
+  --font-mono: var(--font-mono), "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
-/* ---------- app layers on top of DaisyUI ---------- */
+/* ---------- Typography & Base ---------- */
 
 body {
-  background:
-    radial-gradient(1200px 600px at 80% -10%, rgba(34, 211, 238, 0.07), transparent 60%),
-    radial-gradient(900px 500px at 10% 110%, rgba(251, 191, 36, 0.05), transparent 60%),
-    var(--color-base-100);
+  background-color: var(--color-base-100);
+  background-image:
+    radial-gradient(1200px 700px at 80% -10%, rgba(6, 182, 212, 0.08), transparent 60%),
+    radial-gradient(1000px 600px at 15% 100%, rgba(99, 102, 241, 0.06), transparent 60%),
+    radial-gradient(800px 500px at 50% 30%, rgba(245, 158, 11, 0.03), transparent 70%);
   min-height: 100vh;
+  color: var(--color-base-content);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-.font-display { font-family: var(--font-display); }
+[data-theme="hackmaxx-light"] body {
+  background-color: var(--color-base-100);
+  background-image:
+    radial-gradient(1200px 700px at 80% -10%, rgba(8, 145, 178, 0.05), transparent 60%),
+    radial-gradient(1000px 600px at 15% 100%, rgba(79, 70, 229, 0.04), transparent 60%),
+    radial-gradient(800px 500px at 50% 30%, rgba(217, 119, 6, 0.02), transparent 70%);
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-serif {
+  font-family: var(--font-serif);
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Gradients & Brand Text ---------- */
 
 .grad-text {
-  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+  background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+[data-theme="hackmaxx-light"] .grad-text {
+  background: linear-gradient(135deg, #0284c7 0%, #4f46e5 50%, #7c3aed 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.grad-text-gold {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.grad-text-emerald {
+  background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
 .logo-mark {
-  width: 30px; height: 30px;
-  display: grid; place-items: center;
-  border-radius: 8px;
-  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
-  color: var(--color-primary-content);
-  font-size: 15px;
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+  background: linear-gradient(135deg, #06b6d4, #6366f1);
+  box-shadow: 0 0 16px rgba(6, 182, 212, 0.35);
+  color: #ffffff;
+  font-size: 16px;
   font-weight: 900;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
+
+.logo-mark:hover {
+  transform: scale(1.06) rotate(-3deg);
+  box-shadow: 0 0 22px rgba(6, 182, 212, 0.55);
+}
+
+/* ---------- Cards & Glassmorphism ---------- */
+
+.card-glass {
+  background: color-mix(in srgb, var(--color-base-200) 88%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid color-mix(in srgb, var(--color-base-content) 10%, transparent);
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.18);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.card-glass:hover {
+  border-color: color-mix(in srgb, var(--color-primary) 35%, transparent);
+  box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.28), 0 0 20px -4px color-mix(in srgb, var(--color-primary) 18%, transparent);
+}
+
+/* ---------- Worth Score Meter ---------- */
 
 .worth-fill {
-  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
-  animation: bar-grow 500ms cubic-bezier(0.23, 1, 0.32, 1) both;
+  background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  animation: bar-grow 600ms cubic-bezier(0.23, 1, 0.32, 1) both;
   transform-origin: left;
 }
-@keyframes bar-grow { from { transform: scaleX(0); } }
 
-.card-in { animation: card-in 260ms cubic-bezier(0.23, 1, 0.32, 1) both; }
+@keyframes bar-grow {
+  from { transform: scaleX(0); }
+}
+
+/* ---------- Animations ---------- */
+
+.card-in {
+  animation: card-in 300ms cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+
 @keyframes card-in {
-  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .strategy-bg {
   background:
-    radial-gradient(600px 200px at 90% 0%, rgba(34, 211, 238, 0.1), transparent 60%),
+    radial-gradient(800px 300px at 95% 0%, rgba(6, 182, 212, 0.12), transparent 70%),
+    radial-gradient(600px 300px at 5% 100%, rgba(99, 102, 241, 0.08), transparent 70%),
     var(--color-base-200);
 }
 
 .step-num {
   flex: none;
-  width: 24px; height: 24px;
-  display: grid; place-items: center;
-  border-radius: 999px;
-  background: var(--color-primary);
-  color: var(--color-primary-content);
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  color: #ffffff;
   font-weight: 800;
   font-size: 13px;
+  box-shadow: 0 0 12px color-mix(in srgb, var(--color-primary) 40%, transparent);
+}
+
+.pulse-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background-color: #10b981;
+  box-shadow: 0 0 10px #10b981;
+  animation: pulse-glow 2s infinite ease-in-out;
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.45;
+    transform: scale(0.85);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
