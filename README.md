@@ -1,26 +1,30 @@
 # HackMaxx — Maxx Your Hackathon ROI
 
-> Paste your project idea → AI agent finds the best upcoming hackathons to reuse it in, ranks by **Worth Score**, and gives a maxxing strategy.
+> **The problem:** Hackathons are everywhere — Devpost, Unstop, Devfolio, MLH — and most projects die in a drawer after submission.
+>
+> **The fix:** Paste your project idea → HackMaxx finds the best upcoming hackathons to reuse it in, ranks them by **Worth Score**, and gives you a maxxing strategy.
 
-Built for **AWS First Commit** (Bharat Builds Tour, WeMakeDevs × AWS) — *Ship It* track.
+<p align="center">
+  <img src="https://img.shields.io/badge/Bun-1.4+-brightgreen?logo=bun" alt="Bun">
+  <img src="https://img.shields.io/badge/TypeScript-5.6+-3178c6?logo=typescript" alt="TypeScript">
+  <img src="https://img.shields.io/badge/AWS-Bedrock%20%7C%20DynamoDB%20%7C%20Lambda-orange?logo=amazon-aws" alt="AWS">
+  <img src="https://img.shields.io/badge/Next.js-000000?logo=nextdotjs" alt="Next.js">
+</p>
 
----
-
-## Stack
-
-| Layer | Technology |
-|---|---|
-| Runtime | **Bun workspaces + TypeScript everywhere** (no npm) |
-| Web | Next.js (TS) on Amplify Hosting · OpenUI for generative cards |
-| Backend | API Gateway + Lambda (TS, Node 20) via SAM |
-| AI | **AWS Bedrock only** — Titan Embeddings + Claude for why-match |
-| Data | DynamoDB `Hackathons` + in-Lambda cosine fallback (MVP) |
-| Discovery | TinyFish Search / Fetch |
-| Auth | **Clerk, gated OFF by default** (`CLERK_ENABLED=false`) |
+**Built for AWS First Commit** (Bharat Builds Tour, WeMakeDevs × AWS) — *Ship It* track.
 
 ---
 
-## Quickstart
+## 🎯 What It Does
+
+1. **Paste** your project idea, repo URL, or tech stack.
+2. **Discover** the best upcoming hackathons where it fits.
+3. **Rank** them by Worth Score — skill match, learning, prize, reputation, difficulty fit.
+4. **Strategy** — get a clear plan: *"Submit X to these 3 in the next 10 days."*
+
+---
+
+## 🚀 Quickstart
 
 ```bash
 cp .env.example .env
@@ -34,7 +38,21 @@ Pages: `/` Explore · `/maxx` Maxx My Project.
 
 ---
 
-## Repo Layout
+## 🏗️ Stack
+
+| Layer | Technology |
+|---|---|
+| Runtime | **Bun workspaces + TypeScript everywhere** (no npm) |
+| Web | Next.js (TS) on Amplify Hosting · OpenUI generative cards |
+| Backend | API Gateway + Lambda (TS, Node 20) via SAM |
+| AI | **AWS Bedrock only** — Titan Embeddings + Claude for why-match |
+| Data | DynamoDB `Hackathons` + in-Lambda cosine fallback (MVP) |
+| Discovery | TinyFish Search / Fetch |
+| Auth | **Clerk, gated OFF** (`CLERK_ENABLED=false`) |
+
+---
+
+## 📂 Repo Layout
 
 ```
 web/          Next.js app (app/, components/, lib/api.ts)
@@ -49,7 +67,7 @@ roadmap.md    Phased build plan with checkboxes
 
 ---
 
-## API
+## 🔌 API
 
 | Method | Endpoint | Description |
 |---|---|---|
@@ -59,7 +77,25 @@ roadmap.md    Phased build plan with checkboxes
 
 ---
 
-## Deploy
+## 📈 Worth Score Formula
+
+```
+0.30 × skill     + 0.20 × learning
++ 0.20 × rep     + 0.15 × prize
++ 0.15 × difficulty_fit
+```
+
+| Component | How |
+|---|---|
+| `skill` | Cosine similarity(project_emb, hack_emb) |
+| `prize` | `min(prize / max_prize, 1)` |
+| `rep` | Platform trust (Devpost / MLH = high) |
+| `difficulty_fit` | `1 - \|project_complexity - hack_difficulty\|` |
+| `learning` | Tech / tag overlap |
+
+---
+
+## 🚢 Deploy
 
 ```bash
 sam build && sam deploy --guided   # from backend/
@@ -68,7 +104,7 @@ sam build && sam deploy --guided   # from backend/
 
 ---
 
-## Docs
+## 📖 Docs
 
 - `goal.md` — product vision + Definition of Done
 - `roadmap.md` — phased build plan with checkboxes
@@ -81,7 +117,7 @@ sam build && sam deploy --guided   # from backend/
 
 ---
 
-## Judging Pillars
+## 🏆 Judging Pillars
 
 | Pillar | How |
 |---|---|
