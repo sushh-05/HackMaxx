@@ -1,0 +1,80 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: HackMaxx — serverless backend (TS Lambda + DynamoDB + API GW)
+
+Globals:
+  Function:
+    Runtime: nodejs20.x
+    MemorySize: 256
+    Timeout: 15
+    Environment:
+      Variables:
+        HACKATHONS_TABLE: !Ref HackathonsTable
+        BEDROCK_EMBED_MODEL: amazon.titan-embed-text-v2:0
+        BEDROCK_LLM_MODEL: anthropic.claude-3-haiku-20240307-v1:0
+
+Resources:
+  HackathonsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub Hackathons-${AWS::StackName}
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+
+  Api:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: dev
+      Cors: "'*'"
+
+  ListFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./
+      Handler: dist/handlers/list.handler
+      Events:
+        List:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Api
+            Path: /hackathons
+            Method: get
+
+  RecommendFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./
+      Handler: dist/handlers/recommend.handler
+      Events:
+        Recommend:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Api
+            Path: /recommend
+            Method: post
+
+  RefreshFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./
+      Handler: dist/handlers/refresh.handler
+      Timeout: 60
+      Environment:
+        Variables:
+          TINYFISH_API_KEY: ""
+      Events:
+        Refresh:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Api
+            Path: /hackathons/refresh
+            Method: post
+
+Outputs:
+  ApiUrl:
+    Value: !Sub https://${Api}.execute-api.${AWS::Region}.amazonaws.com/dev
