@@ -1,8 +1,14 @@
-# Submission checklist (First Commit)
+# Submission Checklist (First Commit)
 
-- [ ] Live URL (Amplify) + repro `sam deploy`
-- [ ] Video <3min, public/unlisted, AWS visibly used (not just mentioned)
-- [ ] Writeup: real problem → solution → arch diagram → AWS services (Bedrock agent+embeddings, DynamoDB+vectors, Lambda+API GW, Amplify) → external tools (TinyFish Search/Fetch, OpenUI) → what you learned → future scope
-- [ ] Disclose AI coding assistants used
-- [ ] Meaningful commits during window (see CONTRIBUTING)
-- [ ] Track: Ship It (deployed). Mention Free Tier discipline.
+- [ ] **Live URL** (Amplify) + reproducible `sam deploy`
+- [ ] **Video** < 3 min, public/unlisted, AWS visibly used (not just mentioned)
+- [ ] **Writeup** covering:
+  - Real problem → solution
+  - Architecture diagram
+  - AWS services (Bedrock agent + embeddings, DynamoDB + vectors, Lambda + API GW, Amplify)
+  - External tools (TinyFish Search/Fetch, OpenUI)
+  - What you learned
+  - Future scope
+- [ ] **Disclose** AI coding assistants used
+- [ ] **Meaningful commits** during window (see `CONTRIBUTING.md`)
+- [ ] **Track:** Ship It (deployed). Mention Free Tier discipline.
