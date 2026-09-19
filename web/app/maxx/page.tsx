@@ -71,46 +71,49 @@ export default function MaxxPage() {
 
   return (
     <section>
-      <div className="hero">
-        <h2>One project. <span className="grad">Many hackathons.</span></h2>
-        <p className="sub">
+      <div className="pt-7 pb-2">
+        <h2 className="font-display text-3xl font-extrabold tracking-tight sm:text-4xl">
+          One project. <span className="grad-text">Many hackathons.</span>
+        </h2>
+        <p className="mt-2.5 max-w-2xl text-base text-base-content/60">
           Tell us about your project — we rank every open hackathon by Worth Score and build a
           submission plan that maxxes your total expected value and win chances.
         </p>
       </div>
 
-      <div className="panel" style={{ marginTop: 20 }}>
-        <div className="form-grid">
-          <div className="field">
-            <label htmlFor="title">Project title</label>
-            <input id="title" className="input" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. AI CP tutor agent" />
+      <div className="card mt-5 bg-base-300 border border-base-content/10 shadow-xl">
+        <div className="card-body gap-4 p-6">
+          <fieldset className="fieldset">
+            <legend className="fieldset-legend">Project title</legend>
+            <input className="input input-bordered w-full" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. AI CP tutor agent" />
+          </fieldset>
+          <fieldset className="fieldset">
+            <legend className="fieldset-legend">Description (2–4 lines)</legend>
+            <textarea className="textarea textarea-bordered w-full" value={description} onChange={(e) => setDescription(e.target.value)} rows={3} placeholder="What does it do, for whom, with what?" />
+          </fieldset>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <fieldset className="fieldset">
+              <legend className="fieldset-legend">Tech stack</legend>
+              <input className="input input-bordered w-full" value={stack} onChange={(e) => setStack(e.target.value)} placeholder="Bedrock, Lambda, Next.js" />
+            </fieldset>
+            <fieldset className="fieldset">
+              <legend className="fieldset-legend">Domain tags</legend>
+              <input className="input input-bordered w-full" value={tags} onChange={(e) => setTags(e.target.value)} placeholder="AI agent, edtech" />
+            </fieldset>
           </div>
-          <div className="field">
-            <label htmlFor="desc">Description (2–4 lines)</label>
-            <textarea id="desc" className="textarea" value={description} onChange={(e) => setDescription(e.target.value)} rows={3} placeholder="What does it do, for whom, with what?" />
-          </div>
-          <div className="field-row">
-            <div className="field">
-              <label htmlFor="stack">Tech stack</label>
-              <input id="stack" className="input" value={stack} onChange={(e) => setStack(e.target.value)} placeholder="Bedrock, Lambda, Next.js" />
-            </div>
-            <div className="field">
-              <label htmlFor="tags">Domain tags</label>
-              <input id="tags" className="input" value={tags} onChange={(e) => setTags(e.target.value)} placeholder="AI agent, edtech" />
-            </div>
-          </div>
-          <div className="field">
-            <label htmlFor="repo">Repo URL (optional)</label>
-            <input id="repo" className="input" value={repoUrl} onChange={(e) => setRepoUrl(e.target.value)} placeholder="https://github.com/you/project" />
-          </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 14, flexWrap: "wrap" }}>
-            <button className="btn" onClick={go} disabled={!canSubmit}>
-              {loading ? "Maxxing…" : "⚡ Maxx it"}
+          <fieldset className="fieldset">
+            <legend className="fieldset-legend">Repo URL (optional)</legend>
+            <input className="input input-bordered w-full" value={repoUrl} onChange={(e) => setRepoUrl(e.target.value)} placeholder="https://github.com/you/project" />
+          </fieldset>
+          <div className="flex flex-wrap items-center gap-3.5">
+            <button className="btn btn-primary btn-lg font-extrabold" onClick={go} disabled={!canSubmit}>
+              {loading ? <span className="loading loading-spinner loading-sm" /> : "⚡"}
+              {loading ? "Maxxing…" : "Maxx it"}
             </button>
-            <span style={{ color: "var(--text-dim)", fontSize: 13 }}>
-              Try an example:{" "}
+            <span className="flex flex-wrap items-center gap-1.5 text-[13px] text-base-content/50">
+              Try an example:
               {EXAMPLES.map((ex, i) => (
-                <button key={ex.label} className="chip" style={{ marginLeft: 6, padding: "4px 10px" }} onClick={() => loadExample(i)}>
+                <button key={ex.label} className="btn btn-ghost btn-xs rounded-full border-base-content/15" onClick={() => loadExample(i)}>
                   {ex.label}
                 </button>
               ))}
@@ -119,21 +122,25 @@ export default function MaxxPage() {
         </div>
       </div>
 
-      {error && <div className="error-box">{error}</div>}
+      {error && (
+        <div role="alert" className="alert alert-error mt-5">
+          <span>{error}</span>
+        </div>
+      )}
 
       {loading && (
-        <div className="grid">
-          <div className="skeleton" style={{ height: 180 }} />
-          <div className="skeleton" />
-          <div className="skeleton" />
+        <div className="mt-5 grid gap-3.5">
+          <div className="skeleton h-44 w-full" />
+          <div className="skeleton h-32 w-full" />
+          <div className="skeleton h-32 w-full" />
         </div>
       )}
 
       <div ref={resultsRef}>
         {res && (
-          <div className="grid">
+          <div className="mt-5 grid gap-3.5">
             <MaxxingStrategyPanel strategy={res.strategy} plan={res.plan} />
-            <p className="count-note" style={{ marginTop: 4 }}>
+            <p className="text-[13px] text-base-content/50">
               All {res.recommendations.length} ranked matches — the plan above picks the best-ROI subset.
             </p>
             {res.recommendations.map((r) => <HackathonCard key={r.hackathon.id} r={r} />)}
