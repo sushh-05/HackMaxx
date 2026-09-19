@@ -9,7 +9,7 @@ Hackathon repo — speed matters, but judges check **meaningful commits**. Keep 
 ```bash
 bun install          # install all workspaces
 bun seed             # sanity check
-bun run dev:backend  # :3001
+bun run dev:backend  # :3011
 bun run dev          # :3000 (web)
 bun run typecheck    # all workspaces
 ```

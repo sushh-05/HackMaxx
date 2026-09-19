@@ -22,6 +22,16 @@
 3. **Rank** them by Worth Score — skill match, learning, prize, reputation, difficulty fit.
 4. **Strategy** — get a clear plan: *"Submit X to these 3 in the next 10 days."*
 
+### How the maxxing math works
+
+One project can be re-submitted to many hackathons — each submission is an independent shot at placing. HackMaxx turns that into portfolio math:
+
+- **EV per submission** = `prize × P(win)`, where P(win) comes from Worth Score + difficulty fit.
+- **Rank by EV per unit effort** — High reuse = Low effort (minor pitch/UI tweaks), Low reuse gets dropped (rework eats the value).
+- **Order by deadline** and report the run's **total expected value** + cumulative chance of placing in *at least one*.
+
+That's the pitch: stop hunting one hackathon at a time — max the whole portfolio.
+
 ---
 
 ## 🚀 Quickstart
@@ -30,8 +40,8 @@
 cp .env.example .env
 bun install
 bun seed                  # sanity: loads data/seed.csv + scores sample
-bun run dev:backend       # http://localhost:3001
-bun run dev               # http://localhost:3000 (NEXT_PUBLIC_API_BASE_URL=http://localhost:3001)
+bun run dev:backend       # http://localhost:3011
+bun run dev               # http://localhost:3000 (NEXT_PUBLIC_API_BASE_URL=http://localhost:3011)
 ```
 
 Pages: `/` Explore · `/maxx` Maxx My Project.

@@ -3,7 +3,7 @@ import { handler as list } from "./handlers/list.js";
 import { handler as recommend } from "./handlers/recommend.js";
 import { handler as refresh } from "./handlers/refresh.js";
 
-const port = Number(process.env.PORT ?? 3001);
+const port = Number(process.env.PORT ?? 3011);
 Bun.serve({
   port,
   async fetch(req) {

@@ -1,1 +1,27 @@
-{"extends":"../tsconfig.base.json","compilerOptions":{"noEmit":true,"jsx":"preserve","plugins":[{"name":"next"}],"types":["node"]},"include":["app","components","lib","next-env.d.ts"],"exclude":["node_modules"]}
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "jsx": "preserve",
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "types": [
+      "node"
+    ],
+    "allowJs": true,
+    "incremental": true
+  },
+  "include": [
+    "app",
+    "components",
+    "lib",
+    "next-env.d.ts",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

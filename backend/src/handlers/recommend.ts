@@ -1,5 +1,5 @@
 import {
-  buildWhy, keywordSimilarity, reuseLabel, worthScore,
+  buildMaxxingPlan, buildWhy, keywordSimilarity, reuseLabel, worthScore,
   type ProjectInput, type RecommendResponse,
 } from "@hackmaxx/shared";
 import { listHackathons } from "../lib/dynamo.js";
@@ -25,8 +25,15 @@ export async function handler(event: { body?: string }) {
   );
   scored.sort((a, b) => b.worth - a.worth);
   const top = scored.slice(0, 8);
-  const strategy = `Submit "${project.title}" to the top ${Math.min(3, top.length)}: ` +
-    top.slice(0, 3).map((r) => `${r.hackathon.title} (Worth ${r.worth})`).join("; ") + ".";
-  const res: RecommendResponse = { recommendations: top, strategy };
+
+  // The hackmaxxing plan: which ones to actually submit to, in deadline order,
+  // with total expected value + cumulative win chance across the run.
+  const plan = buildMaxxingPlan(top);
+
+  const strategy = plan.steps.length > 0
+    ? plan.headline + " Order: " + plan.steps.map((s) => `${s.title} (${s.days_left}d left, EV ₹${s.expected_value_inr.toLocaleString("en-IN")}, ${s.effort} effort)`).join(" → ") + "."
+    : plan.headline;
+
+  const res: RecommendResponse = { recommendations: top, strategy, plan };
   return { statusCode: 200, headers: { "content-type": "application/json" }, body: JSON.stringify(res) };
 }

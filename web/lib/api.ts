@@ -1,6 +1,6 @@
 import type { Hackathon, ProjectInput, RecommendResponse } from "@hackmaxx/shared";
 
-const BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:3001";
+const BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:3011";
 
 export async function fetchHackathons(q = ""): Promise<Hackathon[]> {
   const r = await fetch(`${BASE}/hackathons${q ? `?q=${encodeURIComponent(q)}` : ""}`, { cache: "no-store" });
