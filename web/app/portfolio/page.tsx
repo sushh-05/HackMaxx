@@ -211,7 +211,7 @@ export default function PortfolioPage(): React.JSX.Element {
           {projects.map((p) => (
             <div
               key={p.id}
-              className="grid grid-cols-[minmax(0,1fr)_36px] items-center gap-x-3 gap-y-1.5 border-b border-border px-4 py-3 transition-colors last:border-b-0 hover:bg-foreground/[0.03] sm:grid-cols-[minmax(0,1fr)_110px_74px_124px_64px_90px_36px] sm:px-5"
+              className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-2 gap-y-1.5 border-b border-border px-4 py-3 transition-colors last:border-b-0 hover:bg-foreground/[0.03] sm:grid-cols-[minmax(0,1fr)_110px_74px_124px_64px_90px_36px] sm:gap-x-3 sm:px-5"
             >
               {/* project title + stack tags */}
               <div className="flex min-w-0 flex-col gap-1">
@@ -237,8 +237,32 @@ export default function PortfolioPage(): React.JSX.Element {
                 </div>
               </div>
 
-              {/* metrics — sm:contents promotes cells to outer grid */}
-              <div className="col-start-1 flex items-center justify-between gap-3 sm:contents">
+              {/* Mobile top-right actions: Re-Maxx icon + Delete */}
+              <div className="row-start-1 col-start-2 flex items-center gap-1 sm:hidden">
+                <Button
+                  asChild
+                  size="sm"
+                  variant="ghost"
+                  className="size-7 p-0 text-action hover:bg-action/10 hover:text-action"
+                  title="Re-Maxx project"
+                >
+                  <a href={maxxHref(p)}>
+                    <IconZap className="size-3.5" />
+                  </a>
+                </Button>
+                <button
+                  type="button"
+                  onClick={() => remove(p.id)}
+                  aria-label={`Close position ${p.title}`}
+                  title="Close position"
+                  className="rounded-md p-1.5 text-muted-foreground transition-colors hover:text-deadline hover:bg-deadline/10"
+                >
+                  <IconTrash className="size-3.5" />
+                </button>
+              </div>
+
+              {/* metrics — col-span-full on mobile, sm:contents promotes cells to outer grid */}
+              <div className="col-span-full flex items-center justify-between gap-2 pt-1 sm:pt-0 sm:contents">
                 <div className="flex items-center justify-start gap-1 text-[11px] text-muted-foreground sm:justify-end sm:w-[110px]">
                   <IconDeadline className="size-3" />
                   <span className="font-mono tabular-nums">{formatDate(p.snapshot.timestamp)}</span>
@@ -265,7 +289,7 @@ export default function PortfolioPage(): React.JSX.Element {
                 </div>
               </div>
 
-              {/* re-maxx button */}
+              {/* desktop re-maxx button */}
               <div className="hidden sm:flex justify-end sm:w-[90px]">
                 <Button asChild size="sm" variant="ghost" className="h-7 px-2 text-xs font-semibold gap-1 text-action hover:bg-action/10 hover:text-action">
                   <a href={maxxHref(p)}>
@@ -275,8 +299,8 @@ export default function PortfolioPage(): React.JSX.Element {
                 </Button>
               </div>
 
-              {/* close/delete position */}
-              <div className={cn("row-start-1 col-start-2 flex justify-end sm:row-auto sm:col-start-auto")}>
+              {/* desktop close/delete position */}
+              <div className="hidden sm:flex justify-end sm:w-[36px]">
                 <button
                   type="button"
                   onClick={() => remove(p.id)}

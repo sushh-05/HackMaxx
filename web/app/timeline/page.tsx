@@ -125,7 +125,7 @@ export default function TimelinePage(): React.JSX.Element {
 
         <div className="flex flex-col sm:flex-row sm:items-center gap-3">
           {/* Mode filter tabs */}
-          <div className="flex items-center gap-1 p-1 bg-muted/70 rounded-xl border border-border">
+          <div className="flex items-center gap-1 p-1 bg-muted/70 rounded-xl border border-border overflow-x-auto max-w-full">
             {(["all", "online", "offline", "hybrid"] as const).map((m) => (
               <button
                 key={m}
@@ -158,10 +158,18 @@ export default function TimelinePage(): React.JSX.Element {
         </div>
       )}
 
+      {/* Mobile scroll hint */}
+      <div className="flex items-center justify-between sm:hidden px-1 text-[11px] font-mono text-muted-foreground">
+        <span>← Swipe schedule horizontally →</span>
+        <span className="tabular-nums">{rows.length} events</span>
+      </div>
+
       {/* Gantt panel */}
       <div className="rounded-2xl border border-border bg-card shadow-sm overflow-hidden">
-        {/* Month axis */}
-        <div className="relative h-8 border-b border-border mx-4 sm:mx-6">
+        <div className="overflow-x-auto scrollbar-thin">
+          <div className="min-w-[660px] sm:min-w-0">
+            {/* Month axis */}
+            <div className="relative h-8 border-b border-border mx-4 sm:mx-6">
           {monthTicks.map((t) => (
             <div
               key={`${t.label}-${t.pct}`}
@@ -289,6 +297,8 @@ export default function TimelinePage(): React.JSX.Element {
           </ul>
         </div>
       </div>
+    </div>
+  </div>
 
       {/* Legend */}
       <div className="flex flex-wrap items-center gap-5 font-mono tabular-nums text-[11px] text-muted-foreground">

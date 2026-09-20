@@ -56,16 +56,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }):
         <CurrencyProvider>
           <CommandPalette />
           {/* Sticky frosted glass header */}
-          <header className="sticky top-0 z-50 backdrop-blur-xl bg-base-100/80 border-b border-base-content/8">
-            <div className="mx-auto max-w-6xl px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
-              <div className="flex items-center gap-3">
-                <a href="/" className="font-display flex items-center gap-2.5 text-xl font-extrabold tracking-tight text-base-content no-underline group">
+          <header className="sticky top-0 z-50 backdrop-blur-xl bg-card/85 border-b border-border/80">
+            <div className="mx-auto max-w-6xl px-3 sm:px-6 h-16 flex items-center justify-between gap-2 sm:gap-4">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <a href="/" className="font-display flex items-center gap-2 sm:gap-2.5 text-lg sm:text-xl font-extrabold tracking-tight text-foreground no-underline group shrink-0">
                   <span className="logo-mark">
-                    <IconZap className="size-4 text-white" />
+                    <IconZap className="size-4 text-primary-foreground" />
                   </span>
                   <span className="flex items-baseline gap-0.5">
                     <span className="font-display font-extrabold tracking-tight">Hack</span>
-                    <span className="font-serif italic font-normal text-2xl grad-text">Maxx</span>
+                    <span className="font-serif italic font-normal text-xl sm:text-2xl grad-text">Maxx</span>
                   </span>
                 </a>
                 <span className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-primary/10 text-primary border border-primary/20">
@@ -74,9 +74,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }):
                 </span>
               </div>
 
-              <div className="flex items-center gap-2 sm:gap-2.5">
+              <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
                 <Nav />
-                <div className="h-5 w-px bg-base-content/15 hidden sm:block" />
+                <div className="h-5 w-px bg-border hidden sm:block" />
                 <CurrencySelector />
                 <ThemeToggle />
               </div>
@@ -87,15 +87,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }):
           <StickyGithubBadge />
 
           {/* Main content container */}
-          <div className="mx-auto max-w-6xl w-full px-4 sm:px-6 pb-20 flex-1">
+          <div className="mx-auto max-w-6xl w-full px-3.5 sm:px-6 pb-20 flex-1">
             <main>{children}</main>
           </div>
 
           {/* Modern Footer */}
-          <footer className="border-t border-base-content/8 bg-base-200/40 mt-auto py-8">
-            <div className="mx-auto max-w-6xl px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-base-content/60">
+          <footer className="border-t border-border bg-muted/30 mt-auto py-8">
+            <div className="mx-auto max-w-6xl px-3.5 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
               <div className="flex items-center gap-2">
-                <span className="font-display font-bold text-base-content/90">HackMaxx</span>
+                <span className="font-display font-bold text-foreground">HackMaxx</span>
                 <span>·</span>
                 <span>Maxx your hackathon portfolio with AWS Bedrock AI</span>
               </div>

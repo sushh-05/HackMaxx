@@ -84,7 +84,7 @@ export function FiltersBar({
   return (
     <div className="mt-6 space-y-3.5">
       {/* Search Input & Core Filters Bar */}
-      <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3">
+      <div className="flex flex-col md:flex-row items-stretch md:items-center gap-2.5 sm:gap-3">
         {/* Search input with icons */}
         <div className="relative flex-1">
           <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-muted-foreground">
@@ -110,47 +110,50 @@ export function FiltersBar({
           )}
         </div>
 
-        {/* Platform Dropdown */}
-        {setSelectedPlatform && platforms.length > 0 && (
-          <Select value={selectedPlatform || "all"} onValueChange={setSelectedPlatform}>
-            <SelectTrigger size="sm" className="h-10 w-[172px] rounded-lg text-xs font-semibold" aria-label="Filter by platform">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Platforms</SelectItem>
-              {platforms.map((p) => (
-                <SelectItem key={p} value={p}>
-                  {p}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        )}
+        {/* Responsive platform and sort selectors */}
+        <div className="grid grid-cols-2 gap-2 w-full sm:flex sm:w-auto sm:items-center sm:gap-3">
+          {/* Platform Dropdown */}
+          {setSelectedPlatform && platforms.length > 0 && (
+            <Select value={selectedPlatform || "all"} onValueChange={setSelectedPlatform}>
+              <SelectTrigger size="sm" className="h-10 w-full sm:w-[172px] rounded-lg text-xs font-semibold" aria-label="Filter by platform">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Platforms</SelectItem>
+                {platforms.map((p) => (
+                  <SelectItem key={p} value={p}>
+                    {p}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
 
-        {/* Sort Dropdown */}
-        {setSort && (
-          <Select value={sort || "deadline-asc"} onValueChange={(v) => setSort(v as SortOption)}>
-            <SelectTrigger size="sm" className="h-10 w-[196px] rounded-lg text-xs font-semibold" aria-label="Sort hackathons">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {SORT_OPTIONS.map((opt) => (
-                <SelectItem key={opt.id} value={opt.id}>
-                  <span className="flex items-center gap-1.5">
-                    {SORT_ICON[opt.id]}
-                    {opt.label}
-                  </span>
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        )}
+          {/* Sort Dropdown */}
+          {setSort && (
+            <Select value={sort || "deadline-asc"} onValueChange={(v) => setSort(v as SortOption)}>
+              <SelectTrigger size="sm" className="h-10 w-full sm:w-[196px] rounded-lg text-xs font-semibold" aria-label="Sort hackathons">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {SORT_OPTIONS.map((opt) => (
+                  <SelectItem key={opt.id} value={opt.id}>
+                    <span className="flex items-center gap-1.5">
+                      {SORT_ICON[opt.id]}
+                      {opt.label}
+                    </span>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
+        </div>
       </div>
 
       {/* Mode pills & Quick topic chips */}
       <div className="flex flex-wrap items-center justify-between gap-2.5 pt-1">
         {/* Mode filter pills */}
-        <div className="flex flex-wrap items-center gap-1.5 rounded-lg border border-border bg-muted/60 p-1">
+        <div className="flex items-center gap-1.5 rounded-lg border border-border bg-muted/60 p-1 overflow-x-auto scrollbar-none max-w-full">
           {MODES.map((m) => {
             const active = mode === m;
             const ModeIcon = modeIcons[m];

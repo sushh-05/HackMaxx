@@ -16,7 +16,8 @@ export function CurrencySelector() {
         title={`Display currency: ${config.name}`}
       >
         <span className="font-mono text-xs font-semibold tabular-nums">
-          {config.symbol} {config.code}
+          {config.symbol}
+          <span className="hidden sm:inline"> {config.code}</span>
         </span>
       </SelectTrigger>
       <SelectContent position="popper" align="start" side="bottom" sideOffset={6} className="min-w-[190px]">

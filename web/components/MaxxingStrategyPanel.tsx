@@ -111,7 +111,7 @@ export function MaxxingStrategyPanel({
 
       <div className="relative space-y-6">
         {/* Header with Title and Copy button */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-base-content/10 pb-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border pb-4">
           <div className="flex items-center gap-2.5">
             <div className="size-9 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white shadow-lg shadow-primary/30">
               <IconZap className="size-5 text-white" />
@@ -124,11 +124,11 @@ export function MaxxingStrategyPanel({
                     Strategy & Plan
                   </span>
                 </h2>
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-secondary/15 text-secondary border border-secondary/30">
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-data/15 text-data border border-data/30">
                   AI Orchestrated
                 </span>
               </div>
-              <p className="text-xs text-base-content/60">
+              <p className="text-xs text-muted-foreground">
                 Optimized submission roadmap to maximize your cumulative portfolio expected value
               </p>
             </div>
@@ -140,12 +140,12 @@ export function MaxxingStrategyPanel({
               variant="outline"
               size="sm"
               onClick={copyToClipboard}
-              className="rounded-xl border-base-content/15 bg-base-200/80 hover:bg-base-300 text-xs font-semibold gap-1.5 self-start sm:self-auto"
+              className="rounded-xl border-border bg-muted/80 hover:bg-muted text-xs font-semibold gap-1.5 self-start sm:self-auto"
             >
               {copied ? (
                 <>
-                  <IconCheck className="size-3.5 text-success" />
-                  <span className="text-success">Copied to Clipboard!</span>
+                  <IconCheck className="size-3.5 text-win" />
+                  <span className="text-win">Copied to Clipboard!</span>
                 </>
               ) : (
                 <>
@@ -168,7 +168,7 @@ export function MaxxingStrategyPanel({
         )}
 
         {/* Strategy Narrative */}
-        <div className="flex items-start gap-3 rounded-xl border border-l-2 border-border border-l-action/60 bg-muted/60 p-4 text-sm leading-relaxed text-base-content/85">
+        <div className="flex items-start gap-3 rounded-xl border border-l-2 border-border border-l-action/60 bg-muted/60 p-4 text-sm leading-relaxed text-foreground">
           <IconQuote className="mt-1 size-4 shrink-0 text-action" />
           <div className="space-y-1">
             <span className="block text-xs font-bold tracking-wider text-action uppercase">
@@ -181,7 +181,7 @@ export function MaxxingStrategyPanel({
         {/* Interactive Step-by-Step Submission Timeline */}
         {steps.length > 0 && (
           <div className="space-y-3">
-            <h3 className="flex items-center gap-2 font-display text-sm font-bold tracking-wider text-base-content/70 uppercase">
+            <h3 className="flex items-center gap-2 font-display text-sm font-bold tracking-wider text-muted-foreground uppercase">
               <IconDeadline className="size-4 text-action" />
               Submission Pipeline (Ordered by Deadline)
             </h3>
@@ -212,7 +212,7 @@ export function MaxxingStrategyPanel({
                             href={s.url}
                             target="_blank"
                             rel="noreferrer"
-                            className="flex items-center gap-1.5 font-display text-base font-bold text-base-content transition-colors hover:text-action"
+                            className="flex items-center gap-1.5 font-display text-base font-bold text-foreground transition-colors hover:text-action"
                           >
                             <span>{s.title}</span>
                             <IconExternalLink className="size-3.5 text-muted-foreground transition-colors group-hover:text-action" />

@@ -230,8 +230,17 @@ export default function ComparePage(): React.JSX.Element {
       )}
 
       {!loading && !err && cols.length > 0 && (
-        <div className="overflow-x-auto rounded-2xl border border-border bg-card shadow-sm">
-          <table className="w-full min-w-[560px] border-collapse">
+        <>
+          {/* Mobile scroll hint */}
+          {cols.length > 1 && (
+            <div className="flex items-center justify-between sm:hidden px-1 text-[11px] font-mono text-muted-foreground">
+              <span>← Swipe horizontally to compare columns →</span>
+              <span className="tabular-nums">{cols.length} hackathons</span>
+            </div>
+          )}
+
+          <div className="overflow-x-auto scrollbar-thin rounded-2xl border border-border bg-card shadow-sm">
+            <table className="w-full min-w-[520px] border-collapse">
             <thead>
               <tr>
                 <th className="w-[132px] px-4 py-3 text-left align-bottom">
@@ -403,7 +412,8 @@ export default function ComparePage(): React.JSX.Element {
             </tbody>
           </table>
         </div>
-      )}
+      </>
+    )}
 
       {verdict && (
         <p className="rounded-xl border border-win/40 bg-win/10 px-4 py-3 font-mono text-xs font-semibold tabular-nums text-win">

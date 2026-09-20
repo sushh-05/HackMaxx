@@ -21,7 +21,7 @@ export function Nav(): React.JSX.Element {
   const isCompare = path.startsWith("/compare");
 
   const linkClass = (active: boolean) =>
-    `flex items-center gap-1.5 px-2 sm:px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-xl transition-all duration-200 no-underline ${
+    `flex items-center gap-1.5 px-1.5 sm:px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-xl transition-all duration-200 no-underline ${
       active
         ? "bg-primary text-primary-foreground shadow-sm shadow-primary/25 font-bold"
         : "text-muted-foreground hover:text-foreground hover:bg-muted"
@@ -62,7 +62,7 @@ export function Nav(): React.JSX.Element {
             window.dispatchEvent(new CustomEvent("hackmaxx:open-palette"));
           }
         }}
-        className="flex items-center gap-1 px-2 py-1.5 text-xs sm:text-sm font-semibold rounded-xl text-muted-foreground hover:text-foreground hover:bg-muted transition-all duration-200"
+        className="flex items-center gap-1 px-1.5 sm:px-2 py-1.5 text-xs sm:text-sm font-semibold rounded-xl text-muted-foreground hover:text-foreground hover:bg-muted transition-all duration-200"
         aria-label="Open command palette"
         title="Command palette (⌘K)"
       >

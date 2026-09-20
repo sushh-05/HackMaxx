@@ -84,7 +84,7 @@ export function HackathonCard({
   const soon = days > 3 && days <= 7;
 
   return (
-    <article className="card-glass rounded-2xl p-5 sm:p-6 card-in transition-all duration-200 hover:-translate-y-0.5 relative group">
+    <article className="rounded-2xl border border-border bg-card p-4 sm:p-6 card-in transition-all duration-200 hover:-translate-y-0.5 relative group shadow-sm">
       <div className="flex flex-col gap-4">
         {/* Top bar: Platform + Mode + Deadline countdown + Reuse badge */}
         <div className="flex flex-wrap items-center justify-between gap-2.5">
@@ -133,12 +133,12 @@ export function HackathonCard({
         {/* Title and Prize header */}
         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 pt-1">
           <div className="space-y-1">
-            <h3 className="font-display text-lg sm:text-xl font-bold tracking-tight text-base-content group-hover:text-primary transition-colors">
+            <h3 className="font-display text-lg sm:text-xl font-bold tracking-tight text-foreground group-hover:text-primary transition-colors">
               <a href={h.url} target="_blank" rel="noreferrer" className="no-underline hover:underline">
                 {h.title}
               </a>
             </h3>
-            <p className="text-xs sm:text-sm text-base-content/65 line-clamp-2 leading-relaxed">
+            <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2 leading-relaxed">
               {h.description}
             </p>
           </div>
@@ -161,7 +161,7 @@ export function HackathonCard({
 
         {/* Why this matches quote box */}
         {formattedWhy && (
-          <div className="flex items-start gap-2.5 rounded-xl border border-l-2 border-border border-l-action/60 bg-muted/60 p-3 text-xs text-base-content/80">
+          <div className="flex items-start gap-2.5 rounded-xl border border-l-2 border-border border-l-action/60 bg-muted/60 p-3 text-xs text-foreground">
             <IconSparkles className="mt-0.5 size-4 shrink-0 text-action" />
             <div className="space-y-0.5">
               <span className="block text-[11px] font-semibold tracking-wider text-action uppercase">
@@ -208,7 +208,7 @@ export function HackathonCard({
         )}
 
         {/* Bottom Actions */}
-        <div className="flex items-center justify-end gap-3 pt-2 border-t border-base-content/8">
+        <div className="flex flex-wrap sm:flex-nowrap items-center justify-between sm:justify-end gap-2 sm:gap-3 pt-2 border-t border-border">
           <Button
             asChild
             variant="ghost"

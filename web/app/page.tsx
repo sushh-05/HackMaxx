@@ -382,14 +382,14 @@ export default function ExplorePage(): React.JSX.Element {
       {/* Floating compare bar — appears once ≥1 row is staged */}
       {compareIds.length > 0 && (
         <div className="fixed inset-x-0 bottom-4 z-40 flex justify-center px-4 pointer-events-none">
-          <div className="pointer-events-auto flex items-center gap-3.5 rounded-2xl border border-action/40 bg-card/95 backdrop-blur-md px-5 py-3 shadow-2xl">
+          <div className="pointer-events-auto flex items-center gap-2.5 sm:gap-3.5 rounded-2xl border border-action/40 bg-card/95 backdrop-blur-md px-3.5 py-2.5 sm:px-5 sm:py-3 shadow-2xl max-w-[calc(100vw-32px)] sm:max-w-none">
             <span className="font-mono text-xs tabular-nums text-muted-foreground flex items-center gap-1.5">
               <IconScale className="size-3.5 text-action" />
               <span>{compareIds.length}/{COMPARE_MAX} staged</span>
             </span>
             {compareRejected && (
-              <span className="font-mono text-xs text-deadline">
-                max {COMPARE_MAX} — deselect one first
+              <span className="font-mono text-[11px] sm:text-xs text-deadline truncate max-w-[140px] sm:max-w-none">
+                max {COMPARE_MAX} reached
               </span>
             )}
             <Button
@@ -397,7 +397,7 @@ export default function ExplorePage(): React.JSX.Element {
               size="sm"
               onClick={handleLaunchCompare}
               disabled={compareIds.length < COMPARE_MIN}
-              className="rounded-xl font-bold gap-1.5 shadow-sm shadow-primary/25"
+              className="rounded-xl font-bold gap-1 sm:gap-1.5 shadow-sm shadow-primary/25 text-xs sm:text-sm px-3"
             >
               <span>Compare</span>
               <span className="font-mono tabular-nums">({compareIds.length})</span>
