@@ -43,7 +43,7 @@ bun seed                  # sanity: loads data/seed.csv + scores sample
 bun run dev               # starts BOTH backend (:3011) + frontend (:3000) concurrently
 ```
 
-Pages: `/` Explore · `/maxx` Maxx My Project.
+Pages: `/` Landing · `/dashboard` live hackathon watchlist · `/maxx` Maxx My Project · `/timeline` deadline Gantt · `/portfolio` saved positions · `/compare` head-to-head. Auth via Clerk — sign up, land on the dashboard, ⌘K anywhere.
 
 ---
 
