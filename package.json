@@ -17,7 +17,6 @@
     "dev:python": "uvicorn app.main:app --reload --port 8000",
     "build": "bun run --cwd web build",
     "typecheck": "tsc -p shared/tsconfig.json --noEmit && tsc -p backend/tsconfig.json --noEmit && tsc -p web/tsconfig.json --noEmit",
-    "seed": "bun scripts/seed.ts",
     "tui": "bun cli/src/index.ts"
   },
   "devDependencies": {

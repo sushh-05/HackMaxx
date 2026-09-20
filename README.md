@@ -39,7 +39,6 @@ That's the pitch: stop hunting one hackathon at a time — max the whole portfol
 ```bash
 cp .env.example .env
 bun install
-bun seed                  # sanity: loads data/seed.csv + scores sample
 bun run dev               # starts BOTH backend (:3011) + frontend (:3000) concurrently
 ```
 
@@ -80,11 +79,8 @@ Watchlist view (worth-ranked rows, `/` filter, `t` sort, `r` reload) → `m` on 
 web/          Next.js app (app/, components/, lib/api.ts)
 backend/      SAM (template.yaml) + TS Lambdas (handlers/, lib/) + local Bun server
 shared/       Types + Worth Score + cosine/keyword similarity (single source of truth)
-data/seed.csv Offline hackathon seed (source of truth until TinyFish refresh)
-scripts/seed.ts Sanity check script
+cli/          OpenTUI terminal client (`bun run tui`)
 docs/         Architecture, API, demo script, submission checklist
-goal.md       Locked product + Definition of Done
-roadmap.md    Phased build plan with checkboxes
 ```
 
 ---

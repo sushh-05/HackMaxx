@@ -5,7 +5,7 @@ export async function handler() {
   // Phase 0: proves the route works. Phase 2: Search → Fetch → embed → DynamoDB upsert.
   const key = process.env.TINYFISH_API_KEY ?? "";
   if (!key) {
-    return jsonResponse(200, { upserted: 0, note: "TINYFISH_API_KEY unset; seed.csv is source of truth" });
+    return jsonResponse(200, { upserted: 0, note: "TINYFISH_API_KEY unset; run with the key configured" });
   }
   let found = 0;
   for (const q of PRESET_QUERIES) found += (await searchHackathons(q)).length;
