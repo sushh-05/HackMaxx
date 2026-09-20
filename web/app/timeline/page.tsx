@@ -49,7 +49,7 @@ export default function TimelinePage(): React.JSX.Element {
     fetchHackathons()
       .then((data) => {
         if (!cancelled) {
-          setItems(data);
+          setItems(data.items);
           setErr("");
         }
       })

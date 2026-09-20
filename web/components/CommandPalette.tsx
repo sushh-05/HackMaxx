@@ -82,8 +82,8 @@ function PaletteDialog({ onClose }: { onClose: () => void }): React.JSX.Element 
   useEffect(() => {
     let cancelled = false;
     fetchHackathons()
-      .then((hs) => {
-        if (!cancelled) setHackathons(hs);
+      .then((res) => {
+        if (!cancelled) setHackathons(res.items);
       })
       .catch(() => {
         // Backend may be down during local review — the palette still works.
