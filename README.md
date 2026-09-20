@@ -40,8 +40,7 @@ That's the pitch: stop hunting one hackathon at a time — max the whole portfol
 cp .env.example .env
 bun install
 bun seed                  # sanity: loads data/seed.csv + scores sample
-bun run dev:backend       # http://localhost:3011
-bun run dev               # http://localhost:3000 (NEXT_PUBLIC_API_BASE_URL=http://localhost:3011)
+bun run dev               # starts BOTH backend (:3011) + frontend (:3000) concurrently
 ```
 
 Pages: `/` Explore · `/maxx` Maxx My Project.

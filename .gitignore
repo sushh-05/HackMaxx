@@ -7,3 +7,4 @@ out/
 .env.local
 .aws-sam/
 .DS_Store
+.commandcode/
