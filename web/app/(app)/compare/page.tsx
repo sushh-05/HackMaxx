@@ -175,7 +175,7 @@ export default function ComparePage(): React.JSX.Element {
   }, [cols]);
 
   return (
-    <section className="space-y-6 pt-6 sm:pt-8">
+    <section className="space-y-6 pt-6 sm:pt-8 max-w-5xl mx-auto">
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div className="space-y-2">
           <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-primary/10 text-primary border border-primary/20">

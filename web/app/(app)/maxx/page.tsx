@@ -198,7 +198,7 @@ export default function MaxxPage(): React.JSX.Element {
     : [];
 
   return (
-    <section className="space-y-8 pt-6 sm:pt-8">
+    <section className="space-y-8 pt-6 sm:pt-8 max-w-4xl mx-auto">
       {/* Hero Header */}
       <div className="space-y-3">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-primary/10 text-primary border border-primary/20">

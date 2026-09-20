@@ -106,7 +106,7 @@ export default function TimelinePage(): React.JSX.Element {
   const totalPrize = useMemo(() => rows.reduce((s, h) => s + (h.prize_inr || 0), 0), [rows]);
 
   return (
-    <section className="space-y-6 pt-6 sm:pt-8">
+    <section className="space-y-6 pt-6 sm:pt-8 max-w-5xl mx-auto">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div className="space-y-2">
