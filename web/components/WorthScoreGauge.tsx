@@ -147,7 +147,7 @@ export function WorthBreakdownView({ breakdown }: { breakdown: WorthBreakdown })
       <div className="flex items-center justify-between text-[11px] font-semibold tracking-wider text-base-content/80 uppercase">
         <span className="flex items-center gap-1.5">
           <IconSparkles className="size-3.5 text-action" />
-          Worth Score Breakdown (Bedrock)
+          Worth Score Breakdown
         </span>
         <span className="text-[10px] normal-case text-muted-foreground">weighted points</span>
       </div>

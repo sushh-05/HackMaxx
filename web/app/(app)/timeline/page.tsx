@@ -55,7 +55,7 @@ export default function TimelinePage(): React.JSX.Element {
       })
       .catch(() => {
         if (!cancelled) {
-          setErr("Backend not reachable — make sure `bun run dev:backend` is running on port 3011.");
+          setErr("The hackathon index is unreachable right now — retry in a few seconds.");
         }
       })
       .finally(() => {

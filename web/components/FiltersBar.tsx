@@ -40,7 +40,7 @@ const SORT_ICON: Record<SortOption, React.ReactNode> = {
 
 export const QUICK_TAGS = [
   "AI",
-  "Bedrock",
+  "Agents",
   "Fintech",
   "Devtools",
   "Cloud",
@@ -94,7 +94,7 @@ export function FiltersBar({
             type="search"
             value={q}
             onChange={(e) => setQ(e.target.value)}
-            placeholder="Search by title, tech stack (AI, Next.js, Lambda) or keywords..."
+            placeholder="Search by title, stack or keyword…"
             aria-label="Search hackathons"
             className="w-full rounded-lg border border-input bg-card/80 py-2.5 pr-10 pl-10 text-sm transition-all duration-200 placeholder:text-muted-foreground focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring/25"
           />

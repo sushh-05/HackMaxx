@@ -165,7 +165,7 @@ export function HackathonCard({
             <IconSparkles className="mt-0.5 size-4 shrink-0 text-action" />
             <div className="space-y-0.5">
               <span className="block text-[11px] font-semibold tracking-wider text-action uppercase">
-                Bedrock Match Rationale
+                Why this matches
               </span>
               <p className="leading-normal">{formattedWhy}</p>
             </div>
@@ -198,7 +198,7 @@ export function HackathonCard({
               <AccordionTrigger className="py-2.5 text-[11px] font-semibold tracking-wide text-muted-foreground uppercase hover:no-underline hover:text-action data-[state=open]:text-action data-[state=open]:hover:no-underline">
                 <span className="flex items-center gap-1.5">
                   <IconWorth className="size-3" />
-                  Bedrock Formula Details
+                  Worth Score Formula
                 </span>
               </AccordionTrigger>
               <AccordionContent className="text-xs">

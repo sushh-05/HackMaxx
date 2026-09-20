@@ -13,11 +13,11 @@ import {
 /* Terminal transcript shown in the hero mock — mirrors a real /maxx run. */
 const TERMINAL_LINES: { text: string; tone: "cmd" | "dim" | "ok" | "money" }[] = [
   { text: '❯ maxx "UPI ledger for kirana stores"', tone: "cmd" },
-  { text: "[engine] embedding project vector… titan-v2", tone: "dim" },
-  { text: "[engine] scoring 47 open events against vector space", tone: "dim" },
-  { text: "[ok] W91  AWS GenAI Hackathon      EV ₹41,200  · 6d", tone: "ok" },
-  { text: "[ok] W86  Devfolio QuantumBuild     EV ₹28,500  · 11d", tone: "ok" },
-  { text: "[ok] W79  Unstop CodeSprint S12     EV ₹12,900  · 18d", tone: "ok" },
+  { text: "[engine] profiling project…", tone: "dim" },
+  { text: "[engine] scoring 47 open events", tone: "dim" },
+  { text: "[ok] W91  GenAI Builders Hack      EV ₹41,200  · 6d", tone: "ok" },
+  { text: "[ok] W86  QuantumBuild            EV ₹28,500  · 11d", tone: "ok" },
+  { text: "[ok] W79  CodeSprint S12          EV ₹12,900  · 18d", tone: "ok" },
   { text: "[plan] 3 submissions · total expected value ₹82,600", tone: "money" },
 ];
 
@@ -134,7 +134,7 @@ export default function LandingPage(): React.JSX.Element {
         <div className="mx-auto w-full max-w-3xl space-y-7">
           <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1.5 text-xs font-semibold text-primary">
             <span className="pulse-dot motion-reduce:animate-none" />
-            Built for AWS First Commit
+            Live hackathon index
           </div>
 
           <h1 className="font-display text-4xl font-extrabold leading-tight tracking-tight text-foreground sm:text-5xl md:text-6xl">
@@ -175,7 +175,7 @@ export default function LandingPage(): React.JSX.Element {
           <Proof
             icon={<IconZap className="size-4 text-primary" />}
             title="Worth-ranked, not searched"
-            body="Bedrock Titan embeddings score every open event against your stack. No keyword bingo."
+            body="Every open event scored against your stack, prize pool, and deadline. No keyword bingo."
           />
           <Proof
             icon={<IconTimeline className="size-4 text-data" />}
@@ -198,12 +198,8 @@ export default function LandingPage(): React.JSX.Element {
             <span>·</span>
             <span>For builders who farm hackathons</span>
           </div>
-          <div className="flex items-center gap-4 font-mono text-[11px]">
-            <span>AWS Bedrock</span>
-            <span>·</span>
-            <span>Titan Embeddings</span>
-            <span>·</span>
-            <span>Next.js + Bun</span>
+          <div className="font-mono text-[11px]">
+            <span>hackmaxx / live</span>
           </div>
         </div>
       </footer>

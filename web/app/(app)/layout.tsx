@@ -7,7 +7,7 @@ import { CurrencyProvider } from "../../lib/currency";
 import { StickyGithubBadge } from "../../components/StickyGithubBadge";
 import { CommandPalette } from "../../components/CommandPalette";
 import { UserButton } from "@clerk/nextjs";
-import { IconZap, IconChip, IconDatabase, IconCloud } from "../../components/Icons";
+import { IconZap } from "../../components/Icons";
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const { userId } = await auth();
@@ -34,7 +34,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
             </a>
             <span className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-primary/10 text-primary border border-primary/20">
               <span className="pulse-dot" />
-              AWS First Commit
+              Live index
             </span>
           </div>
 
@@ -69,21 +69,10 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           <div className="flex items-center gap-2">
             <span className="font-display font-bold text-foreground">HackMaxx</span>
             <span>·</span>
-            <span>Maxx your hackathon portfolio with AWS Bedrock AI</span>
+            <span>Maxx your hackathon portfolio</span>
           </div>
-          <div className="flex flex-wrap items-center gap-4">
-            <span className="flex items-center gap-1.5">
-              <IconChip className="size-3.5 text-data" />
-              Titan Embeddings
-            </span>
-            <span className="flex items-center gap-1.5">
-              <IconDatabase className="size-3.5 text-action" />
-              DynamoDB Vector
-            </span>
-            <span className="flex items-center gap-1.5">
-              <IconCloud className="size-3.5 text-money" />
-              Lambda &amp; Bun
-            </span>
+          <div className="font-mono text-[11px]">
+            <span>hackmaxx / live index</span>
           </div>
         </div>
       </footer>

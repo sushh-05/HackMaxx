@@ -119,7 +119,7 @@ export default function MaxxPage(): React.JSX.Element {
         resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
       }, 100);
     } catch {
-      setError("Could not reach the backend — ensure `bun run dev:backend` is running on port 3011.");
+      setError("The engine is unreachable right now — retry in a few seconds.");
     } finally {
       clearTimeout(timer1);
       clearTimeout(timer2);
@@ -212,7 +212,7 @@ export default function MaxxPage(): React.JSX.Element {
           </span>
         </h1>
         <p className="text-sm sm:text-base text-muted-foreground max-w-3xl leading-relaxed">
-          Paste the project once. Bedrock scores every open event against it and
+          Paste the project once. The engine scores every open event against it and
           returns a deadline-ordered plan — expected value in rupees, not vibes.
         </p>
 
@@ -233,8 +233,8 @@ export default function MaxxPage(): React.JSX.Element {
               2
             </span>
             <div className="text-xs">
-              <span className="font-bold text-foreground block">Bedrock Scoring</span>
-              <span className="text-muted-foreground">Titan cosine & Worth algorithm</span>
+              <span className="font-bold text-foreground block">Worth Scoring</span>
+              <span className="text-muted-foreground">Fit, prize &amp; deadline weighed</span>
             </div>
           </div>
 
@@ -334,7 +334,7 @@ export default function MaxxPage(): React.JSX.Element {
                 setDescription(e.target.value);
                 setSelectedPreset(null);
               }}
-              placeholder="What does your project do, who is it for, and how is it architected? (e.g. Serverless payment reconciler built with AWS Lambda, DynamoDB, Bedrock...)"
+              placeholder="What does your project do, who is it for, and how is it built?"
               className="w-full rounded-xl sm:rounded-2xl bg-card border border-input p-3.5 sm:p-4 text-sm font-medium placeholder:text-muted-foreground focus:outline-none focus:border-ring focus:ring-2 focus:ring-ring/25 transition-all duration-200 resize-y"
             />
           </div>
@@ -353,7 +353,7 @@ export default function MaxxPage(): React.JSX.Element {
                   setStack(e.target.value);
                   setSelectedPreset(null);
                 }}
-                placeholder="Bedrock, Lambda, DynamoDB, Next.js"
+                placeholder="React, Node, Postgres, Tailwind"
                 className="w-full rounded-xl sm:rounded-2xl bg-card border border-input px-3.5 sm:px-4 py-2 sm:py-2.5 text-sm font-medium placeholder:text-muted-foreground focus:outline-none focus:border-ring focus:ring-2 focus:ring-ring/25 transition-all duration-200"
               />
             </div>
@@ -414,7 +414,7 @@ export default function MaxxPage(): React.JSX.Element {
             {loading ? (
               <>
                 <Spinner />
-                <span>Maxxing with Bedrock…</span>
+                <span>Maxxing…</span>
               </>
             ) : (
               <>
@@ -435,7 +435,7 @@ export default function MaxxPage(): React.JSX.Element {
         </Alert>
       )}
 
-      {/* Dynamic Bedrock AI Loading State */}
+      {/* Loading state */}
       {loading && (
         <div
           role="status"
@@ -448,12 +448,12 @@ export default function MaxxPage(): React.JSX.Element {
 
           <div className="space-y-2 max-w-md mx-auto">
             <h3 className="font-display font-extrabold text-xl">
-              {loadingStep === 0 && "Analyzing Project Architecture…"}
-              {loadingStep === 1 && "Generating Titan Embeddings & Vector Search…"}
-              {loadingStep >= 2 && "Synthesizing Expected Value Schedule with Claude…"}
+              {loadingStep === 0 && "Profiling your project…"}
+              {loadingStep === 1 && "Scoring every open event…"}
+              {loadingStep >= 2 && "Building the submission plan…"}
             </h3>
             <p className="text-xs text-muted-foreground">
-              Evaluating skill match, learning value, platform reputation, and prize expected value.
+              Weighing stack fit, learning value, platform trust, and prize expected value.
             </p>
           </div>
 
@@ -488,7 +488,7 @@ export default function MaxxPage(): React.JSX.Element {
                   <span>All Ranked Hackathon Matches</span>
                 </h3>
                 <p className="text-xs text-muted-foreground">
-                  Ranked by Bedrock Worth Score — the execution plan above picked the highest-ROI subset.
+                  Ranked by Worth Score — the execution plan above picked the highest-ROI subset.
                 </p>
               </div>
 

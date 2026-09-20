@@ -55,7 +55,7 @@ export async function fetchHackathons(q = "", mode = "", retries = 2): Promise<H
     if (!r.ok) throw new Error(`Failed to load hackathons (status ${r.status})`);
     return {
       items: await r.json(),
-      source: r.headers.get("x-hackmaxx-source") ?? "AWS API Gateway",
+      source: r.headers.get("x-hackmaxx-source") ?? "Live index",
       fetchedAt: r.headers.get("x-hackmaxx-fetched-at"),
     };
   } catch (err) {

@@ -37,7 +37,7 @@ export default function ExplorePage(): React.JSX.Element {
   const [sort, setSort] = useState<SortOption>("deadline-asc");
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState("");
-  const [dataSource, setDataSource] = useState("AWS API Gateway");
+  const [dataSource, setDataSource] = useState("Live index");
   const [fetchedAt, setFetchedAt] = useState<string | null>(null);
 
   // Drawer state
@@ -115,7 +115,7 @@ export default function ExplorePage(): React.JSX.Element {
         })
         .catch(() => {
           if (!cancelled) {
-            setErr("Backend not reachable — make sure `bun run dev:backend` is running on port 3011.");
+            setErr("The hackathon index is unreachable right now — retry in a few seconds.");
           }
         })
         .finally(() => {
