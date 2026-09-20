@@ -39,6 +39,12 @@ await cp(join(nextRoot, "static"), join(staticRoot, "_next", "static"), {
   recursive: true,
 });
 
+// Amplify validates this Next.js runtime metadata at the artifact root.
+await cp(
+  join(nextRoot, "required-server-files.json"),
+  join(bundleRoot, "required-server-files.json"),
+);
+
 // Public files are served by the standalone server and by Amplify's static primitive.
 try {
   await stat(join(webRoot, "public"));
