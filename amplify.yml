@@ -11,10 +11,9 @@ frontend:
         - export PATH="$HOME/.bun/bin:$PATH"
         - bun run --cwd web build
   artifacts:
-    baseDirectory: web/.next
+    baseDirectory: web/out
     files:
       - '**/*'
   cache:
     paths:
       - node_modules/**/*
-      - web/.next/cache/**/*
