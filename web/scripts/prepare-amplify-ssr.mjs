@@ -1,5 +1,5 @@
 import { cp, mkdir, readFile, rm, stat, writeFile } from "node:fs/promises";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const webRoot = fileURLToPath(new URL("..", import.meta.url));
@@ -39,11 +39,20 @@ await cp(join(nextRoot, "static"), join(staticRoot, "_next", "static"), {
   recursive: true,
 });
 
-// Amplify validates this Next.js runtime metadata at the artifact root.
-await cp(
-  join(nextRoot, "required-server-files.json"),
-  join(bundleRoot, "required-server-files.json"),
+// Amplify validates Next's traced runtime metadata at the artifact root.
+// Copy every path listed by required-server-files.json while preserving the
+// .next/ prefix expected by Amplify's validator.
+const requiredServerFilesPath = join(nextRoot, "required-server-files.json");
+const requiredServerFiles = JSON.parse(
+  await readFile(requiredServerFilesPath, "utf8"),
 );
+for (const relativeFile of requiredServerFiles.files) {
+  const normalizedFile = relativeFile.replaceAll("\\", "/");
+  const sourceFile = join(webRoot, ...normalizedFile.split("/"));
+  const targetFile = join(bundleRoot, ...normalizedFile.split("/"));
+  await mkdir(dirname(targetFile), { recursive: true });
+  await cp(sourceFile, targetFile);
+}
 
 // Public files are served by the standalone server and by Amplify's static primitive.
 try {
