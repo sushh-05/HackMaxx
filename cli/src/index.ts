@@ -7,7 +7,7 @@
  * Keys: ↑↓/j/k move · Enter details · m maxx · / filter · r reload
  * · t sort · d draft plan .md · Esc back · q quit.
  */
-import { writeFileSync } from "node:fs";
+import { writeFileSync, readFileSync, existsSync } from "node:fs";
 import {
   createCliRenderer,
   BoxRenderable,
@@ -80,9 +80,11 @@ class App {
   private filter = "";
   private filtering = false;
   private sort: SortKey = "deadline";
-  private view: "watchlist" | "maxx" = "watchlist";
+  private view: "watchlist" | "maxx" | "preview" = "watchlist";
   private busy = false;
   private lastRun: { project: ProjectInput; res: RecommendResponse } | null = null;
+  private draftedFile: string | null = null;
+  private previewOffset = 0;
 
   async run() {
     this.renderer = await createCliRenderer({
@@ -410,10 +412,11 @@ class App {
     ];
     try {
       writeFileSync(file, lines.join("\n"));
-      this.setStatus(`drafted ${file} — Esc back`, C.win);
+      this.draftedFile = file;
+      this.setStatus(`drafted ${file} — p to preview · Esc back`, C.win);
       this.body.add(
         new TextRenderable(this.ctx, {
-          content: `  [ok] wrote ${file}`,
+          content: `  [ok] wrote ${file} — p to preview`,
           fg: C.win,
         })
       );
@@ -423,15 +426,120 @@ class App {
     }
   }
 
+  /* ---------- Plan preview + follow-up ---------- */
+
+  private suggestChanges(): string[] {
+    if (!this.lastRun) return [];
+    const { res } = this.lastRun;
+    const out: string[] = [];
+    const steps = res.plan.steps;
+    const urgent = steps.filter((s) => s.days_left <= 3);
+    if (urgent.length > 0)
+      out.push(`⚠ ${urgent.length} deadline${urgent.length > 1 ? "s" : ""} within 3 days — cut scope on ${urgent[0].title} first.`);
+    const highEffort = steps.filter((s) => s.effort === "High");
+    if (highEffort.length > 0)
+      out.push(`Drop ${highEffort[0].title} if time is tight — High effort drags portfolio EV.`);
+    const lowWorth = steps.filter((s) => s.worth < 60);
+    if (lowWorth.length > 0)
+      out.push(`Re-check ${lowWorth.map((s) => s.title).join(", ")} — worth below 60 weakens the plan.`);
+    const noDesc = !this.lastRun.project.description || this.lastRun.project.description.length < 40;
+    if (noDesc) out.push("Add a 2–3 line project description — thin briefs score shallow matches.");
+    if (steps.length === 1) out.push("Only one target selected — broaden tags to widen the pool.");
+    if (out.length === 0) out.push("Plan looks tight. Ship it.");
+    return out;
+  }
+
+  private renderPreview() {
+    this.clearBody();
+    this.view = "preview";
+    this.previewOffset = 0;
+    this.hint.content = "↑↓ scroll · s suggestions · Esc back to plan · q quit";
+    this.setStatus(`preview: ${this.draftedFile}`, C.data);
+    this.drawPreview();
+  }
+
+  private drawPreview() {
+    if (!this.draftedFile || !existsSync(this.draftedFile)) return;
+    const text = readFileSync(this.draftedFile, "utf8");
+    const lines = text.split("\n");
+    const height = Math.max(4, (this.renderer.terminalHeight ?? 24) - 8);
+    const window_ = lines.slice(this.previewOffset, this.previewOffset + height);
+
+    const box = new BoxRenderable(this.ctx, {
+      width: "100%",
+      border: true,
+      borderStyle: "single",
+      borderColor: C.action,
+      backgroundColor: C.card,
+      paddingX: 1,
+      title: ` ${this.draftedFile} `,
+      titleColor: C.dim,
+      flexDirection: "column",
+    });
+    for (const line of window_) {
+      const fg = line.startsWith("# ") ? C.fg : line.startsWith("##") ? C.action : line.startsWith(">") ? C.faint : C.dim;
+      const t = new TextRenderable(this.ctx, { content: line || " ", fg });
+      if (line.startsWith("#")) t.attributes = 1;
+      box.add(t);
+    }
+    this.body.add(box);
+  }
+
+  private drawSuggestions() {
+    const suggestions = this.suggestChanges();
+    const box = new BoxRenderable(this.ctx, {
+      width: "100%",
+      border: true,
+      borderStyle: "single",
+      borderColor: C.money,
+      backgroundColor: C.card,
+      paddingX: 1,
+      marginY: 1,
+      title: " follow-up suggestions ",
+      titleColor: C.money,
+      flexDirection: "column",
+    });
+    for (const s of suggestions) {
+      box.add(new TextRenderable(this.ctx, { content: `  · ${s}`, fg: C.dim }));
+    }
+    this.body.add(box);
+    this.setStatus("suggestions shown — Esc back to plan", C.money);
+  }
+
   /* ---------- Keys ---------- */
 
   private onKey(key: ParsedKey) {
+    if (this.view === "preview") {
+      if (key.name === "escape") {
+        this.renderWatchlist();
+        this.setStatus("", C.dim);
+        return;
+      }
+      if (key.name === "up" || key.name === "k") {
+        this.previewOffset = Math.max(0, this.previewOffset - 1);
+        this.clearBody();
+        this.drawPreview();
+      }
+      if (key.name === "down" || key.name === "j") {
+        this.previewOffset += 1;
+        this.clearBody();
+        this.drawPreview();
+      }
+      if (key.name === "s") {
+        this.clearBody();
+        this.drawPreview();
+        this.drawSuggestions();
+      }
+      return;
+    }
+
     if (this.view === "maxx") {
       if (key.name === "escape" && !this.busy) {
         this.renderWatchlist();
         this.setStatus("", C.dim);
       }
       if (key.name === "d" && !this.busy && this.lastRun) this.draftPlan();
+      if (key.name === "p" && !this.busy && this.draftedFile) this.renderPreview();
       return;
     }
 
