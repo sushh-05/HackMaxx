@@ -7,3 +7,7 @@ out/
 .env.local
 .aws-sam/
 .DS_Store
+venv/
+.venv/
+__pycache__/
+*.pyc
