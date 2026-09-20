@@ -1,6 +1,7 @@
 node_modules/
 dist/
 .next/
+.amplify-hosting/
 out/
 *.tsbuildinfo
 .env

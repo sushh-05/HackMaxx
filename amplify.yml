@@ -19,8 +19,11 @@ applications:
           commands:
             - npx --yes bun@1.4.2 --version
             - npx --yes bun@1.4.2 run build
+        postBuild:
+          commands:
+            - node scripts/prepare-amplify-ssr.mjs
       artifacts:
-        baseDirectory: .next
+        baseDirectory: .amplify-hosting
         files:
           - '**/*'
       cache:
