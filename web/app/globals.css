@@ -1,127 +1,132 @@
+@import url("https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
 
-/* ---------- Theme: Amber Slate ----------
+/* ---------- Theme: Notebook ----------
  * 21st.dev theme by serafimcloud
- * https://21st.dev/community/themes/amber-slate
- * Primary amber #df6035 on slate base.
- * :root is light mode, .dark the primary dark experience.
+ * https://21st.dev/community/themes/notebook
+ * Architectural sketch / notebook paper aesthetic.
+ * :root is light mode (paper white #f9f9f9), .dark is dark slate paper (#2b2b2b).
  */
 
 :root {
   color-scheme: light;
 
-  --background: #e8ebed;
-  --foreground: #333333;
+  --background: #f9f9f9;
+  --foreground: #3a3a3a;
   --card: #ffffff;
   --popover: #ffffff;
-  --primary: #df6035;
-  --primary-fg: #ffffff;
-  --secondary: #2f4b79;
-  --secondary-fg: #ffffff;
-  --muted: #f9fafb;
-  --muted-fg: #6b7280;
-  --accent: #d6e4f0;
-  --accent-fg: #1e3a8a;
-  --destructive: #ef4444;
+  --primary: #606060;
+  --primary-fg: #f0f0f0;
+  --secondary: #dedede;
+  --secondary-fg: #3a3a3a;
+  --muted: #e3e3e3;
+  --muted-fg: #505050;
+  --accent: #f3eac8;
+  --accent-fg: #5d4037;
+  --destructive: #c87a7a;
   --destructive-fg: #ffffff;
-  --border: #cccccc;
-  --input: #f4f5f7;
-  --ring: #e05d38;
+  --border: #747272;
+  --input: #ffffff;
+  --ring: #a0a0a0;
 
-  --chart-1: #7399bf;
-  --chart-2: #e16f41;
-  --chart-3: #d54450;
-  --chart-4: #e2b146;
-  --chart-5: #3c4c76;
+  --chart-1: #333333;
+  --chart-2: #555555;
+  --chart-3: #777777;
+  --chart-4: #999999;
+  --chart-5: #bbbbbb;
 
-  --sidebar: #dddfe2;
-  --sidebar-fg: #333333;
-  --sidebar-primary: #e05d38;
-  --sidebar-primary-fg: #ffffff;
-  --sidebar-accent: #d6e4f0;
-  --sidebar-accent-fg: #1e3a8a;
-  --sidebar-border: #e5e7eb;
-  --sidebar-ring: #e05d38;
+  --sidebar: #f0f0f0;
+  --sidebar-fg: #3a3a3a;
+  --sidebar-primary: #606060;
+  --sidebar-primary-fg: #f0f0f0;
+  --sidebar-accent: #f3eac8;
+  --sidebar-accent-fg: #5d4037;
+  --sidebar-border: #c0c0c0;
+  --sidebar-ring: #a0a0a0;
 
   /* surface ramp: page -> card -> raised */
   --surface: #ffffff;
-  --raised: #f4f5f7;
+  --raised: #f0f0f0;
 
-  /* semantic slots */
-  --data: #7399bf;
-  --money: #e2b146;
-  --deadline: #ef4444;
-  --win: #16a34a;
+  /* semantic slots — light-mode values raised for WCAG AA (≥4.5:1 on #f9f9f9) */
+  --data: #44607a;
+  --money: #8a5a0a;
+  --deadline: #a03030;
+  --win: #3a7052;
   --money-fg: #ffffff;
   --win-fg: #ffffff;
 
-  --radius: 0.5rem;
+  --radius: 0.625rem;
+  --letter-spacing: 0.5px;
+  --spacing: 0.25rem;
 
-  --wash-1: rgba(223, 96, 53, 0.10);
-  --wash-2: rgba(115, 153, 191, 0.08);
-  --wash-3: rgba(226, 177, 70, 0.06);
-  --grad-brand: linear-gradient(135deg, #df6035 0%, #e2b146 50%, #7399bf 100%);
-  --grad-money: linear-gradient(135deg, #fcd34d 0%, #e2b146 100%);
-  --grad-win: linear-gradient(135deg, #7399bf 0%, #2f4b79 100%);
+  --wash-1: rgba(96, 96, 96, 0.06);
+  --wash-2: rgba(243, 234, 200, 0.20);
+  --wash-3: rgba(200, 122, 122, 0.05);
+  --grad-brand: linear-gradient(135deg, #3a3a3a 0%, #606060 50%, #8c7e63 100%);
+  --grad-money: linear-gradient(135deg, #c89324 0%, #996515 100%);
+  --grad-win: linear-gradient(135deg, #4e8c65 0%, #3a3a3a 100%);
 }
 
 .dark {
   color-scheme: dark;
 
-  --background: #1a1a1a;
-  --foreground: #e5e5e5;
-  --card: #202020;
-  --popover: #202020;
-  --primary: #df6035;
-  --primary-fg: #ffffff;
-  --secondary: #284167;
-  --secondary-fg: #e5e5e5;
-  --muted: #2a2a2a;
-  --muted-fg: #808080;
-  --accent: #2a3656;
-  --accent-fg: #bfdbfe;
-  --destructive: #ef4444;
-  --destructive-fg: #ffffff;
-  --border: #353535;
-  --input: #303030;
-  --ring: #e05d38;
+  --background: #2b2b2b;
+  --foreground: #dcdcdc;
+  --card: #333333;
+  --popover: #333333;
+  --primary: #b0b0b0;
+  --primary-fg: #2b2b2b;
+  --secondary: #5a5a5a;
+  --secondary-fg: #c0c0c0;
+  --muted: #454545;
+  --muted-fg: #a0a0a0;
+  --accent: #e0e0e0;
+  --accent-fg: #333333;
+  --destructive: #d9afaf;
+  --destructive-fg: #2b2b2b;
+  --border: #4f4f4f;
+  --input: #333333;
+  --ring: #c0c0c0;
 
-  --chart-1: #85a6c7;
-  --chart-2: #e16f41;
-  --chart-3: #d54450;
-  --chart-4: #e2b146;
-  --chart-5: #3c4c76;
+  --chart-1: #efefef;
+  --chart-2: #d0d0d0;
+  --chart-3: #b0b0b0;
+  --chart-4: #909090;
+  --chart-5: #707070;
 
-  --sidebar: #1f1f1f;
-  --sidebar-fg: #e5e5e5;
-  --sidebar-primary: #e05d38;
-  --sidebar-primary-fg: #ffffff;
-  --sidebar-accent: #2a3656;
-  --sidebar-accent-fg: #bfdbfe;
-  --sidebar-border: #353535;
-  --sidebar-ring: #e05d38;
+  --sidebar: #212121;
+  --sidebar-fg: #dcdcdc;
+  --sidebar-primary: #b0b0b0;
+  --sidebar-primary-fg: #212121;
+  --sidebar-accent: #e0e0e0;
+  --sidebar-accent-fg: #333333;
+  --sidebar-border: #4f4f4f;
+  --sidebar-ring: #c0c0c0;
 
-  --surface: #202020;
-  --raised: #2a2a2a;
+  --surface: #333333;
+  --raised: #3d3d3d;
 
-  --data: #85a6c7;
-  --money: #e2b146;
-  --deadline: #ef4444;
-  --win: #4ade80;
-  --money-fg: #1a1a1a;
-  --win-fg: #1a1a1a;
+  --data: #94a3b8;
+  --money: #f3eac8;
+  --deadline: #d9afaf;
+  --win: #7ec294;
+  --money-fg: #2b2b2b;
+  --win-fg: #2b2b2b;
 
-  --radius: 0.5rem;
+  --radius: 0.625rem;
+  --letter-spacing: 0.5px;
+  --spacing: 0.25rem;
 
-  --wash-1: rgba(223, 96, 53, 0.12);
-  --wash-2: rgba(133, 166, 199, 0.08);
-  --wash-3: rgba(226, 177, 70, 0.06);
-  --grad-brand: linear-gradient(135deg, #e16f41 0%, #df6035 50%, #85a6c7 100%);
-  --grad-money: linear-gradient(135deg, #e2b146 0%, #df6035 100%);
-  --grad-win: linear-gradient(135deg, #85a6c7 0%, #284167 100%);
+  --wash-1: rgba(176, 176, 176, 0.08);
+  --wash-2: rgba(243, 234, 200, 0.08);
+  --wash-3: rgba(217, 175, 175, 0.05);
+  --grad-brand: linear-gradient(135deg, #ffffff 0%, #b0b0b0 50%, #f3eac8 100%);
+  --grad-money: linear-gradient(135deg, #f3eac8 0%, #e2b146 100%);
+  --grad-win: linear-gradient(135deg, #7ec294 0%, #b0b0b0 100%);
 }
 
 @theme inline {
@@ -191,10 +196,10 @@
 }
 
 @theme {
-  --font-sans: var(--font-body), "Outfit", "Inter Tight", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-display: var(--font-display-face), "Merriweather", ui-serif, Georgia, Cambria, serif;
-  --font-serif: var(--font-serif), "Instrument Serif", ui-serif, Georgia, Cambria, serif;
-  --font-mono: var(--font-mono), "Fira Code", "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-display: "Architects Daughter", var(--font-body), "Outfit", ui-sans-serif, sans-serif;
+  --font-sans: "Architects Daughter", var(--font-body), "Outfit", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-serif: var(--font-serif), Georgia, Cambria, serif;
+  --font-mono: var(--font-mono), "Fira Code", "Courier New", monospace;
 }
 
 /* ---------- Typography & Base ---------- */
@@ -267,7 +272,6 @@ svg.lucide {
   place-items: center;
   border-radius: calc(var(--radius) + 2px);
   background: linear-gradient(135deg, var(--primary), var(--data));
-  box-shadow: 0 0 16px color-mix(in srgb, var(--primary) 35%, transparent);
   color: var(--primary-fg);
   font-size: 16px;
   font-weight: 900;
@@ -275,35 +279,33 @@ svg.lucide {
 }
 
 .logo-mark:hover {
-  transform: scale(1.06) rotate(-3deg);
+  transform: scale(1.06);
   box-shadow: 0 0 22px color-mix(in srgb, var(--primary) 55%, transparent);
 }
 
-/* ---------- Cards & Glassmorphism ---------- */
+/* ---------- Cards ---------- */
 
 .card-glass {
-  background: color-mix(in srgb, var(--surface) 88%, transparent);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid color-mix(in srgb, var(--foreground) 14%, transparent);
-  box-shadow: 3px 3px 2px color-mix(in srgb, hsl(88 22% 35% / 15%), transparent);
+  background: var(--card);
+  border: 1px solid color-mix(in srgb, var(--border) 45%, transparent);
+  box-shadow: 1px 4px 6px -1px rgba(0, 0, 0, 0.05);
   transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .dark .card-glass {
-  box-shadow: 0 4px 8px -1px color-mix(in srgb, #000 10%, transparent);
+  box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.35);
 }
 
 .card-glass:hover {
-  border-color: color-mix(in srgb, var(--primary) 45%, transparent);
-  box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.18), 0 0 20px -4px color-mix(in srgb, var(--primary) 22%, transparent);
+  border-color: color-mix(in srgb, var(--primary) 50%, transparent);
+  box-shadow: 0 10px 24px -4px rgba(0, 0, 0, 0.15), 0 0 16px -4px color-mix(in srgb, var(--primary) 25%, transparent);
 }
 
 /* ---------- Worth Score Meter ---------- */
 
 .worth-fill {
   background: linear-gradient(90deg, var(--primary) 0%, var(--data) 100%);
-  animation: bar-grow 600ms cubic-bezier(0.23, 1, 0.32, 1) both;
+  animation: bar-grow 600ms cubic-bezier(0.4, 0, 0.2, 1) both;
   transform-origin: left;
 }
 
@@ -314,7 +316,7 @@ svg.lucide {
 /* ---------- Animations ---------- */
 
 .card-in {
-  animation: card-in 300ms cubic-bezier(0.23, 1, 0.32, 1) both;
+  animation: card-in 300ms cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 
 @keyframes card-in {

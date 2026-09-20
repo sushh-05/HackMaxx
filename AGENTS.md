@@ -9,9 +9,9 @@ Do not deviate without explicit user approval.
 In QA mode, flag any code that doesn't match DESIGN.md.
 
 Quick reference (full spec in DESIGN.md):
-- Display: **Merriweather** (headings/hero/score glyph). Body/UI: Inter Tight. Numbers: JetBrains Mono + tabular-nums — ALWAYS. Icons: lucide via `components/Icons.tsx`, `size-*` not `w-* h-*`, stroke set globally.
-- Color semantics: palette comes from the **Kodama Grove remix** 21st.dev theme (olive `#8a9f7b` · sage `#71856a` · gold `#a18f5c` · coral `#b5766a` on umber `#3a3529`). Use the semantic token names, not raw hues: `--color-action` · `--color-data` · `--color-money` · `--color-deadline` · `--color-win` (each with a `-foreground` ink pair).
-- Dark mode is primary: `.dark` on `<html>`; `:root` is the parchment light mirror.
+- Display/Headings: **Architects Daughter** (via `--font-notebook`). Body/UI: Architects Daughter / Outfit. Numbers: Fira Code / JetBrains Mono + tabular-nums — ALWAYS. Icons: lucide via `components/Icons.tsx`, `size-*` not `w-* h-*`, stroke set globally.
+- Color semantics: palette comes from the **Notebook** 21st.dev theme by @serafimcloud (`https://21st.dev/community/themes/notebook`). Graphite pencil (`#606060`/`#b0b0b0`), parchment cream (`#f3eac8`), slate lead (`#62758d`/`#94a3b8`), yellow highlighter (`#c89324`/`#f3eac8`). Use the semantic token names, not raw hues: `--color-action` · `--color-data` · `--color-money` · `--color-deadline` · `--color-win` (each with a `-foreground` ink pair).
+- Dark mode is primary: `.dark` on `<html>` (dark slate paper `#2b2b2b`); `:root` is the paper white mirror (`#f9f9f9`).
 - Never hardcode a Tailwind palette colour (`text-amber-400`, `bg-emerald-500`…) in components — it fights whatever theme is applied.
 - `/maxx` results = TERM-FULL-BLEED terminal session (see DESIGN.md "Signature Risk"). Honor `prefers-reduced-motion` with a static fallback.
 

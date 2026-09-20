@@ -16,24 +16,24 @@
 - **Reference sites:** linear.app (dark-first + glow accent), vercel.com (info density, mono data, functional empty states). Deliberate departure from the marketplace feel of Devpost/Unstop.
 
 ## Typography
-- **Display/Hero:** **Merriweather** (700/900) — h1–h3, hero, score glyph. Comes from the Kodama Grove remix theme; wired via `next/font/google` as `--font-display-face`. (Supersedes the earlier Clash Grotesk plan, which was never actually loaded.)
-- **Body/UI:** **Inter Tight** — everything else (paragraphs, buttons, labels, nav). Wired via `next/font`. Kept as a sans deliberately: the theme proposes Merriweather for UI too, but the dense watchlist rows need a sans for legibility.
-- **Data/Tables:** **JetBrains Mono** — ALL numbers: EV, prize, worth score, days-left, odds. Always with `tabular-nums`. The theme agrees here.
+- **Display/Hero:** **Architects Daughter** (400) — h1–h3, hero, score glyph, headings. Comes from the Notebook theme (21st.dev @serafimcloud); wired via `next/font/google` as `--font-notebook`. Gives the authentic architectural draft/notebook posture.
+- **Body/UI:** **Architects Daughter** with **Outfit** / **Inter Tight** fallback — wired via `next/font/google`. Keeps the hand-annotated sketch character while maintaining legibility.
+- **Data/Tables:** **Fira Code** / **JetBrains Mono** — ALL numbers: EV, prize, worth score, days-left, odds. Always with `tabular-nums`.
 - **Wordmark serif:** **Instrument Serif** italic — the "Maxx" in the logo; unchanged brand mark.
 - **Scale:** display-hero 40–64px/700 · h2 24–28px/600 · h3 18–20px/600 · body 15px/400 · labels 11–13px/500 mono uppercase w/ 0.08–0.12em tracking.
 - **Icons:** lucide-react at **1.75 stroke** (not the 2 default), set once via `svg.lucide` in `globals.css`. Every icon goes through `components/Icons.tsx`, which exports *roles* (`IconMoney`, `IconDeadline`, `IconWorth`…) rather than glyphs — swap the assignment there and every call site follows.
 
 ## Color
-- **Approach:** Supplied by the **Amber Slate** theme (21st.dev, by serafimcloud) — https://21st.dev/community/themes/amber-slate. A warm, high-contrast palette: **terracotta amber (`#df6035`) + slate navy (`#2f4b79`/`#284167`) + golden amber (`#e2b146`) + slate blue (`#7399bf`/`#85a6c7`)**, on clean light slate or deep charcoal slate (`#1a1a1a`). Tokens live in `web/app/globals.css`.
-- **Dark (primary experience):** background `#1a1a1a` · card `#202020` · raised `#2a2a2a` · content `#e5e5e5` · muted `#808080` · border `#353535`
-- **Light (mirror):** background `#e8ebed` · card `#ffffff` · popover `#ffffff` · content `#333333` · muted `#6b7280` · border `#cccccc`
-- **Accents:** primary `#df6035` (terracotta amber) · secondary `#284167` (slate navy) · accent `#2a3656` · destructive `#ef4444`
+- **Approach:** Supplied by the **Notebook** theme (21st.dev, by serafimcloud) — https://21st.dev/community/themes/notebook. An architectural blueprint / notebook paper palette: **graphite pencil (`#606060` / `#b0b0b0`) + parchment cream (`#f3eac8`) + slate pencil lead (`#62758d` / `#94a3b8`) + yellow highlighter ochre (`#c89324` / `#f3eac8`)**, on clean paper white (`#f9f9f9`) or dark slate notebook paper (`#2b2b2b`). Tokens live in `web/app/globals.css`.
+- **Dark (primary experience):** background `#2b2b2b` · card `#333333` · raised `#3d3d3d` · content `#dcdcdc` · muted `#a0a0a0` · border `#4f4f4f`
+- **Light (mirror):** background `#f9f9f9` · card `#ffffff` · popover `#ffffff` · content `#3a3a3a` · muted `#505050` · border `#747272`
+- **Accents:** primary `#b0b0b0` (dark) / `#606060` (light) · secondary `#5a5a5a` · accent `#e0e0e0` · destructive `#d9afaf`
 - **Semantic slots:**
-  - **`--color-action`** = primary amber `#df6035` — buttons, prompts, focus, live state.
-  - **`--color-data`** = slate blue `#7399bf` / `#85a6c7` — analysis accents, charts, timeline gradient.
-  - **`--color-money`** = golden amber `#e2b146` — prize, EV, and worth scores ≥ 75.
-  - **`--color-deadline`** = alert red `#ef4444` — days-left pressure, closing soon.
-  - **`--color-win`** = green `#4ade80` dark / `#16a34a` light — high-reuse badges, success, pulse-dot.
+  - **`--color-action`** = primary pencil `#606060` (light) / `#b0b0b0` (dark) — buttons, prompts, focus, live state.
+  - **`--color-data`** = slate pencil `#62758d` (light) / `#94a3b8` (dark) — analysis accents, charts, timeline gradient.
+  - **`--color-money`** = highlighter gold `#c89324` (light) / `#f3eac8` (dark) — prize, EV, and worth scores ≥ 75.
+  - **`--color-deadline`** = red pencil `#c87a7a` (light) / `#d9afaf` (dark) — days-left pressure, closing soon.
+  - **`--color-win`** = green pencil `#4e8c65` (light) / `#7ec294` (dark) — high-reuse badges, success, pulse-dot.
   - Each has a `--color-*-foreground` ink pair for filled surfaces (e.g. `bg-money text-money-foreground`).
 - **Dark mode:** the default and primary experience, applied as the `.dark` class on `<html>` (shadcn/ui convention; toggled by `ThemeToggle`). The light mode is `:root`.
 
@@ -81,4 +81,5 @@ Authoritative values live in `web/app/globals.css` as CSS variables: `:root` hol
 | 2026-09-20 | Icons unified behind role names, stroke set globally to 1.75 | `Icons.tsx` exports roles (`IconMoney`, `IconDeadline`), so a glyph swap is one line and every call site follows. GitHub mark rewritten to mirror lucide's prop API so it is interchangeable. |
 | 2026-09-20 | Worth score now renders the `W86` glyph, money at ≥75 | Implements the Layout rule that had been specified but never built; the bar is demoted to a hairline. |
 | 2026-09-20 | Dropdowns + breakdown moved to Radix `select`/`accordion`; `/` rebuilt as watchlist rows | The 21st.dev `market-watchlist` pattern finally lands the "ticker, not marketing card" posture. Radix select is what makes real icons-in-options possible. `native-select` removed as orphaned. |
-| 2026-09-20 | Palette + fonts switched to **Amber Slate** (21st.dev @serafimcloud) | User requested switch to Amber Slate. Warm terracotta amber primary (`#df6035`) with crisp slate accents and golden amber (`#e2b146`) money tokens. Outfit for sans, Fira Code for mono numerics. GitHub link moved from top-right to minimal sticky bottom-left component; Explore renamed to Dashboard. |
+| 2026-09-20 | Palette + fonts switched to **Amber Slate** (21st.dev @serafimcloud) | User requested switch to Amber Slate. Warm terracotta amber primary (`#df6035`) with crisp slate accents and golden amber (`#e2b146`) money tokens. Outfit for sans, Fira Code for mono numerics. GitHub link moved from top-right to minimal sticky bottom-left component; Explore renamed to Dashboard. *(superseded by Notebook below)* |
+| 2026-09-20 | Palette + fonts switched to **Notebook** (21st.dev @serafimcloud) | User requested switch to Notebook theme (https://21st.dev/community/themes/notebook). Architectural sketch / notebook paper aesthetic: graphite pencil primary (`#606060`/`#b0b0b0`), parchment cream accent (`#f3eac8`), slate pencil lead (`#62758d`/`#94a3b8`), yellow highlighter ochre (`#c89324`/`#f3eac8`). Architects Daughter loaded as `--font-notebook` for authentic blueprint/notebook handwriting across headings and cards. |
