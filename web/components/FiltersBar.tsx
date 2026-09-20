@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
-import type { LucideIcon } from "lucide-react";
-import { IconSearch, IconX, IconGlobe, IconMapPin, IconZap, IconSliders } from "./Icons";
+import { IconSearch, IconX, IconGlobe, IconMapPin, IconZap, IconSliders, type AppIcon } from "./Icons";
 
 export const MODES = ["all", "online", "offline", "hybrid"] as const;
 export type ModeFilter = (typeof MODES)[number];
@@ -49,7 +48,7 @@ export function FiltersBar({
 }): React.JSX.Element {
   const isFiltered = q.trim().length > 0 || mode !== "all" || (selectedPlatform && selectedPlatform !== "all");
 
-  const modeIcons: Record<ModeFilter, LucideIcon | null> = {
+  const modeIcons: Record<ModeFilter, AppIcon | null> = {
     all: null,
     online: IconGlobe,
     offline: IconMapPin,

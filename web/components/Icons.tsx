@@ -3,6 +3,7 @@
 // sizing/stroke via className (size falls back to 1em when width/height set by CSS).
 // Note: lucide dropped brand icons — GitHub stays a local inline SVG.
 import type React from "react";
+import type { LucideIcon, LucideProps } from "lucide-react";
 import {
   Zap,
   Trophy,
@@ -29,29 +30,38 @@ import {
   SlidersVertical,
 } from "lucide-react";
 
-export const IconZap = Zap;
-export const IconTrophy = Trophy;
-export const IconCalendar = Calendar;
-export const IconGlobe = Globe;
-export const IconMapPin = MapPin;
-export const IconSearch = Search;
-export const IconSparkles = Sparkles;
-export const IconArrowRight = ArrowRight;
-export const IconExternalLink = ExternalLink;
-export const IconCopy = Copy;
-export const IconCheck = Check;
-export const IconTrendingUp = TrendingUp;
-export const IconCheckCircle = CircleCheck;
-export const IconAlertCircle = CircleAlert;
-export const IconSun = Sun;
-export const IconMoon = Moon;
-export const IconLayers = Layers;
-export const IconTag = Tag;
-export const IconCode = CodeXml;
-export const IconChevronDown = ChevronDown;
-export const IconChevronUp = ChevronUp;
-export const IconX = X;
-export const IconSliders = SlidersVertical;
+// Bun's isolated linker can expose two identical @types/react paths. Cast at
+// this single boundary so consumers never compare Lucide's ReactNode with the
+// app's ReactNode during Next.js production type checking.
+export type AppIcon = React.ComponentType<LucideProps>;
+
+function appIcon(icon: LucideIcon): AppIcon {
+  return icon as unknown as AppIcon;
+}
+
+export const IconZap = appIcon(Zap);
+export const IconTrophy = appIcon(Trophy);
+export const IconCalendar = appIcon(Calendar);
+export const IconGlobe = appIcon(Globe);
+export const IconMapPin = appIcon(MapPin);
+export const IconSearch = appIcon(Search);
+export const IconSparkles = appIcon(Sparkles);
+export const IconArrowRight = appIcon(ArrowRight);
+export const IconExternalLink = appIcon(ExternalLink);
+export const IconCopy = appIcon(Copy);
+export const IconCheck = appIcon(Check);
+export const IconTrendingUp = appIcon(TrendingUp);
+export const IconCheckCircle = appIcon(CircleCheck);
+export const IconAlertCircle = appIcon(CircleAlert);
+export const IconSun = appIcon(Sun);
+export const IconMoon = appIcon(Moon);
+export const IconLayers = appIcon(Layers);
+export const IconTag = appIcon(Tag);
+export const IconCode = appIcon(CodeXml);
+export const IconChevronDown = appIcon(ChevronDown);
+export const IconChevronUp = appIcon(ChevronUp);
+export const IconX = appIcon(X);
+export const IconSliders = appIcon(SlidersVertical);
 
 export function IconGithub({ className = "w-4 h-4" }: { className?: string }): React.JSX.Element {
   return (
