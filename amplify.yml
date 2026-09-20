@@ -7,19 +7,20 @@ applications:
         AMPLIFY_MONOREPO_APP_ROOT: web
         NEXT_PUBLIC_API_BASE_URL: https://c9y3l3wuma.execute-api.ap-south-1.amazonaws.com/dev
     frontend:
-      buildPath: /
+      buildPath: web
       phases:
         preBuild:
           commands:
-            - rm -rf node_modules web/node_modules web/.next
+            - cd .. && rm -rf node_modules web/node_modules web/.next
             - npx --yes bun@1.4.2 --version
             - npx --yes bun@1.4.2 install --frozen-lockfile
+            - cd web
         build:
           commands:
             - npx --yes bun@1.4.2 --version
-            - npx --yes bun@1.4.2 run --cwd web build
+            - npx --yes bun@1.4.2 run build
       artifacts:
-        baseDirectory: web/.next
+        baseDirectory: .next
         files:
           - '**/*'
       cache:
