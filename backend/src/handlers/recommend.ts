@@ -7,7 +7,12 @@ import { embedText, explainMatch } from "../lib/bedrock.js";
 import { cosine } from "@hackmaxx/shared";
 
 export async function handler(event: { body?: string }) {
-  const project = JSON.parse(event.body ?? "{}") as ProjectInput;
+  const raw = JSON.parse(event.body ?? "{}");
+  const project: ProjectInput = {
+    tech_stack: [],
+    tags: [],
+    ...raw,
+  };
   if (!project.title || !project.description) {
     return { statusCode: 400, body: JSON.stringify({ error: "title + description required" }) };
   }

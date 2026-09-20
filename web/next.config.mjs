@@ -1,3 +1,6 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = { transpilePackages: ["@hackmaxx/shared"] };
+const nextConfig = {
+    output: "standalone",
+    transpilePackages: ["@hackmaxx/shared"],
+};
 export default nextConfig;

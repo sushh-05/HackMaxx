@@ -1,0 +1,25 @@
+version: 1
+applications:
+  - frontend:
+      phases:
+        preBuild:
+          commands:
+            - curl -fsSL https://bun.sh/install | bash
+            - export PATH="$HOME/.bun/bin:$PATH"
+            - bun install
+        build:
+          commands:
+            - export PATH="$HOME/.bun/bin:$PATH"
+            - bun run --cwd web build
+      artifacts:
+        baseDirectory: web/.next/standalone
+        files:
+          - "**/*"
+      cache:
+        paths:
+          - node_modules/**/*
+          - web/.next/cache/**/*
+      environment:
+        variables:
+          NEXT_PUBLIC_API_BASE_URL: https://c9y3l3wuma.execute-api.ap-south-1.amazonaws.com/dev
+    appRoot: /

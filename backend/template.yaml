@@ -7,9 +7,11 @@ Globals:
     Runtime: nodejs20.x
     MemorySize: 256
     Timeout: 15
+    Architectures: [x86_64]
     Environment:
       Variables:
         HACKATHONS_TABLE: !Ref HackathonsTable
+        AWS_REGION_NAME: !Ref AWS::Region
         BEDROCK_EMBED_MODEL: amazon.titan-embed-text-v2:0
         BEDROCK_LLM_MODEL: anthropic.claude-3-haiku-20240307-v1:0
 
@@ -30,13 +32,23 @@ Resources:
     Type: AWS::Serverless::Api
     Properties:
       StageName: dev
-      Cors: "'*'"
+      Cors:
+        AllowMethods: "'GET,POST,OPTIONS'"
+        AllowHeaders: "'Content-Type,Authorization'"
+        AllowOrigin: "'*'"
 
   ListFn:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: ./
-      Handler: dist/handlers/list.handler
+      CodeUri: .aws-sam/build/ListFn/
+      Handler: list.handler
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref HackathonsTable
+        - Statement:
+            - Effect: Allow
+              Action: [bedrock:InvokeModel]
+              Resource: "*"
       Events:
         List:
           Type: Api
@@ -48,8 +60,16 @@ Resources:
   RecommendFn:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: ./
-      Handler: dist/handlers/recommend.handler
+      CodeUri: .aws-sam/build/RecommendFn/
+      Handler: recommend.handler
+      Timeout: 30
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref HackathonsTable
+        - Statement:
+            - Effect: Allow
+              Action: [bedrock:InvokeModel]
+              Resource: "*"
       Events:
         Recommend:
           Type: Api
@@ -61,9 +81,16 @@ Resources:
   RefreshFn:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: ./
-      Handler: dist/handlers/refresh.handler
+      CodeUri: .aws-sam/build/RefreshFn/
+      Handler: refresh.handler
       Timeout: 60
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref HackathonsTable
+        - Statement:
+            - Effect: Allow
+              Action: [bedrock:InvokeModel]
+              Resource: "*"
       Environment:
         Variables:
           TINYFISH_API_KEY: ""
@@ -77,4 +104,5 @@ Resources:
 
 Outputs:
   ApiUrl:
+    Description: API Gateway endpoint URL
     Value: !Sub https://${Api}.execute-api.${AWS::Region}.amazonaws.com/dev
