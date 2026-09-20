@@ -1,4 +1,5 @@
 "use client";
+import React from "react";
 import { useCurrency, CURRENCIES, type CurrencyCode } from "../lib/currency";
 import { Select, SelectContent, SelectItem, SelectTrigger } from "./ui/select";
 
