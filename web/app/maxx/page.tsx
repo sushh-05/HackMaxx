@@ -46,7 +46,7 @@ const EXAMPLES = [
   },
 ];
 
-export default function MaxxPage() {
+export default function MaxxPage(): React.ReactNode {
   const [selectedExample, setSelectedExample] = useState<number | null>(0);
   const [title, setTitle] = useState(EXAMPLES[0].title);
   const [description, setDescription] = useState(EXAMPLES[0].description);
@@ -215,11 +215,10 @@ export default function MaxxPage() {
                 key={ex.label}
                 type="button"
                 onClick={() => loadExample(i)}
-                className={`btn btn-xs rounded-xl px-3 py-1 font-semibold text-xs transition-all ${
-                  selectedExample === i
+                className={`btn btn-xs rounded-xl px-3 py-1 font-semibold text-xs transition-all ${selectedExample === i
                     ? "bg-primary text-primary-content border-primary shadow-sm"
                     : "btn-ghost border border-base-content/15 hover:border-primary/40 text-base-content/75"
-                }`}
+                  }`}
               >
                 {ex.label}
               </button>
@@ -345,9 +344,8 @@ export default function MaxxPage() {
             type="button"
             onClick={go}
             disabled={!canSubmit}
-            className={`btn btn-primary btn-lg rounded-2xl font-extrabold px-8 shadow-xl shadow-primary/25 transition-all duration-300 gap-2.5 w-full sm:w-auto ${
-              canSubmit ? "hover:scale-[1.02] active:scale-[0.98]" : "opacity-50 cursor-not-allowed"
-            }`}
+            className={`btn btn-primary btn-lg rounded-2xl font-extrabold px-8 shadow-xl shadow-primary/25 transition-all duration-300 gap-2.5 w-full sm:w-auto ${canSubmit ? "hover:scale-[1.02] active:scale-[0.98]" : "opacity-50 cursor-not-allowed"
+              }`}
           >
             {loading ? (
               <>
@@ -426,33 +424,30 @@ export default function MaxxPage() {
                 <button
                   type="button"
                   onClick={() => setReuseFilter("all")}
-                  className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all ${
-                    reuseFilter === "all"
+                  className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all ${reuseFilter === "all"
                       ? "bg-primary text-primary-content shadow-sm"
                       : "text-base-content/60 hover:text-base-content"
-                  }`}
+                    }`}
                 >
                   All ({res.recommendations.length})
                 </button>
                 <button
                   type="button"
                   onClick={() => setReuseFilter("High")}
-                  className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all ${
-                    reuseFilter === "High"
+                  className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all ${reuseFilter === "High"
                       ? "bg-emerald-500 text-white shadow-sm"
                       : "text-base-content/60 hover:text-base-content"
-                  }`}
+                    }`}
                 >
                   High Reuse Only
                 </button>
                 <button
                   type="button"
                   onClick={() => setReuseFilter("Medium")}
-                  className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all ${
-                    reuseFilter === "Medium"
+                  className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all ${reuseFilter === "Medium"
                       ? "bg-amber-500 text-white shadow-sm"
                       : "text-base-content/60 hover:text-base-content"
-                  }`}
+                    }`}
                 >
                   Medium Reuse
                 </button>
