@@ -27,6 +27,8 @@ import {
   IconTarget,
   IconSparkles,
   IconTrendingUp,
+  IconPin,
+  IconPinOff,
 } from "./Icons";
 import { getPlatformBadgeStyle } from "./HackathonCard";
 import { useCurrency } from "../lib/currency";
@@ -87,11 +89,15 @@ export function HackathonDrawer({
   open,
   onClose,
   onTagClick,
+  isPinned = false,
+  onTogglePin,
 }: {
   row: WatchlistRow | null;
   open: boolean;
   onClose: () => void;
   onTagClick?: (tag: string) => void;
+  isPinned?: boolean;
+  onTogglePin?: (id: string) => void;
 }) {
   const { format } = useCurrency();
   // Keep the last row mounted during the exit transition so content doesn't
@@ -100,6 +106,16 @@ export function HackathonDrawer({
   useEffect(() => {
     if (row) setRendered(row);
   }, [row]);
+
+  // Lock background scroll when drawer is open.
+  useEffect(() => {
+    if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [open]);
 
   // Esc to close.
   useEffect(() => {
@@ -168,14 +184,31 @@ export function HackathonDrawer({
               {rendered.title}
             </h2>
           </div>
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Close details"
-            className="rounded-md p-1 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-          >
-            <IconX className="size-4" />
-          </button>
+          <div className="flex items-center gap-1 shrink-0">
+            {onTogglePin && (
+              <button
+                type="button"
+                onClick={() => onTogglePin(rendered.id)}
+                aria-pressed={isPinned}
+                aria-label={isPinned ? `Unpin ${rendered.title}` : `Pin ${rendered.title}`}
+                title={isPinned ? "Unpin from ticker" : "Pin to ticker"}
+                className={cn(
+                  "rounded-md p-1.5 transition-colors",
+                  isPinned ? "text-action bg-action/10" : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                )}
+              >
+                {isPinned ? <IconPin className="size-4" /> : <IconPinOff className="size-4" />}
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="Close details"
+              className="rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+            >
+              <IconX className="size-4" />
+            </button>
+          </div>
         </div>
 
         {/* Body */}

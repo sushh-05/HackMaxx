@@ -180,11 +180,11 @@ export function HackathonWatchlist({
                 : undefined
             }
             className={cn(
-              "grid grid-cols-[3px_minmax(0,1fr)] items-center gap-x-3 gap-y-1.5 border-b border-border px-4 py-3 transition-colors last:border-b-0 hover:bg-foreground/[0.03] sm:gap-x-3 sm:px-5",
+              "grid grid-cols-[3px_minmax(0,1fr)] items-center gap-x-3 gap-y-1.5 border-b border-border px-4 py-3 transition-colors last:border-b-0 hover:bg-foreground/[0.03] sm:gap-x-3 sm:px-5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-action/60 focus-visible:ring-inset",
               compareIds
                 ? "sm:grid-cols-[20px_3px_minmax(0,1fr)_74px_124px_110px]"
                 : "sm:grid-cols-[3px_minmax(0,1fr)_74px_124px_110px]",
-              onRowClick && "cursor-pointer",
+              onRowClick && "cursor-pointer select-none",
             )}
           >
             {/* compare checkbox */}
@@ -274,7 +274,7 @@ export function HackathonWatchlist({
             </div>
 
             {/* worth | prize | deadline — `sm:contents` hands the three cells to the outer grid */}
-            <div className={cn("flex items-center justify-between gap-3 sm:contents", compareIds ? "col-start-3" : "col-start-2")}>
+            <div className="col-start-2 flex items-center justify-between gap-3 sm:contents">
               <div className="flex justify-end sm:w-[74px]">
                 {typeof row.worth === "number" ? (
                   <WorthScoreGlyph worth={row.worth} className="text-base" />

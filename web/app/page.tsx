@@ -375,6 +375,8 @@ export default function ExplorePage(): React.JSX.Element {
         open={drawerRow !== null}
         onClose={() => setDrawerRow(null)}
         onTagClick={setQ}
+        isPinned={drawerRow ? pins.includes(drawerRow.id) : false}
+        onTogglePin={togglePin}
       />
 
       {/* Floating compare bar — appears once ≥1 row is staged */}

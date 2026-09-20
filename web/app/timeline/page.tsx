@@ -2,8 +2,20 @@
 import React, { useEffect, useMemo, useState } from "react";
 import type { Hackathon } from "@hackmaxx/shared";
 import { fetchHackathons } from "../../lib/api";
-import { IconDeadline, IconTimeline, IconFlame } from "../../components/Icons";
+import {
+  IconDeadline,
+  IconTimeline,
+  IconFlame,
+  IconGlobe,
+  IconMapPin,
+  IconHybrid,
+  IconZap,
+} from "../../components/Icons";
 import { useCurrency } from "../../lib/currency";
+import { Button } from "../../components/ui/button";
+import { HackathonDrawer } from "../../components/HackathonDrawer";
+import { getPlatformBadgeStyle } from "../../components/HackathonCard";
+import type { WatchlistRow } from "../../components/ui/hackathon-watchlist";
 
 const DAY_MS = 86400000;
 const URGENT_DAYS = 7;
@@ -29,6 +41,8 @@ export default function TimelinePage(): React.JSX.Element {
   const [items, setItems] = useState<Hackathon[]>([]);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState("");
+  const [modeFilter, setModeFilter] = useState<"all" | "online" | "offline" | "hybrid">("all");
+  const [drawerRow, setDrawerRow] = useState<WatchlistRow | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -53,16 +67,16 @@ export default function TimelinePage(): React.JSX.Element {
   }, []);
 
   const rows = useMemo(() => {
-    return [...items]
+    return items
       .filter((h) => h.deadline && !Number.isNaN(new Date(h.deadline).getTime()))
+      .filter((h) => (modeFilter === "all" ? true : h.mode === modeFilter))
       .sort((a, b) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime());
-  }, [items]);
+  }, [items, modeFilter]);
 
   const rangeStart = useMemo(() => todayStart(), []);
   const rangeEnd = useMemo(() => {
     if (rows.length === 0) return rangeStart + 30 * DAY_MS;
     const furthest = Math.max(...rows.map((h) => new Date(h.deadline).getTime()));
-    // pad past the last bar and guarantee a minimum window
     return Math.max(furthest + DAY_MS, rangeStart + DAY_MS * 14);
   }, [rows, rangeStart]);
   const span = rangeEnd - rangeStart;
@@ -108,12 +122,33 @@ export default function TimelinePage(): React.JSX.Element {
             <span className="text-deadline font-semibold">deadline colour</span> when the window is ≤ {URGENT_DAYS} days.
           </p>
         </div>
-        <div className="flex items-center gap-4 font-mono tabular-nums text-xs text-muted-foreground">
-          <span className="flex items-center gap-1">
-            <IconFlame className="size-3.5 text-deadline" />
-            <strong className="text-foreground">{urgentCount}</strong> closing soon
-          </span>
-          <span className="text-money font-semibold">{format(totalPrize)} on the board</span>
+
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+          {/* Mode filter tabs */}
+          <div className="flex items-center gap-1 p-1 bg-muted/70 rounded-xl border border-border">
+            {(["all", "online", "offline", "hybrid"] as const).map((m) => (
+              <button
+                key={m}
+                type="button"
+                onClick={() => setModeFilter(m)}
+                className={`px-2.5 py-1 text-xs font-semibold rounded-lg capitalize transition-all ${
+                  modeFilter === m
+                    ? "bg-primary text-primary-foreground shadow-sm"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {m}
+              </button>
+            ))}
+          </div>
+
+          <div className="flex items-center gap-3 font-mono tabular-nums text-xs text-muted-foreground">
+            <span className="flex items-center gap-1">
+              <IconFlame className="size-3.5 text-deadline" />
+              <strong className="text-foreground">{urgentCount}</strong> closing soon
+            </span>
+            <span className="text-money font-semibold">{format(totalPrize)}</span>
+          </div>
         </div>
       </div>
 
@@ -161,7 +196,7 @@ export default function TimelinePage(): React.JSX.Element {
 
           {!loading && rows.length === 0 && !err && (
             <div className="py-12 text-center text-sm text-muted-foreground">
-              No upcoming hackathons with deadlines.
+              No upcoming hackathons found for mode: {modeFilter}.
             </div>
           )}
 
@@ -172,20 +207,39 @@ export default function TimelinePage(): React.JSX.Element {
               const width = Math.max(pct(dl) - left, 0.5);
               const dLeft = daysLeft(h.deadline);
               const urgent = dLeft <= URGENT_DAYS;
+              const platform = getPlatformBadgeStyle(h.platform);
+
               return (
-                <li key={h.id} className="flex items-center gap-3 py-2.5" style={{ animationDelay: `${Math.min(i * 30, 300)}ms` }}>
-                  {/* Title + deadline meta */}
-                  <div className="w-44 sm:w-56 shrink-0 min-w-0">
-                    <a
-                      href={h.url}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="block truncate text-sm font-semibold text-foreground hover:text-action hover:underline no-underline"
-                      title={h.title}
-                    >
-                      {h.title}
-                    </a>
-                    <div className="flex items-center gap-1.5 font-mono tabular-nums text-[11px] text-muted-foreground">
+                <li
+                  key={h.id}
+                  className="flex items-center gap-3 py-2.5 hover:bg-foreground/[0.02] transition-colors rounded-lg px-1.5 -mx-1.5 cursor-pointer"
+                  onClick={() =>
+                    setDrawerRow({
+                      id: h.id,
+                      title: h.title,
+                      url: h.url,
+                      platform: h.platform,
+                      mode: h.mode,
+                      deadline: h.deadline,
+                      prize_inr: h.prize_inr,
+                      tech_tags: h.tech_tags,
+                    })
+                  }
+                  style={{ animationDelay: `${Math.min(i * 30, 300)}ms` }}
+                >
+                  {/* Title + platform + deadline meta */}
+                  <div className="w-48 sm:w-60 shrink-0 min-w-0">
+                    <div className="flex items-center gap-1.5 min-w-0">
+                      <span
+                        className={`inline-flex shrink-0 rounded-full border px-1.5 py-px text-[9px] font-bold tracking-wider uppercase ${platform.bg} ${platform.text} ${platform.border}`}
+                      >
+                        {h.platform}
+                      </span>
+                      <span className="truncate text-sm font-semibold text-foreground hover:text-action">
+                        {h.title}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-1.5 font-mono tabular-nums text-[11px] text-muted-foreground mt-0.5">
                       <IconDeadline className={`size-3 ${urgent ? "text-deadline" : "text-data"}`} />
                       <span className={urgent ? "text-deadline font-semibold" : ""}>{dLeft}d left</span>
                       <span>·</span>
@@ -211,9 +265,23 @@ export default function TimelinePage(): React.JSX.Element {
                     />
                   </div>
 
-                  {/* Prize */}
-                  <div className="w-24 shrink-0 text-right font-mono tabular-nums text-sm font-semibold text-money">
-                    {h.prize_inr > 0 ? format(h.prize_inr) : "—"}
+                  {/* Prize & Maxx action */}
+                  <div className="flex items-center gap-2 shrink-0">
+                    <div className="w-20 text-right font-mono tabular-nums text-sm font-semibold text-money">
+                      {h.prize_inr > 0 ? format(h.prize_inr) : "—"}
+                    </div>
+                    <Button
+                      asChild
+                      size="sm"
+                      variant="ghost"
+                      className="h-7 px-2 text-xs font-semibold text-action hover:bg-action/10 hover:text-action"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <a href={`/maxx?title=${encodeURIComponent(h.title)}&tags=${encodeURIComponent(h.tech_tags.join(", "))}`}>
+                        <IconZap className="size-3" />
+                        <span className="hidden sm:inline">Maxx</span>
+                      </a>
+                    </Button>
                   </div>
                 </li>
               );
@@ -234,6 +302,13 @@ export default function TimelinePage(): React.JSX.Element {
           <span className="inline-block w-px h-3 bg-action/60" /> today
         </span>
       </div>
+
+      {/* Detail slide-over drawer */}
+      <HackathonDrawer
+        row={drawerRow}
+        open={drawerRow !== null}
+        onClose={() => setDrawerRow(null)}
+      />
     </section>
   );
 }

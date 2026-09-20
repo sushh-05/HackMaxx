@@ -63,10 +63,21 @@ function PaletteDialog({ onClose }: { onClose: () => void }): React.JSX.Element 
   const [hackathons, setHackathons] = useState<Hackathon[]>([]);
   const [loadingHackathons, setLoadingHackathons] = useState(true);
   const inputRef = useRef<HTMLInputElement>(null);
+  const close = useCallback(() => onClose(), [onClose]);
 
   useEffect(() => {
     inputRef.current?.focus();
-  }, []);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") close();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = prev;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [close]);
 
   useEffect(() => {
     let cancelled = false;
@@ -84,8 +95,6 @@ function PaletteDialog({ onClose }: { onClose: () => void }): React.JSX.Element 
       cancelled = true;
     };
   }, []);
-
-  const close = useCallback(() => onClose(), [onClose]);
 
   const cycleCurrency = useCallback(() => {
     const idx = CYCLE.indexOf(currency);
@@ -242,7 +251,7 @@ function PaletteDialog({ onClose }: { onClose: () => void }): React.JSX.Element 
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-start justify-center bg-background/60 backdrop-blur-sm pt-[18vh] px-4"
+      className="fixed inset-0 z-[100] flex items-start justify-center bg-background/60 backdrop-blur-sm pt-[10vh] sm:pt-[18vh] px-4"
       role="presentation"
       onMouseDown={(e) => {
         if (e.target === e.currentTarget) close();

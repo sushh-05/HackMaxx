@@ -23,6 +23,7 @@ import {
   IconTrophy,
   IconZap,
   IconScale,
+  IconX,
 } from "../../components/Icons";
 import { Button } from "../../components/ui/button";
 import { Alert, AlertTitle, AlertDescription } from "../../components/ui/alert";
@@ -38,29 +39,6 @@ const MODE_ICON: Record<string, React.ReactNode> = {
   offline: <IconMapPin className="size-3 text-data" />,
   hybrid: <IconHybrid className="size-3 text-money" />,
 };
-
-/** Staged ids: ?ids=a,b,c in the URL wins, localStorage is the fallback. Client-only, guarded. */
-function useCompareIds(): string[] {
-  const [ids, setIds] = useState<string[]>([]);
-  useEffect(() => {
-    try {
-      const fromUrl = new URLSearchParams(window.location.search).get("ids");
-      if (fromUrl) {
-        setIds(fromUrl.split(",").map((s) => s.trim()).filter(Boolean).slice(0, 3));
-        return;
-      }
-      const raw = window.localStorage.getItem(COMPARE_KEY);
-      if (!raw) return;
-      const parsed = JSON.parse(raw) as unknown;
-      if (Array.isArray(parsed)) {
-        setIds(parsed.filter((x): x is string => typeof x === "string").slice(0, 3));
-      }
-    } catch {
-      /* ignore corrupt storage */
-    }
-  }, []);
-  return ids;
-}
 
 function Cell({
   best = false,
@@ -96,11 +74,39 @@ function RowLabel({ children }: { children: React.ReactNode }) {
 }
 
 export default function ComparePage(): React.JSX.Element {
-  const ids = useCompareIds();
+  const [ids, setIds] = useState<string[]>([]);
   const { format } = useCurrency();
   const [items, setItems] = useState<Hackathon[]>([]);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState("");
+
+  useEffect(() => {
+    try {
+      const fromUrl = new URLSearchParams(window.location.search).get("ids");
+      if (fromUrl) {
+        setIds(fromUrl.split(",").map((s) => s.trim()).filter(Boolean).slice(0, 3));
+        return;
+      }
+      const raw = window.localStorage.getItem(COMPARE_KEY);
+      if (!raw) return;
+      const parsed = JSON.parse(raw) as unknown;
+      if (Array.isArray(parsed)) {
+        setIds(parsed.filter((x): x is string => typeof x === "string").slice(0, 3));
+      }
+    } catch {
+      /* ignore corrupt storage */
+    }
+  }, []);
+
+  function removeId(id: string) {
+    setIds((prev) => {
+      const next = prev.filter((x) => x !== id);
+      try {
+        window.localStorage.setItem(COMPARE_KEY, JSON.stringify(next));
+      } catch {}
+      return next;
+    });
+  }
 
   useEffect(() => {
     let cancelled = false;
@@ -238,18 +244,29 @@ export default function ComparePage(): React.JSX.Element {
                   return (
                     <th key={c.id} className="px-4 py-3 text-left align-bottom">
                       <div className="flex flex-col gap-1.5">
-                        <span
-                          className={
-                            "inline-flex w-fit rounded-full border px-1.5 py-px text-[9px] font-bold tracking-wider " +
-                            platform.bg +
-                            " " +
-                            platform.text +
-                            " " +
-                            platform.border
-                          }
-                        >
-                          {c.platform}
-                        </span>
+                        <div className="flex items-center justify-between gap-2">
+                          <span
+                            className={
+                              "inline-flex w-fit rounded-full border px-1.5 py-px text-[9px] font-bold tracking-wider uppercase " +
+                              platform.bg +
+                              " " +
+                              platform.text +
+                              " " +
+                              platform.border
+                            }
+                          >
+                            {c.platform}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => removeId(c.id)}
+                            aria-label={`Remove ${c.title} from comparison`}
+                            title="Remove from compare"
+                            className="size-5 flex items-center justify-center rounded-md text-muted-foreground opacity-50 hover:text-deadline hover:opacity-100 hover:bg-deadline/10 transition-colors"
+                          >
+                            <IconX className="size-3" />
+                          </button>
+                        </div>
                         <a
                           href={c.url}
                           target="_blank"
@@ -368,6 +385,19 @@ export default function ComparePage(): React.JSX.Element {
                   <Cell key={c.id} best={ppdOf(c) === best.ppd} className="text-money">
                     {format(Math.round(ppdOf(c)))} /d
                   </Cell>
+                ))}
+              </tr>
+              <tr>
+                <RowLabel>Action</RowLabel>
+                {cols.map((c) => (
+                  <td key={c.id} className="border-t border-border px-4 py-3 align-middle">
+                    <Button asChild size="sm" variant="outline" className="w-full text-xs font-semibold gap-1.5 rounded-xl border-action/40 text-action hover:bg-action/10 hover:text-action">
+                      <a href={`/maxx?title=${encodeURIComponent(c.title)}&tags=${encodeURIComponent(c.tech_tags.join(", "))}`}>
+                        <IconZap className="size-3.5" />
+                        <span>Maxx this</span>
+                      </a>
+                    </Button>
+                  </td>
                 ))}
               </tr>
             </tbody>

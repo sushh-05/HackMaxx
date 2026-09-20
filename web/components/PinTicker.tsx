@@ -35,7 +35,7 @@ export function PinTicker({
 
   return (
     <div className="sticky top-16 z-40 -mx-4 border-b border-border bg-background/90 backdrop-blur-xl sm:-mx-6">
-      <div className="flex items-stretch overflow-x-auto">
+      <div className="flex items-stretch overflow-x-auto scrollbar-none [&::-webkit-scrollbar]:hidden">
         <span className="flex shrink-0 items-center gap-1.5 border-r border-border px-3 font-mono text-[9px] font-bold tracking-[0.12em] text-muted-foreground uppercase">
           <IconPin className="size-3 text-action" />
           Pinned

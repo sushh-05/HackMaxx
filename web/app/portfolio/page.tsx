@@ -7,7 +7,7 @@
  * dividers, mono tabular numerics, W-glyph for the best worth score, money
  * colour for best total EV. Rows deep-link back to /maxx prefilled.
  */
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { cn } from "cn";
 import {
   IconPortfolio,
@@ -16,6 +16,8 @@ import {
   IconZap,
   IconBoxes,
   IconArrowRight,
+  IconTrophy,
+  IconTrendingUp,
 } from "../../components/Icons";
 import { WorthScoreGlyph } from "../../components/WorthScoreGauge";
 import { Button } from "../../components/ui/button";
@@ -54,25 +56,103 @@ export default function PortfolioPage(): React.JSX.Element {
     setProjects(listProjects());
   }
 
+  const totalPortfolioEV = useMemo(() => {
+    if (!projects) return 0;
+    return projects.reduce((s, p) => s + (p.snapshot.totalEV || 0), 0);
+  }, [projects]);
+
+  const peakWorth = useMemo(() => {
+    if (!projects || projects.length === 0) return 0;
+    return Math.max(...projects.map((p) => p.snapshot.topWorth || 0));
+  }, [projects]);
+
+  const totalSteps = useMemo(() => {
+    if (!projects) return 0;
+    return projects.reduce((s, p) => s + (p.snapshot.planLength || 0), 0);
+  }, [projects]);
+
   return (
     <section className="space-y-6 pt-6 sm:pt-8">
-      <div className="space-y-3">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-primary/10 text-primary border border-primary/20">
-          <IconPortfolio className="size-3.5" />
-          <span>Open Positions</span>
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div className="space-y-2">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-primary/10 text-primary border border-primary/20">
+            <IconPortfolio className="size-3.5" />
+            <span>Open Positions</span>
+          </div>
+          <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight">
+            Your project{" "}
+            <span className="font-serif italic font-normal text-4xl sm:text-5xl lg:text-6xl grad-text tracking-normal">
+              portfolio.
+            </span>
+          </h1>
+          <p className="text-sm sm:text-base text-muted-foreground max-w-3xl leading-relaxed">
+            Projects you have Maxxed, held like positions. Each row carries the last run&apos;s
+            total expected value and best worth score — re-Maxx when the hackathon tape moves.
+          </p>
         </div>
-        <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight">
-          Your project{" "}
-          <span className="font-serif italic font-normal text-4xl sm:text-5xl lg:text-6xl grad-text tracking-normal">
-            portfolio.
-          </span>
-        </h1>
-        <p className="text-sm sm:text-base text-muted-foreground max-w-3xl leading-relaxed">
-          Projects you have Maxxed, held like positions. Each row carries the last run&apos;s
-          total expected value and best worth score — re-Maxx when the hackathon tape moves.
-        </p>
+
+        <Button asChild size="sm" className="gap-1.5 rounded-xl font-bold self-start sm:self-auto shadow-sm shadow-primary/25">
+          <a href="/maxx">
+            <IconZap className="size-4" />
+            <span>Maxx New Project</span>
+          </a>
+        </Button>
       </div>
 
+      {/* Summary Stat Cards */}
+      {projects && projects.length > 0 && (
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-1">
+          <div className="rounded-2xl border border-border bg-card p-4 shadow-sm">
+            <span className="text-[11px] uppercase tracking-wider font-bold text-money flex items-center gap-1.5">
+              <IconTrophy className="size-3.5 text-money" /> Total Portfolio EV
+            </span>
+            <span className="font-mono text-xl sm:text-2xl font-black tabular-nums text-money block mt-1">
+              {format(totalPortfolioEV)}
+            </span>
+            <span className="text-[11px] text-muted-foreground block mt-0.5">
+              across {projects.length} {projects.length === 1 ? "position" : "positions"}
+            </span>
+          </div>
+
+          <div className="rounded-2xl border border-border bg-card p-4 shadow-sm">
+            <span className="text-[11px] uppercase tracking-wider font-bold text-primary flex items-center gap-1.5">
+              <IconPortfolio className="size-3.5 text-primary" /> Active Holdings
+            </span>
+            <span className="font-mono text-xl sm:text-2xl font-black tabular-nums text-primary block mt-1">
+              {projects.length}
+            </span>
+            <span className="text-[11px] text-muted-foreground block mt-0.5">
+              saved project plans
+            </span>
+          </div>
+
+          <div className="rounded-2xl border border-border bg-card p-4 shadow-sm">
+            <span className="text-[11px] uppercase tracking-wider font-bold text-action flex items-center gap-1.5">
+              <IconTrendingUp className="size-3.5 text-action" /> Peak Match Score
+            </span>
+            <div className="mt-1 flex items-baseline gap-2">
+              <WorthScoreGlyph worth={peakWorth} className="text-xl sm:text-2xl font-black" />
+            </div>
+            <span className="text-[11px] text-muted-foreground block mt-0.5">
+              best individual fit
+            </span>
+          </div>
+
+          <div className="rounded-2xl border border-border bg-card p-4 shadow-sm">
+            <span className="text-[11px] uppercase tracking-wider font-bold text-data flex items-center gap-1.5">
+              <IconBoxes className="size-3.5 text-data" /> Submission Pipeline
+            </span>
+            <span className="font-mono text-xl sm:text-2xl font-black tabular-nums text-data block mt-1">
+              {totalSteps} Steps
+            </span>
+            <span className="text-[11px] text-muted-foreground block mt-0.5">
+              planned submissions
+            </span>
+          </div>
+        </div>
+      )}
+
+      {/* Empty State */}
       {projects !== null && projects.length === 0 && (
         <div className="rounded-2xl border border-dashed border-border bg-card px-6 py-14 text-center space-y-4">
           <div className="mx-auto size-11 rounded-xl bg-muted flex items-center justify-center">
@@ -83,7 +163,7 @@ export default function PortfolioPage(): React.JSX.Element {
               No positions open
             </p>
             <p className="text-xs text-muted-foreground max-w-sm mx-auto">
-              Run a project through the engine and save the result — it will list here with
+              Run a project through the engine and click &ldquo;Save to portfolio&rdquo; — it will list here with
               its EV, plan size and best worth score.
             </p>
           </div>
@@ -97,6 +177,7 @@ export default function PortfolioPage(): React.JSX.Element {
         </div>
       )}
 
+      {/* Positions Table */}
       {projects && projects.length > 0 && (
         <div className="w-full overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
           <div className="flex items-center justify-between border-b border-border px-4 py-3 sm:px-5">
@@ -106,8 +187,8 @@ export default function PortfolioPage(): React.JSX.Element {
             </span>
           </div>
 
-          {/* column header — mirrors the hackathon watchlist grid */}
-          <div className="hidden border-b border-border px-4 py-2 sm:grid sm:grid-cols-[minmax(0,1fr)_110px_74px_124px_64px_40px] sm:items-center sm:gap-3 sm:px-5">
+          {/* Column headers */}
+          <div className="hidden border-b border-border px-4 py-2 sm:grid sm:grid-cols-[minmax(0,1fr)_110px_74px_124px_64px_90px_36px] sm:items-center sm:gap-3 sm:px-5">
             <span className="text-[10px] tracking-[0.07em] text-muted-foreground uppercase">
               Project
             </span>
@@ -124,14 +205,15 @@ export default function PortfolioPage(): React.JSX.Element {
               Plan
             </span>
             <span />
+            <span />
           </div>
 
           {projects.map((p) => (
             <div
               key={p.id}
-              className="grid grid-cols-[minmax(0,1fr)_40px] items-center gap-x-3 gap-y-1.5 border-b border-border px-4 py-3 transition-colors last:border-b-0 hover:bg-foreground/[0.03] sm:grid-cols-[minmax(0,1fr)_110px_74px_124px_64px_40px] sm:px-5"
+              className="grid grid-cols-[minmax(0,1fr)_36px] items-center gap-x-3 gap-y-1.5 border-b border-border px-4 py-3 transition-colors last:border-b-0 hover:bg-foreground/[0.03] sm:grid-cols-[minmax(0,1fr)_110px_74px_124px_64px_90px_36px] sm:px-5"
             >
-              {/* project */}
+              {/* project title + stack tags */}
               <div className="flex min-w-0 flex-col gap-1">
                 <a
                   href={maxxHref(p)}
@@ -155,7 +237,7 @@ export default function PortfolioPage(): React.JSX.Element {
                 </div>
               </div>
 
-              {/* metrics — sm:contents hands cells to the outer grid on desktop */}
+              {/* metrics — sm:contents promotes cells to outer grid */}
               <div className="col-start-1 flex items-center justify-between gap-3 sm:contents">
                 <div className="flex items-center justify-start gap-1 text-[11px] text-muted-foreground sm:justify-end sm:w-[110px]">
                   <IconDeadline className="size-3" />
@@ -183,7 +265,17 @@ export default function PortfolioPage(): React.JSX.Element {
                 </div>
               </div>
 
-              {/* close position */}
+              {/* re-maxx button */}
+              <div className="hidden sm:flex justify-end sm:w-[90px]">
+                <Button asChild size="sm" variant="ghost" className="h-7 px-2 text-xs font-semibold gap-1 text-action hover:bg-action/10 hover:text-action">
+                  <a href={maxxHref(p)}>
+                    <IconZap className="size-3" />
+                    <span>Re-Maxx</span>
+                  </a>
+                </Button>
+              </div>
+
+              {/* close/delete position */}
               <div className={cn("row-start-1 col-start-2 flex justify-end sm:row-auto sm:col-start-auto")}>
                 <button
                   type="button"
