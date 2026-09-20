@@ -9,7 +9,7 @@ import { CommandPalette } from "../../components/CommandPalette";
 import { UserButton } from "@clerk/nextjs";
 import { IconZap } from "../../components/Icons";
 
-export default async function AppLayout({ children }: { children: React.ReactNode }) {
+export default async function AppLayout({ children }: { children: React.ReactNode }): Promise<React.JSX.Element> {
   const { userId } = await auth();
 
   if (!userId) {
