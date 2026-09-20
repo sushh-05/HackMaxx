@@ -13,8 +13,8 @@ const CORS_HEADERS = {
   "access-control-allow-headers": "content-type",
 };
 
-function json(body: string, status = 200) {
-  return new Response(body, { status, headers: { "content-type": "application/json", ...CORS_HEADERS } });
+function json(body: string, status = 200, headers: Record<string, string> = {}) {
+  return new Response(body, { status, headers: { "content-type": "application/json", ...CORS_HEADERS, ...headers } });
 }
 
 Bun.serve({
@@ -31,15 +31,15 @@ Bun.serve({
       const params: Record<string, string> = {};
       url.searchParams.forEach((v, k) => (params[k] = v));
       const r = await list({ queryStringParameters: params });
-      return json(r.body, r.statusCode);
+      return json(r.body, r.statusCode, r.headers);
     }
     if (url.pathname === "/recommend" && req.method === "POST") {
       const r = await recommend({ body: await req.text() });
-      return json(r.body, r.statusCode);
+      return json(r.body, r.statusCode, r.headers);
     }
     if (url.pathname === "/hackathons/refresh" && req.method === "POST") {
       const r = await refresh();
-      return json(r.body, r.statusCode);
+      return json(r.body, r.statusCode, r.headers);
     }
     if (url.pathname === "/healthz") {
       return json(JSON.stringify({ ok: true }));

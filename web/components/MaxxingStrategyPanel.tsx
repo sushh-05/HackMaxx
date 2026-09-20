@@ -11,6 +11,7 @@ import {
   IconDeadline,
   IconReuse,
   IconQuote,
+  IconTerminal,
 } from "./Icons";
 import { getPlatformBadgeStyle } from "./HackathonCard";
 import { WorthScoreGlyph } from "./WorthScoreGauge";
@@ -69,9 +70,11 @@ function Kpi({
 export function MaxxingStrategyPanel({
   strategy,
   plan,
+  projectTitle,
 }: {
   strategy: string;
   plan?: MaxxingPlan;
+  projectTitle?: string;
 }): React.JSX.Element {
   const [copied, setCopied] = useState(false);
   const { format } = useCurrency();
@@ -110,6 +113,26 @@ export function MaxxingStrategyPanel({
       <div className="absolute top-0 right-0 size-96 bg-primary/10 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20" />
 
       <div className="relative space-y-6">
+        {/* Demo receipt: a compact terminal-style proof of the AWS run. */}
+        <div className="overflow-hidden rounded-xl border border-primary/25 bg-background/90 font-mono text-[11px] shadow-inner">
+          <div className="flex items-center gap-2 border-b border-base-content/10 bg-base-200/60 px-3 py-2 text-[10px] uppercase tracking-wider text-muted-foreground">
+            <IconTerminal className="size-3.5 text-action" />
+            <span>hackmaxx / optimization-run</span>
+            <span className="ml-auto inline-flex items-center gap-1.5 text-win">
+              <span className="size-1.5 rounded-full bg-win shadow-[0_0_7px_var(--color-win)]" />
+              complete
+            </span>
+          </div>
+          <div className="space-y-1 px-3 py-3 leading-relaxed text-base-content/70">
+            <p className="truncate">
+              <span className="text-action">$</span> maxx --project &quot;{projectTitle || "submitted project"}&quot;
+            </p>
+            <p><span className="text-win">[ok]</span> AWS Bedrock match + Worth Score ranking</p>
+            <p><span className="text-win">[ok]</span> {steps.length} deadline-ordered target{steps.length === 1 ? "" : "s"} selected</p>
+            <p className="text-money"><span className="text-win">[ok]</span> expected portfolio value: {plan ? format(plan.total_expected_value_inr) : "calculating"}</p>
+          </div>
+        </div>
+
         {/* Header with Title and Copy button */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-base-content/10 pb-4">
           <div className="flex items-center gap-2.5">
