@@ -7,15 +7,12 @@ frontend:
   phases:
     preBuild:
       commands:
-        - curl -fsSL https://bun.sh/install | bash
-        - export PATH="/root/.bun/bin:$PATH"
-        - bun --version
-        - bun install --frozen-lockfile
+        - npx --yes bun@1.4.2 --version
+        - npx --yes bun@1.4.2 install --frozen-lockfile
     build:
       commands:
-        - export PATH="/root/.bun/bin:$PATH"
-        - bun --version
-        - bun run --cwd web build
+        - npx --yes bun@1.4.2 --version
+        - npx --yes bun@1.4.2 run --cwd web build
   artifacts:
     baseDirectory: web/.next
     files:
