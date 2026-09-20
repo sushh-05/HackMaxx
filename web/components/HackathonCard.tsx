@@ -1,5 +1,5 @@
 "use client";
-import { useState, type ReactNode } from "react";
+import React, { useState } from "react";
 import type { Recommendation } from "@hackmaxx/shared";
 import { WorthBar, WorthBreakdownView } from "./WorthScoreGauge";
 import {
@@ -37,7 +37,7 @@ export function HackathonCard({
 }: {
   r: Recommendation;
   onTagClick?: (tag: string) => void;
-}): ReactNode {
+}): React.JSX.Element {
   const { hackathon: h, worth, why, reuse, breakdown } = r;
   const [showBreakdown, setShowBreakdown] = useState(false);
 

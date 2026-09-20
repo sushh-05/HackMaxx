@@ -1,4 +1,4 @@
-import React, { type ReactNode } from "react";
+import React from "react";
 import type { WorthBreakdown } from "@hackmaxx/shared";
 import { IconSparkles, IconTrendingUp } from "./Icons";
 
@@ -51,7 +51,7 @@ export function WorthBar({
 }: {
   worth: number;
   showTier?: boolean;
-}): ReactNode {
+}): React.JSX.Element {
   const tier = getWorthTier(worth);
 
   return (
@@ -87,7 +87,7 @@ export function WorthBar({
   );
 }
 
-export function WorthBreakdownView({ breakdown }: { breakdown: WorthBreakdown }): ReactNode {
+export function WorthBreakdownView({ breakdown }: { breakdown: WorthBreakdown }): React.JSX.Element {
   const items = [
     { label: "Skill Similarity", weight: "30%", value: Math.round(breakdown.skill * 100) },
     { label: "Learning & Tags", weight: "20%", value: Math.round(breakdown.learning * 100) },

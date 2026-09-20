@@ -1,8 +1,8 @@
 "use client";
-import { useEffect, useState, type ReactNode } from "react";
+import React, { useEffect, useState } from "react";
 import { IconSun, IconMoon } from "./Icons";
 
-export function ThemeToggle(): ReactNode {
+export function ThemeToggle(): React.JSX.Element {
   const [theme, setTheme] = useState<"hackmaxx" | "hackmaxx-light">("hackmaxx");
   const [mounted, setMounted] = useState(false);
 
