@@ -16,10 +16,9 @@
 - **Reference sites:** linear.app (dark-first + glow accent), vercel.com (info density, mono data, functional empty states). Deliberate departure from the marketplace feel of Devpost/Unstop.
 
 ## Typography
-- **Display/Hero:** **Architects Daughter** (400) — h1–h3, hero, score glyph, headings. Comes from the Notebook theme (21st.dev @serafimcloud); wired via `next/font/google` as `--font-notebook`. Gives the authentic architectural draft/notebook posture.
-- **Body/UI:** **Architects Daughter** with **Outfit** / **Inter Tight** fallback — wired via `next/font/google`. Keeps the hand-annotated sketch character while maintaining legibility.
-- **Data/Tables:** **Fira Code** / **JetBrains Mono** — ALL numbers: EV, prize, worth score, days-left, odds. Always with `tabular-nums`.
-- **Wordmark serif:** **Instrument Serif** italic — the "Maxx" in the logo; unchanged brand mark.
+- **Display/Hero & Body/UI:** **Geist** via `next/font/google` (`--font-sans`). Clean, slim, precise geometry, high-tech modern aesthetic designed for developer tools. Replaced the earlier Architects Daughter handwriting font.
+- **Data/Tables:** **Geist Mono** / **Fira Code** — ALL numbers: EV, prize, worth score, days-left, odds. Always with `tabular-nums`.
+- **Wordmark serif:** **Instrument Serif** italic — the "Maxx" in the logo; brand mark preserved.
 - **Scale:** display-hero 40–64px/700 · h2 24–28px/600 · h3 18–20px/600 · body 15px/400 · labels 11–13px/500 mono uppercase w/ 0.08–0.12em tracking.
 - **Icons:** lucide-react at **1.75 stroke** (not the 2 default), set once via `svg.lucide` in `globals.css`. Every icon goes through `components/Icons.tsx`, which exports *roles* (`IconMoney`, `IconDeadline`, `IconWorth`…) rather than glyphs — swap the assignment there and every call site follows.
 
@@ -83,3 +82,4 @@ Authoritative values live in `web/app/globals.css` as CSS variables: `:root` hol
 | 2026-09-20 | Dropdowns + breakdown moved to Radix `select`/`accordion`; `/` rebuilt as watchlist rows | The 21st.dev `market-watchlist` pattern finally lands the "ticker, not marketing card" posture. Radix select is what makes real icons-in-options possible. `native-select` removed as orphaned. |
 | 2026-09-20 | Palette + fonts switched to **Amber Slate** (21st.dev @serafimcloud) | User requested switch to Amber Slate. Warm terracotta amber primary (`#df6035`) with crisp slate accents and golden amber (`#e2b146`) money tokens. Outfit for sans, Fira Code for mono numerics. GitHub link moved from top-right to minimal sticky bottom-left component; Explore renamed to Dashboard. *(superseded by Notebook below)* |
 | 2026-09-20 | Palette + fonts switched to **Notebook** (21st.dev @serafimcloud) | User requested switch to Notebook theme (https://21st.dev/community/themes/notebook). Architectural sketch / notebook paper aesthetic: graphite pencil primary (`#606060`/`#b0b0b0`), parchment cream accent (`#f3eac8`), slate pencil lead (`#62758d`/`#94a3b8`), yellow highlighter ochre (`#c89324`/`#f3eac8`). Architects Daughter loaded as `--font-notebook` for authentic blueprint/notebook handwriting across headings and cards. |
+| 2026-09-20 | Typography switched from Architects Daughter to **Geist** + **Geist Mono** | User requested a slimmer, cleaner, modern font while keeping Instrument Serif for the brand wordmark. Geist brings crisp precision, high legibility, and modern developer tool posture. |

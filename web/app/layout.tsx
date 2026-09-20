@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { Outfit, Instrument_Serif, Fira_Code, Merriweather } from "next/font/google";
+import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 
-const bodyFont = Outfit({
+const geistSans = Geist({
   subsets: ["latin"],
-  variable: "--font-body",
+  variable: "--font-sans",
   display: "swap",
 });
 
@@ -17,17 +17,9 @@ const serifFont = Instrument_Serif({
   display: "swap",
 });
 
-const monoFont = Fira_Code({
+const geistMono = Geist_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
-  display: "swap",
-});
-
-// Amber Slate theme ships Merriweather as its display serif face.
-const displayFont = Merriweather({
-  subsets: ["latin"],
-  weight: ["700", "900"],
-  variable: "--font-display-face",
   display: "swap",
 });
 
@@ -41,7 +33,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }):
   return (
     <ClerkProvider>
       <html lang="en" className="dark" suppressHydrationWarning>
-        <body className={`${bodyFont.variable} ${serifFont.variable} ${monoFont.variable} ${displayFont.variable} font-sans min-h-screen flex flex-col`}>
+        <body className={`${geistSans.variable} ${serifFont.variable} ${geistMono.variable} font-sans min-h-screen flex flex-col`}>
           <script
             dangerouslySetInnerHTML={{
               __html:

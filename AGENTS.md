@@ -9,7 +9,7 @@ Do not deviate without explicit user approval.
 In QA mode, flag any code that doesn't match DESIGN.md.
 
 Quick reference (full spec in DESIGN.md):
-- Display/Headings: **Architects Daughter** (via `--font-notebook`). Body/UI: Architects Daughter / Outfit. Numbers: Fira Code / JetBrains Mono + tabular-nums — ALWAYS. Icons: lucide via `components/Icons.tsx`, `size-*` not `w-* h-*`, stroke set globally.
+- Display/Headings & Body/UI: **Geist** (via `--font-sans`). Wordmark: **Instrument Serif** italic. Numbers: **Geist Mono** / **Fira Code** + tabular-nums — ALWAYS. Icons: lucide via `components/Icons.tsx`, `size-*` not `w-* h-*`, stroke set globally.
 - Color semantics: palette comes from the **Notebook** 21st.dev theme by @serafimcloud (`https://21st.dev/community/themes/notebook`). Graphite pencil (`#606060`/`#b0b0b0`), parchment cream (`#f3eac8`), slate lead (`#62758d`/`#94a3b8`), yellow highlighter (`#c89324`/`#f3eac8`). Use the semantic token names, not raw hues: `--color-action` · `--color-data` · `--color-money` · `--color-deadline` · `--color-win` (each with a `-foreground` ink pair).
 - Dark mode is primary: `.dark` on `<html>` (dark slate paper `#2b2b2b`); `:root` is the paper white mirror (`#f9f9f9`).
 - Never hardcode a Tailwind palette colour (`text-amber-400`, `bg-emerald-500`…) in components — it fights whatever theme is applied.
