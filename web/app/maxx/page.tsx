@@ -12,11 +12,14 @@ import {
   IconCode,
   IconTag,
   IconTrendingUp,
+  IconSave,
+  IconCheck,
 } from "../../components/Icons";
 import { Button } from "../../components/ui/button";
 import { Alert, AlertTitle, AlertDescription } from "../../components/ui/alert";
 import { Kbd } from "../../components/ui/kbd";
 import { Spinner } from "../../components/ui/spinner";
+import { saveProject, getProjectByTitle } from "../../lib/portfolio";
 
 function splitList(s: string): string[] {
   return s.split(",").map((x) => x.trim()).filter(Boolean);
@@ -62,21 +65,33 @@ export default function MaxxPage(): React.JSX.Element {
   const [loading, setLoading] = useState(false);
   const [loadingStep, setLoadingStep] = useState(0);
   const [error, setError] = useState<string | null>(null);
+  const [savedState, setSavedState] = useState<"idle" | "saved" | "updated">("idle");
   const resultsRef = useRef<HTMLDivElement>(null);
 
-  // Check URL search params for prefilled hackathon context from Explore page
+  // Check URL search params for prefilled context — Explore rows pass
+  // title/tags; /portfolio rows additionally pass description/stack.
   useEffect(() => {
     if (typeof window !== "undefined") {
       const sp = new URLSearchParams(window.location.search);
       const urlTitle = sp.get("title");
       const urlTags = sp.get("tags");
+      const urlDescription = sp.get("description");
+      const urlStack = sp.get("stack");
       if (urlTitle) {
-        setTitle(`Multi-hackathon edition for ${urlTitle}`);
+        setTitle(urlDescription ? urlTitle : `Multi-hackathon edition for ${urlTitle}`);
+        setSelectedExample(null);
+      }
+      if (urlDescription) {
+        setDescription(urlDescription);
+        setSelectedExample(null);
+      }
+      if (urlStack) {
+        setStack(urlStack);
         setSelectedExample(null);
       }
       if (urlTags) {
         setTags(urlTags);
-        setStack(urlTags);
+        if (!urlStack) setStack(urlTags);
       }
     }
   }, []);
@@ -98,6 +113,7 @@ export default function MaxxPage(): React.JSX.Element {
     setLoading(true);
     setError(null);
     setRes(null);
+    setSavedState("idle");
     setLoadingStep(0);
 
     // Simulated progress steps for engaging Bedrock AI visualizer
@@ -113,6 +129,7 @@ export default function MaxxPage(): React.JSX.Element {
         ...(repoUrl.trim() ? { repo_url: repoUrl.trim() } : {}),
       });
       setRes(data);
+      setSavedState("idle");
       setTimeout(() => {
         resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
       }, 100);
@@ -145,6 +162,26 @@ export default function MaxxPage(): React.JSX.Element {
   }
 
   const canSubmit = !loading && title.trim().length > 0 && description.trim().length > 0;
+
+  // Persist this project + current result snapshot as an open position.
+  function saveToPortfolio() {
+    if (!res) return;
+    const existed = getProjectByTitle(title) !== null;
+    saveProject({
+      title,
+      description,
+      stack: splitList(stack),
+      tags: splitList(tags),
+      ...(repoUrl.trim() ? { repoUrl: repoUrl.trim() } : {}),
+      snapshot: {
+        timestamp: Date.now(),
+        totalEV: res.plan.total_expected_value_inr,
+        planLength: res.plan.steps.length,
+        topWorth: res.recommendations.reduce((m, r) => Math.max(m, r.worth), 0),
+      },
+    });
+    setSavedState(existed ? "updated" : "saved");
+  }
 
   // Filter recommendations
   const filteredRecs = res
@@ -413,52 +450,76 @@ export default function MaxxPage(): React.JSX.Element {
             {/* Maxxing Strategy & Submission Pipeline */}
             <MaxxingStrategyPanel strategy={res.strategy} plan={res.plan} />
 
-            {/* Recommendations List Header with Filter Tabs */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-4 border-t border-base-content/10">
+            {/* Recommendations List Header with Filter Tabs & Save to Portfolio */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-4 border-t border-border">
               <div>
-                <h3 className="font-display text-xl font-bold tracking-tight text-base-content flex items-center gap-2">
+                <h3 className="font-display text-xl font-bold tracking-tight text-foreground flex items-center gap-2">
                   <IconTrendingUp className="size-5 text-primary" />
                   <span>All Ranked Hackathon Matches</span>
                 </h3>
-                <p className="text-xs text-base-content/60">
+                <p className="text-xs text-muted-foreground">
                   Ranked by Bedrock Worth Score — the execution plan above picked the highest-ROI subset.
                 </p>
               </div>
 
-              {/* Reuse Filter Pills */}
-              <div className="flex items-center gap-1.5 p-1 bg-base-200/80 rounded-xl border border-base-content/10 self-start sm:self-auto">
-                <button
+              {/* Save-to-portfolio + Reuse Filter Pills */}
+              <div className="flex flex-wrap items-center gap-2 self-start sm:self-auto">
+                <Button
                   type="button"
-                  onClick={() => setReuseFilter("all")}
-                  className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all ${reuseFilter === "all"
-                      ? "bg-primary text-primary-content shadow-sm"
-                      : "text-base-content/60 hover:text-base-content"
+                  variant="outline"
+                  size="sm"
+                  onClick={saveToPortfolio}
+                  disabled={savedState !== "idle"}
+                  className="gap-1.5 rounded-xl border border-money/40 text-money hover:bg-money/10 hover:text-money disabled:opacity-100 font-semibold"
+                >
+                  {savedState === "idle" ? (
+                    <>
+                      <IconSave className="size-3.5" />
+                      <span>Save to portfolio</span>
+                    </>
+                  ) : (
+                    <>
+                      <IconCheck className="size-3.5 text-win" />
+                      <span>{savedState === "updated" ? "Position updated" : "Position saved"}</span>
+                    </>
+                  )}
+                </Button>
+
+                <div className="flex items-center gap-1.5 p-1 bg-muted/70 rounded-xl border border-border">
+                  <button
+                    type="button"
+                    onClick={() => setReuseFilter("all")}
+                    className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all ${
+                      reuseFilter === "all"
+                        ? "bg-primary text-primary-foreground shadow-sm"
+                        : "text-muted-foreground hover:text-foreground"
                     }`}
-                >
-                  All ({res.recommendations.length})
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setReuseFilter("High")}
-                  className={`rounded-lg px-3 py-1 text-xs font-semibold transition-all ${
-                    reuseFilter === "High"
-                      ? "bg-win text-win-foreground shadow-sm"
-                      : "text-muted-foreground hover:text-foreground"
-                  }`}
-                >
-                  High Reuse Only
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setReuseFilter("Medium")}
-                  className={`rounded-lg px-3 py-1 text-xs font-semibold transition-all ${
-                    reuseFilter === "Medium"
-                      ? "bg-money text-money-foreground shadow-sm"
-                      : "text-muted-foreground hover:text-foreground"
-                  }`}
-                >
-                  Medium Reuse
-                </button>
+                  >
+                    All ({res.recommendations.length})
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setReuseFilter("High")}
+                    className={`rounded-lg px-3 py-1 text-xs font-semibold transition-all ${
+                      reuseFilter === "High"
+                        ? "bg-win text-win-foreground shadow-sm"
+                        : "text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    High Reuse Only
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setReuseFilter("Medium")}
+                    className={`rounded-lg px-3 py-1 text-xs font-semibold transition-all ${
+                      reuseFilter === "Medium"
+                        ? "bg-money text-money-foreground shadow-sm"
+                        : "text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    Medium Reuse
+                  </button>
+                </div>
               </div>
             </div>
 

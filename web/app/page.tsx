@@ -10,11 +10,19 @@ import {
   IconTrophy,
   IconZap,
   IconLayers,
+  IconScale,
 } from "../components/Icons";
 import { useCurrency } from "../lib/currency";
 import { Button } from "../components/ui/button";
-import { HackathonWatchlist } from "../components/ui/hackathon-watchlist";
+import { HackathonWatchlist, type WatchlistRow } from "../components/ui/hackathon-watchlist";
 import { Alert, AlertTitle, AlertDescription } from "../components/ui/alert";
+import { PinTicker } from "../components/PinTicker";
+import { HackathonDrawer } from "../components/HackathonDrawer";
+import { usePins } from "../lib/pins";
+
+const COMPARE_KEY = "hackmaxx:compare:v1";
+const COMPARE_MIN = 2;
+const COMPARE_MAX = 3;
 
 function daysLeft(iso: string): number {
   return Math.max(0, Math.ceil((new Date(iso).getTime() - Date.now()) / 86400000));
@@ -29,6 +37,66 @@ export default function ExplorePage(): React.JSX.Element {
   const [sort, setSort] = useState<SortOption>("deadline-asc");
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState("");
+
+  // Drawer state
+  const [drawerRow, setDrawerRow] = useState<WatchlistRow | null>(null);
+
+  // Pins state
+  const { pins, toggle: togglePin, unpin } = usePins();
+
+  // Compare state
+  const [compareIds, setCompareIds] = useState<string[]>([]);
+  const [compareRejected, setCompareRejected] = useState(false);
+
+  useEffect(() => {
+    try {
+      const raw = window.localStorage.getItem(COMPARE_KEY);
+      if (!raw) return;
+      const ids = JSON.parse(raw) as unknown;
+      if (Array.isArray(ids)) {
+        setCompareIds(ids.filter((x): x is string => typeof x === "string").slice(0, COMPARE_MAX));
+      }
+    } catch {
+      /* ignore corrupt storage */
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!compareRejected) return;
+    const t = setTimeout(() => setCompareRejected(false), 2200);
+    return () => clearTimeout(t);
+  }, [compareRejected]);
+
+  function handleToggleCompare(id: string) {
+    setCompareIds((prev) => {
+      if (prev.includes(id)) {
+        setCompareRejected(false);
+        const next = prev.filter((x) => x !== id);
+        try {
+          window.localStorage.setItem(COMPARE_KEY, JSON.stringify(next));
+        } catch {}
+        return next;
+      }
+      if (prev.length >= COMPARE_MAX) {
+        setCompareRejected(true);
+        return prev;
+      }
+      const next = [...prev, id];
+      try {
+        window.localStorage.setItem(COMPARE_KEY, JSON.stringify(next));
+      } catch {}
+      return next;
+    });
+  }
+
+  function handleLaunchCompare() {
+    if (compareIds.length < COMPARE_MIN) return;
+    try {
+      window.localStorage.setItem(COMPARE_KEY, JSON.stringify(compareIds));
+    } catch {}
+    const qs = encodeURIComponent(compareIds.join(","));
+    window.location.href = `/compare?ids=${qs}`;
+  }
 
   useEffect(() => {
     let cancelled = false;
@@ -110,7 +178,10 @@ export default function ExplorePage(): React.JSX.Element {
   }
 
   return (
-    <section className="space-y-8 pt-6 sm:pt-8">
+    <section className="space-y-6 pt-4 sm:pt-6">
+      {/* Pinned Hackathons Ticker */}
+      <PinTicker items={items} pins={pins} onUnpin={unpin} />
+
       {/* Hero Section with Live Stats */}
       <div className="space-y-6">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
@@ -125,7 +196,7 @@ export default function ExplorePage(): React.JSX.Element {
                 worth-ranked.
               </span>
             </h1>
-            <p className="text-sm sm:text-base text-base-content/70 leading-relaxed">
+            <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
               Stop hunting one hackathon at a time. Browse active hackathons across Devpost, Devfolio,
               Unstop and MLH, then jump to{" "}
               <a href="/maxx" className="text-primary font-semibold underline underline-offset-4 hover:text-primary/80 transition-colors">
@@ -135,7 +206,13 @@ export default function ExplorePage(): React.JSX.Element {
             </p>
           </div>
 
-          <div className="flex-none">
+          <div className="flex flex-wrap items-center gap-2.5">
+            <Button asChild variant="outline" className="rounded-2xl px-4 font-semibold">
+              <a href="/timeline">
+                <IconCalendar className="size-4" />
+                <span>Timeline</span>
+              </a>
+            </Button>
             <Button asChild className="rounded-2xl px-5 shadow-lg shadow-primary/25 font-bold">
               <a href="/maxx">
                 <IconZap className="size-4" />
@@ -148,50 +225,50 @@ export default function ExplorePage(): React.JSX.Element {
         {/* Live Metrics Ticker */}
         {!err && items.length > 0 && (
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
-            <div className="card-glass rounded-2xl p-4">
+            <div className="rounded-2xl border border-border bg-card p-4 shadow-sm">
               <span className="text-[11px] uppercase tracking-wider font-bold text-money flex items-center gap-1.5">
                 <IconTrophy className="size-3.5 text-money" /> Total Prize Pool
               </span>
               <span className="font-mono text-xl sm:text-2xl font-black tabular-nums text-money block mt-1">
                 {format(totalPrizePool)}
               </span>
-              <span className="text-[11px] text-base-content/50 block mt-0.5">
+              <span className="text-[11px] text-muted-foreground block mt-0.5">
                 across all open events
               </span>
             </div>
 
-            <div className="card-glass rounded-2xl p-4">
+            <div className="rounded-2xl border border-border bg-card p-4 shadow-sm">
               <span className="text-[11px] uppercase tracking-wider font-bold text-primary flex items-center gap-1.5">
                 <IconLayers className="size-3.5 text-primary" /> Active Hackathons
               </span>
               <span className="font-mono text-xl sm:text-2xl font-black tabular-nums text-primary block mt-1">
                 {items.length} Events
               </span>
-              <span className="text-[11px] text-base-content/50 block mt-0.5">
+              <span className="text-[11px] text-muted-foreground block mt-0.5">
                 ready for submission
               </span>
             </div>
 
-            <div className="card-glass rounded-2xl p-4">
-              <span className="text-[11px] uppercase tracking-wider font-bold text-warning flex items-center gap-1.5">
-                <IconCalendar className="size-3.5 text-warning" /> Closing Soon
+            <div className="rounded-2xl border border-border bg-card p-4 shadow-sm">
+              <span className="text-[11px] uppercase tracking-wider font-bold text-deadline flex items-center gap-1.5">
+                <IconCalendar className="size-3.5 text-deadline" /> Closing Soon
               </span>
-              <span className="font-mono text-xl sm:text-2xl font-black tabular-nums text-warning block mt-1">
+              <span className="font-mono text-xl sm:text-2xl font-black tabular-nums text-deadline block mt-1">
                 {urgentCount} Hackathons
               </span>
-              <span className="text-[11px] text-base-content/50 block mt-0.5">
+              <span className="text-[11px] text-muted-foreground block mt-0.5">
                 ≤ 7 days left
               </span>
             </div>
 
-            <div className="card-glass rounded-2xl p-4">
-              <span className="text-[11px] uppercase tracking-wider font-bold text-secondary flex items-center gap-1.5">
-                <IconGlobe className="size-3.5 text-secondary" /> Tracked Platforms
+            <div className="rounded-2xl border border-border bg-card p-4 shadow-sm">
+              <span className="text-[11px] uppercase tracking-wider font-bold text-data flex items-center gap-1.5">
+                <IconGlobe className="size-3.5 text-data" /> Tracked Platforms
               </span>
-              <span className="font-mono text-xl sm:text-2xl font-black tabular-nums text-secondary block mt-1">
+              <span className="font-mono text-xl sm:text-2xl font-black tabular-nums text-data block mt-1">
                 {platforms.length || 4} Platforms
               </span>
-              <span className="text-[11px] text-base-content/50 block mt-0.5">
+              <span className="text-[11px] text-muted-foreground block mt-0.5">
                 Devpost, Devfolio, Unstop+
               </span>
             </div>
@@ -215,27 +292,27 @@ export default function ExplorePage(): React.JSX.Element {
 
       {/* Error Alert */}
       {err && (
-        <Alert className="rounded-2xl border border-error/30 shadow-lg bg-error text-error-content">
+        <Alert className="rounded-2xl border border-destructive/30 bg-destructive/10 text-destructive shadow-lg">
           <IconZap className="size-5" />
           <AlertTitle className="font-bold">Backend Connection Issue</AlertTitle>
-          <AlertDescription className="text-xs opacity-90 text-error-content">{err}</AlertDescription>
+          <AlertDescription className="text-xs opacity-90">{err}</AlertDescription>
         </Alert>
       )}
 
       {/* Loading Skeletons */}
       {loading && !err && (
-        <div className="grid gap-4">
+        <div className="grid gap-3">
           {[0, 1, 2].map((i) => (
-            <div key={i} className="card-glass rounded-2xl p-6 animate-pulse space-y-4">
+            <div key={i} className="rounded-2xl border border-border bg-card p-6 animate-pulse space-y-3">
               <div className="flex justify-between items-center">
-                <div className="h-4 w-28 bg-base-content/10 rounded-full" />
-                <div className="h-4 w-20 bg-base-content/10 rounded-full" />
+                <div className="h-4 w-28 bg-muted rounded-full" />
+                <div className="h-4 w-20 bg-muted rounded-full" />
               </div>
-              <div className="h-6 w-2/3 bg-base-content/15 rounded-lg" />
-              <div className="h-4 w-full bg-base-content/10 rounded" />
+              <div className="h-6 w-2/3 bg-muted/80 rounded-lg" />
+              <div className="h-4 w-full bg-muted/50 rounded" />
               <div className="flex gap-2">
-                <div className="h-6 w-16 bg-base-content/10 rounded-lg" />
-                <div className="h-6 w-20 bg-base-content/10 rounded-lg" />
+                <div className="h-5 w-16 bg-muted rounded-lg" />
+                <div className="h-5 w-20 bg-muted rounded-lg" />
               </div>
             </div>
           ))}
@@ -244,13 +321,13 @@ export default function ExplorePage(): React.JSX.Element {
 
       {/* Empty State */}
       {!loading && !err && filteredItems.length === 0 && (
-        <div className="rounded-3xl border border-dashed border-base-content/20 bg-base-200/40 p-12 text-center space-y-4">
-          <div className="size-12 rounded-2xl bg-base-300 flex items-center justify-center mx-auto text-base-content/50">
+        <div className="rounded-2xl border border-dashed border-border bg-card/60 p-12 text-center space-y-4">
+          <div className="size-12 rounded-2xl bg-muted flex items-center justify-center mx-auto text-muted-foreground">
             <IconSparkles className="size-6" />
           </div>
           <div className="space-y-1 max-w-md mx-auto">
-            <h3 className="font-display font-bold text-lg">No matching hackathons</h3>
-            <p className="text-xs text-base-content/60 leading-relaxed">
+            <h3 className="font-display font-bold text-lg text-foreground">No matching hackathons</h3>
+            <p className="text-xs text-muted-foreground leading-relaxed">
               No open hackathons match your current search or filters. Try adjusting your query or resetting all filters.
             </p>
           </div>
@@ -266,7 +343,7 @@ export default function ExplorePage(): React.JSX.Element {
         </div>
       )}
 
-      {/* Results — watchlist rows, not marketing cards (DESIGN.md > Layout) */}
+      {/* Results — watchlist rows with pinning, compare, and drawer details */}
       {!loading && !err && filteredItems.length > 0 && (
         <HackathonWatchlist
           rows={filteredItems.map((h) => ({
@@ -283,7 +360,60 @@ export default function ExplorePage(): React.JSX.Element {
           onSort={setSort}
           title="Hackathon Dashboard"
           onTagClick={setQ}
+          pins={pins}
+          onTogglePin={togglePin}
+          compareIds={compareIds}
+          onToggleCompare={handleToggleCompare}
+          compareRejected={compareRejected}
+          onRowClick={(row) => setDrawerRow(row)}
         />
+      )}
+
+      {/* Detail slide-over drawer */}
+      <HackathonDrawer
+        row={drawerRow}
+        open={drawerRow !== null}
+        onClose={() => setDrawerRow(null)}
+        onTagClick={setQ}
+      />
+
+      {/* Floating compare bar — appears once ≥1 row is staged */}
+      {compareIds.length > 0 && (
+        <div className="fixed inset-x-0 bottom-4 z-40 flex justify-center px-4 pointer-events-none">
+          <div className="pointer-events-auto flex items-center gap-3.5 rounded-2xl border border-action/40 bg-card/95 backdrop-blur-md px-5 py-3 shadow-2xl">
+            <span className="font-mono text-xs tabular-nums text-muted-foreground flex items-center gap-1.5">
+              <IconScale className="size-3.5 text-action" />
+              <span>{compareIds.length}/{COMPARE_MAX} staged</span>
+            </span>
+            {compareRejected && (
+              <span className="font-mono text-xs text-deadline">
+                max {COMPARE_MAX} — deselect one first
+              </span>
+            )}
+            <Button
+              type="button"
+              size="sm"
+              onClick={handleLaunchCompare}
+              disabled={compareIds.length < COMPARE_MIN}
+              className="rounded-xl font-bold gap-1.5 shadow-sm shadow-primary/25"
+            >
+              <span>Compare</span>
+              <span className="font-mono tabular-nums">({compareIds.length})</span>
+            </Button>
+            <button
+              type="button"
+              onClick={() => {
+                setCompareIds([]);
+                try {
+                  window.localStorage.removeItem(COMPARE_KEY);
+                } catch {}
+              }}
+              className="font-mono text-xs text-muted-foreground transition-colors hover:text-foreground hover:underline"
+            >
+              clear
+            </button>
+          </div>
+        </div>
       )}
     </section>
   );

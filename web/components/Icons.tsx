@@ -56,6 +56,14 @@ import {
   Terminal,
   Boxes,
   LayoutDashboard,
+  Pin,
+  PinOff,
+  Scale,
+  Command,
+  Briefcase,
+  BookmarkPlus,
+  Trash2,
+  ChartGantt,
 } from "lucide-react";
 
 // Bun's isolated linker can expose two identical @types/react paths. Cast at
@@ -79,6 +87,7 @@ export const IconCalendar = appIcon(Calendar);
 export const IconDeadline = appIcon(CalendarClock);
 export const IconHourglass = appIcon(Hourglass);
 export const IconFlame = appIcon(Flame);
+export const IconTimeline = appIcon(ChartGantt);
 
 // --- place / mode ---
 export const IconGlobe = appIcon(Globe);
@@ -122,6 +131,13 @@ export const IconArrowRight = appIcon(ArrowRight);
 export const IconExternal = appIcon(ArrowUpRight);
 export const IconExternalLink = appIcon(ExternalLink);
 export const IconQuote = appIcon(Quote);
+export const IconPin = appIcon(Pin);
+export const IconPinOff = appIcon(PinOff);
+export const IconScale = appIcon(Scale);
+export const IconCommand = appIcon(Command);
+export const IconSave = appIcon(BookmarkPlus);
+export const IconTrash = appIcon(Trash2);
+export const IconPortfolio = appIcon(Briefcase);
 
 // --- status ---
 export const IconCheckCircle = appIcon(CircleCheck);

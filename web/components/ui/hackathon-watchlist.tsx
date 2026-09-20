@@ -1,26 +1,29 @@
 "use client";
 
 /**
- * Hackathon watchlist rows.
+ * Watchlist table — dense, trade-desk style list of hackathons with
+ * real-time sorting, worth scores, compare selection, pinning, and drawer details.
  *
- * Structure adapted from the 21st.dev `ssicevs/market-watchlist` component —
- * sortable header, per-row accent rail, hairline dividers, tabular numerics.
- * That component ships hardcoded stock data (NVDA/AMZN/SPY) and a blue accent,
- * so the pattern is re-implemented here over real hackathon rows and Kodama
- * Grove tokens rather than dropped in as-is.
- *
- * Implements DESIGN.md > Layout: rows, not marketing cards —
- * `rail | event | worth | prize | deadline`, mono numerics.
+ * Visual hierarchy:
+ *   - Accent rail at the row's leading edge marks active row
+ *   - Checkbox on the left enables head-to-head comparison staging
+ *   - Pin button on the right pins to the top ticker
+ *   - Clicking anywhere on the row opens the detail slide-over
+ *   - Monospace tabular-nums for all figures (worth, prize, deadline days)
+ *   - Semantic Notebook tokens only (money, win, deadline, action, data)
  */
 import { useState } from "react";
 import { cn } from "cn";
 import {
+  IconCheck,
   IconChevronDown,
   IconGlobe,
   IconMapPin,
   IconHybrid,
   IconFlame,
   IconDeadline,
+  IconPin,
+  IconPinOff,
 } from "../Icons";
 import { WorthScoreGlyph } from "../WorthScoreGauge";
 import { getPlatformBadgeStyle } from "../HackathonCard";
@@ -30,12 +33,12 @@ import type { SortOption } from "../FiltersBar";
 export type WatchlistRow = {
   id: string;
   title: string;
-  url: string;
   platform: string;
-  mode: string;
-  deadline: string;
+  mode: "online" | "offline" | "hybrid" | string;
   prize_inr: number;
+  deadline: string;
   tech_tags: string[];
+  url: string;
   worth?: number;
   ev_inr?: number;
 };
@@ -76,13 +79,14 @@ function SortHeader({
       type="button"
       onClick={() => onSort(target)}
       className={cn(
-        "flex items-center justify-end gap-1 text-[10px] tracking-[0.07em] uppercase transition-colors",
+        "flex items-center gap-1 font-mono text-[10px] tracking-[0.07em] uppercase transition-colors",
+        column !== "event" && "justify-end",
         column === "event" && "justify-start",
-        active ? "text-foreground" : "text-muted-foreground hover:text-foreground",
+        active ? "text-foreground font-bold" : "text-muted-foreground hover:text-foreground",
       )}
     >
       <span>{label}</span>
-      {active && <IconChevronDown className="size-2.5" />}
+      {active && <IconChevronDown className={cn("size-2.5 transition-transform", sort.endsWith("-desc") ? "" : "rotate-180")} />}
     </button>
   );
 }
@@ -93,18 +97,36 @@ export function HackathonWatchlist({
   onSort,
   title,
   onTagClick,
+  pins,
+  onTogglePin,
+  compareIds,
+  onToggleCompare,
+  compareRejected = false,
+  onRowClick,
 }: {
   rows: WatchlistRow[];
   sort: SortOption;
   onSort: (next: SortOption) => void;
   title?: string;
   onTagClick?: (tag: string) => void;
+  /** ids currently pinned to the top ticker */
+  pins?: string[];
+  /** toggle pin status for a hackathon */
+  onTogglePin?: (id: string) => void;
+  /** ids currently staged for comparison — renders a checkbox on the row's rail */
+  compareIds?: string[];
+  /** toggle a row in/out of the compare set */
+  onToggleCompare?: (id: string) => void;
+  /** flashes when max compare limit reached */
+  compareRejected?: boolean;
+  /** trigger slide-over drawer */
+  onRowClick?: (row: WatchlistRow) => void;
 }) {
   const [activeId, setActiveId] = useState<string | null>(rows[0]?.id ?? null);
   const { format } = useCurrency();
 
   return (
-    <div className="w-full overflow-hidden rounded-lg border border-border bg-card">
+    <div className="w-full overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
       <div className="flex items-center justify-between border-b border-border px-4 py-3 sm:px-5">
         <h3 className="text-[13px] font-semibold text-foreground">{title ?? "Watchlist"}</h3>
         <span className="font-mono text-[10px] tabular-nums text-muted-foreground">
@@ -112,8 +134,20 @@ export function HackathonWatchlist({
         </span>
       </div>
 
-      {/* column header — mobile stacks the metrics instead, so hide it there */}
-      <div className="hidden border-b border-border px-4 py-2 sm:grid sm:grid-cols-[3px_minmax(0,1fr)_74px_124px_86px] sm:items-center sm:gap-3 sm:px-5">
+      {/* column header — mobile stacks instead, so hide it there */}
+      <div
+        className={cn(
+          "hidden border-b border-border px-4 py-2 sm:grid sm:items-center sm:gap-3 sm:px-5",
+          compareIds
+            ? "sm:grid-cols-[20px_3px_minmax(0,1fr)_74px_124px_110px]"
+            : "sm:grid-cols-[3px_minmax(0,1fr)_74px_124px_110px]",
+        )}
+      >
+        {compareIds && (
+          <span className="text-center font-mono text-[10px] tracking-[0.07em] text-muted-foreground uppercase">
+            ⇄
+          </span>
+        )}
         <span />
         <SortHeader label="Event" column="event" sort={sort} onSort={onSort} />
         <span className="text-right text-[10px] tracking-[0.07em] text-muted-foreground uppercase">
@@ -125,6 +159,8 @@ export function HackathonWatchlist({
 
       {rows.map((row) => {
         const selected = activeId === row.id;
+        const pinned = pins?.includes(row.id) ?? false;
+        const inCompare = compareIds?.includes(row.id) ?? false;
         const days = daysLeft(row.deadline);
         const urgent = days <= 3;
         const soon = days > 3 && days <= 7;
@@ -133,12 +169,54 @@ export function HackathonWatchlist({
         return (
           <div
             key={row.id}
-            className="grid grid-cols-[3px_minmax(0,1fr)] items-center gap-x-3 gap-y-1.5 border-b border-border px-4 py-3 transition-colors last:border-b-0 hover:bg-foreground/[0.03] sm:grid-cols-[3px_minmax(0,1fr)_74px_124px_86px] sm:gap-x-3 sm:px-5"
+            role={onRowClick ? "button" : undefined}
+            tabIndex={onRowClick ? 0 : undefined}
+            onClick={onRowClick ? () => onRowClick(row) : undefined}
+            onKeyDown={
+              onRowClick
+                ? (e) => {
+                    if (e.key === "Enter" && e.target === e.currentTarget) onRowClick(row);
+                  }
+                : undefined
+            }
+            className={cn(
+              "grid grid-cols-[3px_minmax(0,1fr)] items-center gap-x-3 gap-y-1.5 border-b border-border px-4 py-3 transition-colors last:border-b-0 hover:bg-foreground/[0.03] sm:gap-x-3 sm:px-5",
+              compareIds
+                ? "sm:grid-cols-[20px_3px_minmax(0,1fr)_74px_124px_110px]"
+                : "sm:grid-cols-[3px_minmax(0,1fr)_74px_124px_110px]",
+              onRowClick && "cursor-pointer",
+            )}
           >
+            {/* compare checkbox */}
+            {compareIds && (
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onToggleCompare?.(row.id);
+                }}
+                aria-pressed={inCompare}
+                aria-label={inCompare ? `Remove ${row.title} from compare` : `Add ${row.title} to compare`}
+                title={inCompare ? "Remove from compare" : "Compare this hackathon"}
+                className={cn(
+                  "hidden sm:flex size-[18px] items-center justify-center rounded-[4px] border font-mono transition-colors",
+                  inCompare
+                    ? "border-action bg-action text-action-foreground"
+                    : "border-border bg-background text-transparent hover:border-action/50",
+                  !inCompare && compareRejected && "border-deadline/70",
+                )}
+              >
+                {inCompare ? <IconCheck className="size-3" /> : null}
+              </button>
+            )}
+
             {/* accent rail — the 21st pattern's selection marker */}
             <button
               type="button"
-              onClick={() => setActiveId(selected ? null : row.id)}
+              onClick={(e) => {
+                e.stopPropagation();
+                setActiveId(selected ? null : row.id);
+              }}
               aria-pressed={selected}
               aria-label={selected ? "Collapse row" : "Select row"}
               className="flex self-stretch"
@@ -151,7 +229,7 @@ export function HackathonWatchlist({
               />
             </button>
 
-            {/* event */}
+            {/* event details */}
             <div className="flex min-w-0 flex-col gap-1">
               <div className="flex min-w-0 items-center gap-2">
                 <span
@@ -168,6 +246,7 @@ export function HackathonWatchlist({
                   href={row.url}
                   target="_blank"
                   rel="noreferrer"
+                  onClick={(e) => e.stopPropagation()}
                   className="truncate text-[13px] font-semibold text-foreground no-underline hover:text-action hover:underline"
                 >
                   {row.title}
@@ -182,7 +261,10 @@ export function HackathonWatchlist({
                   <button
                     key={t}
                     type="button"
-                    onClick={() => onTagClick?.(t)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onTagClick?.(t);
+                    }}
                     className="rounded-sm border border-border bg-muted/60 px-1 py-px font-mono text-[9px] transition-colors hover:border-action/40 hover:text-action"
                   >
                     #{t}
@@ -191,9 +273,8 @@ export function HackathonWatchlist({
               </div>
             </div>
 
-            {/* worth | prize | deadline — `sm:contents` hands the three cells to the
-                outer grid on desktop, while mobile keeps them in one wrapped row */}
-            <div className="col-start-2 flex items-center justify-between gap-3 sm:contents">
+            {/* worth | prize | deadline — `sm:contents` hands the three cells to the outer grid */}
+            <div className={cn("flex items-center justify-between gap-3 sm:contents", compareIds ? "col-start-3" : "col-start-2")}>
               <div className="flex justify-end sm:w-[74px]">
                 {typeof row.worth === "number" ? (
                   <WorthScoreGlyph worth={row.worth} className="text-base" />
@@ -215,12 +296,34 @@ export function HackathonWatchlist({
 
               <div
                 className={cn(
-                  "flex items-center justify-end gap-1 text-[11px] font-semibold sm:w-[86px]",
+                  "flex items-center justify-end gap-1.5 text-[11px] font-semibold sm:w-[110px]",
                   urgent ? "text-deadline" : soon ? "text-money" : "text-muted-foreground",
                 )}
               >
                 {urgent ? <IconFlame className="size-3" /> : <IconDeadline className="size-3" />}
                 <span className="font-mono tabular-nums">{days}d</span>
+
+                {/* pin / unpin button */}
+                {onTogglePin && (
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onTogglePin(row.id);
+                    }}
+                    aria-pressed={pinned}
+                    aria-label={pinned ? `Unpin ${row.title}` : `Pin ${row.title}`}
+                    title={pinned ? "Unpin" : "Pin to ticker"}
+                    className={cn(
+                      "ml-1 flex size-5 shrink-0 items-center justify-center rounded-sm transition-colors",
+                      pinned
+                        ? "text-action"
+                        : "text-muted-foreground opacity-40 hover:text-action hover:opacity-100",
+                    )}
+                  >
+                    {pinned ? <IconPin className="size-3" /> : <IconPinOff className="size-3" />}
+                  </button>
+                )}
               </div>
             </div>
           </div>

@@ -6,6 +6,7 @@ import { ThemeToggle } from "../components/ThemeToggle";
 import { CurrencySelector } from "../components/CurrencySelector";
 import { CurrencyProvider } from "../lib/currency";
 import { StickyGithubBadge } from "../components/StickyGithubBadge";
+import { CommandPalette } from "../components/CommandPalette";
 import { IconZap, IconChip, IconDatabase, IconCloud } from "../components/Icons";
 
 const bodyFont = Outfit({
@@ -53,6 +54,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }):
           }}
         />
         <CurrencyProvider>
+          <CommandPalette />
           {/* Sticky frosted glass header */}
           <header className="sticky top-0 z-50 backdrop-blur-xl bg-base-100/80 border-b border-base-content/8">
             <div className="mx-auto max-w-6xl px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
