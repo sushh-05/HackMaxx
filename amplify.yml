@@ -12,11 +12,13 @@ applications:
           commands:
             - npx --yes bun@1.4.2 --version
             - npx --yes bun@1.4.2 run --cwd web build
-            - rm -rf web/.next/node_modules
-            - mkdir -p web/.next/node_modules
-            - cp -RL web/node_modules/. web/.next/node_modules/
+            - rm -rf web/.next/amplify
+            - mkdir -p web/.next/standalone/web/.next/static
+            - cp -RL web/.next/static/. web/.next/standalone/web/.next/static/
+            - mkdir -p web/.next/amplify
+            - cp -RL web/.next/standalone/web/. web/.next/amplify/
       artifacts:
-        baseDirectory: web/.next
+        baseDirectory: web/.next/amplify
         files:
           - '**/*'
       cache:
