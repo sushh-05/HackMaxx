@@ -1,5 +1,14 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
+
+Parameters:
+  ComposioApiKey:
+    Type: String
+    NoEcho: true
+    Default: ""
+  ComposioGithubAuthConfigId:
+    Type: String
+    Default: "ac_tq4l5eu6qBHZ"
 Description: HackMaxx — serverless backend (TS Lambda + DynamoDB + API GW)
 
 Globals:
@@ -14,6 +23,9 @@ Globals:
         AWS_REGION_NAME: !Ref AWS::Region
         BEDROCK_EMBED_MODEL: amazon.titan-embed-text-v2:0
         BEDROCK_LLM_MODEL: anthropic.claude-3-haiku-20240307-v1:0
+        COMPOSIO_API_KEY: !Ref ComposioApiKey
+        COMPOSIO_GITHUB_AUTH_CONFIG_ID: !Ref ComposioGithubAuthConfigId
+        WEB_APP_URL: "https://main.dspr7l982buda.amplifyapp.com"
 
 Resources:
   HackathonsTable:
@@ -122,6 +134,36 @@ Resources:
             RestApiId: !Ref Api
             Path: /healthz
             Method: get
+
+  GithubConnectFn:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      CodeUri: .
+      Handler: github-connect.handler
+      Events:
+        GithubConnect:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Api
+            Path: /github/connect
+            Method: post
+
+  GithubReposFn:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      CodeUri: .
+      Handler: github-repos.handler
+      Events:
+        GithubRepos:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Api
+            Path: /github/repos
+            Method: post
 
 Outputs:
   ApiUrl:

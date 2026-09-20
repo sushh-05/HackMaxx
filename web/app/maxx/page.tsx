@@ -17,6 +17,7 @@ import { Button } from "../../components/ui/button";
 import { Alert, AlertTitle, AlertDescription } from "../../components/ui/alert";
 import { Kbd } from "../../components/ui/kbd";
 import { Spinner } from "../../components/ui/spinner";
+import { GithubRepoConnector } from "../../components/GithubRepoConnector";
 
 function splitList(s: string): string[] {
   return s.split(",").map((x) => x.trim()).filter(Boolean);
@@ -334,6 +335,8 @@ export default function MaxxPage(): React.JSX.Element {
               className="w-full rounded-2xl bg-base-100/90 border border-base-content/15 px-4 py-2.5 text-sm font-medium placeholder:text-base-content/40 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200"
             />
           </div>
+
+          <GithubRepoConnector onSelect={(url) => setRepoUrl(url)} />
         </div>
 
         {/* Submit Action Bar */}
