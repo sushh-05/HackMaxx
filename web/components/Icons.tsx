@@ -55,6 +55,7 @@ import {
   Cloud,
   Terminal,
   Boxes,
+  LayoutDashboard,
 } from "lucide-react";
 
 // Bun's isolated linker can expose two identical @types/react paths. Cast at
@@ -68,6 +69,7 @@ function appIcon(icon: LucideIcon): AppIcon {
 
 // --- core / brand ---
 export const IconZap = appIcon(Zap);
+export const IconDashboard = appIcon(LayoutDashboard);
 export const IconTrophy = appIcon(Trophy);
 export const IconAward = appIcon(Award);
 export const IconRocket = appIcon(Rocket);

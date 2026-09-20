@@ -3,129 +3,125 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* ---------- Theme: Kodama Grove remix ----------
- * 21st.dev theme by srjaejsry
- * https://21st.dev/community/themes/kodama-grove-remix-1782585641809
- * Colours are the theme's, applied verbatim. `:root` is the parchment light mode,
- * `.dark` the warm-brown primary experience (DESIGN.md keeps dark-first).
- * See DESIGN.md > Color for how the semantic slots resolve onto this palette.
+/* ---------- Theme: Amber Slate ----------
+ * 21st.dev theme by serafimcloud
+ * https://21st.dev/community/themes/amber-slate
+ * Primary amber #df6035 on slate base.
+ * :root is light mode, .dark the primary dark experience.
  */
 
 :root {
   color-scheme: light;
 
-  --background: #e4d7b0;
-  --card: #e7dbbf;
-  --popover: #f3ead2;
-  --foreground: #5c4b3e;
-  --primary: #8d9d4f;
-  --primary-fg: #fdfbf6;
-  --secondary: #decea0;
-  --secondary-fg: #5c4b3e;
-  --muted: #decea0;
-  --muted-fg: #85766a;
-  --accent: #dbc894;
-  --accent-fg: #5c4b3e;
-  --destructive: #d98b7e;
-  --destructive-fg: #faf8f2;
-  --border: #b19681;
-  --input: #dbc894;
-  --ring: #9db18c;
+  --background: #e8ebed;
+  --foreground: #333333;
+  --card: #ffffff;
+  --popover: #ffffff;
+  --primary: #df6035;
+  --primary-fg: #ffffff;
+  --secondary: #2f4b79;
+  --secondary-fg: #ffffff;
+  --muted: #f9fafb;
+  --muted-fg: #6b7280;
+  --accent: #d6e4f0;
+  --accent-fg: #1e3a8a;
+  --destructive: #ef4444;
+  --destructive-fg: #ffffff;
+  --border: #cccccc;
+  --input: #f4f5f7;
+  --ring: #e05d38;
 
-  --chart-1: #9db18c;
-  --chart-2: #8a9f7b;
-  --chart-3: #bac9b4;
-  --chart-4: #71856a;
-  --chart-5: #5e6e58;
+  --chart-1: #7399bf;
+  --chart-2: #e16f41;
+  --chart-3: #d54450;
+  --chart-4: #e2b146;
+  --chart-5: #3c4c76;
 
-  --sidebar: #e2d1a2;
-  --sidebar-fg: #5c4b3e;
-  --sidebar-primary: #9db18c;
-  --sidebar-primary-fg: #fdfbf6;
-  --sidebar-accent: #eae5d9;
-  --sidebar-accent-fg: #5c4b3e;
-  --sidebar-border: #e5e0d4;
-  --sidebar-ring: #9db18c;
+  --sidebar: #dddfe2;
+  --sidebar-fg: #333333;
+  --sidebar-primary: #e05d38;
+  --sidebar-primary-fg: #ffffff;
+  --sidebar-accent: #d6e4f0;
+  --sidebar-accent-fg: #1e3a8a;
+  --sidebar-border: #e5e7eb;
+  --sidebar-ring: #e05d38;
 
   /* surface ramp: page -> card -> raised */
-  --surface: #e7dbbf;
-  --raised: #decea0;
+  --surface: #ffffff;
+  --raised: #f4f5f7;
 
-  /* semantic slots -- this theme is green + gold + coral, so data/win are
-     separated by depth rather than hue. See DESIGN.md > Color. */
-  --data: #71856a;
-  --money: #a18f5c;
-  --deadline: #d98b7e;
-  --win: #5e6e58;
-  /* ink that sits *on* the money/win fills (buttons, chips) */
-  --money-fg: #fdfbf6;
-  --win-fg: #fdfbf6;
+  /* semantic slots */
+  --data: #7399bf;
+  --money: #e2b146;
+  --deadline: #ef4444;
+  --win: #16a34a;
+  --money-fg: #ffffff;
+  --win-fg: #ffffff;
 
-  /* Kodama Grove remix ships 0.425rem here (0.375rem in dark). */
-  --radius: 0.425rem;
+  --radius: 0.5rem;
 
-  --wash-1: rgba(141, 157, 79, 0.1);
-  --wash-2: rgba(157, 177, 140, 0.09);
-  --wash-3: rgba(161, 143, 92, 0.07);
-  --grad-brand: linear-gradient(135deg, #8d9d4f 0%, #a18f5c 50%, #71856a 100%);
-  --grad-money: linear-gradient(135deg, #dbc894 0%, #a18f5c 100%);
-  --grad-win: linear-gradient(135deg, #8a9f7b 0%, #5e6e58 100%);
+  --wash-1: rgba(223, 96, 53, 0.10);
+  --wash-2: rgba(115, 153, 191, 0.08);
+  --wash-3: rgba(226, 177, 70, 0.06);
+  --grad-brand: linear-gradient(135deg, #df6035 0%, #e2b146 50%, #7399bf 100%);
+  --grad-money: linear-gradient(135deg, #fcd34d 0%, #e2b146 100%);
+  --grad-win: linear-gradient(135deg, #7399bf 0%, #2f4b79 100%);
 }
 
 .dark {
   color-scheme: dark;
 
-  --background: #3a3529;
-  --card: #413c33;
-  --popover: #413c33;
-  --foreground: #ede4d4;
-  --primary: #8a9f7b;
-  --primary-fg: #2a2521;
-  --secondary: #5a5345;
-  --secondary-fg: #ede4d4;
-  --muted: #4a4439;
-  --muted-fg: #a8a096;
-  --accent: #a18f5c;
-  --accent-fg: #2a2521;
-  --destructive: #b5766a;
-  --destructive-fg: #f0e9db;
-  --border: #5a5345;
-  --input: #5a5345;
-  --ring: #8a9f7b;
+  --background: #1a1a1a;
+  --foreground: #e5e5e5;
+  --card: #202020;
+  --popover: #202020;
+  --primary: #df6035;
+  --primary-fg: #ffffff;
+  --secondary: #284167;
+  --secondary-fg: #e5e5e5;
+  --muted: #2a2a2a;
+  --muted-fg: #808080;
+  --accent: #2a3656;
+  --accent-fg: #bfdbfe;
+  --destructive: #ef4444;
+  --destructive-fg: #ffffff;
+  --border: #353535;
+  --input: #303030;
+  --ring: #e05d38;
 
-  --chart-1: #8a9f7b;
-  --chart-2: #9db18c;
-  --chart-3: #71856a;
-  --chart-4: #a18f5c;
-  --chart-5: #5e6e58;
+  --chart-1: #85a6c7;
+  --chart-2: #e16f41;
+  --chart-3: #d54450;
+  --chart-4: #e2b146;
+  --chart-5: #3c4c76;
 
-  --sidebar: #3a3529;
-  --sidebar-fg: #ede4d4;
-  --sidebar-primary: #8a9f7b;
-  --sidebar-primary-fg: #2a2521;
-  --sidebar-accent: #a18f5c;
-  --sidebar-accent-fg: #2a2521;
-  --sidebar-border: #5a5345;
-  --sidebar-ring: #8a9f7b;
+  --sidebar: #1f1f1f;
+  --sidebar-fg: #e5e5e5;
+  --sidebar-primary: #e05d38;
+  --sidebar-primary-fg: #ffffff;
+  --sidebar-accent: #2a3656;
+  --sidebar-accent-fg: #bfdbfe;
+  --sidebar-border: #353535;
+  --sidebar-ring: #e05d38;
 
-  --surface: #413c33;
-  --raised: #4a4439;
+  --surface: #202020;
+  --raised: #2a2a2a;
 
-  --data: #71856a;
-  --money: #a18f5c;
-  --deadline: #b5766a;
-  --win: #9db18c;
-  --money-fg: #2a2521;
-  --win-fg: #2a2521;
+  --data: #85a6c7;
+  --money: #e2b146;
+  --deadline: #ef4444;
+  --win: #4ade80;
+  --money-fg: #1a1a1a;
+  --win-fg: #1a1a1a;
 
-  --radius: 0.375rem;
+  --radius: 0.5rem;
 
-  --wash-1: rgba(138, 159, 123, 0.13);
-  --wash-2: rgba(157, 177, 140, 0.1);
-  --wash-3: rgba(161, 143, 92, 0.08);
-  --grad-brand: linear-gradient(135deg, #9db18c 0%, #8a9f7b 50%, #a18f5c 100%);
-  --grad-money: linear-gradient(135deg, #dbc894 0%, #a18f5c 100%);
-  --grad-win: linear-gradient(135deg, #9db18c 0%, #71856a 100%);
+  --wash-1: rgba(223, 96, 53, 0.12);
+  --wash-2: rgba(133, 166, 199, 0.08);
+  --wash-3: rgba(226, 177, 70, 0.06);
+  --grad-brand: linear-gradient(135deg, #e16f41 0%, #df6035 50%, #85a6c7 100%);
+  --grad-money: linear-gradient(135deg, #e2b146 0%, #df6035 100%);
+  --grad-win: linear-gradient(135deg, #85a6c7 0%, #284167 100%);
 }
 
 @theme inline {
@@ -195,10 +191,10 @@
 }
 
 @theme {
-  --font-sans: var(--font-body), "Inter Tight", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-sans: var(--font-body), "Outfit", "Inter Tight", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-display: var(--font-display-face), "Merriweather", ui-serif, Georgia, Cambria, serif;
   --font-serif: var(--font-serif), "Instrument Serif", ui-serif, Georgia, Cambria, serif;
-  --font-mono: var(--font-mono), "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-mono: var(--font-mono), "Fira Code", "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
 /* ---------- Typography & Base ---------- */

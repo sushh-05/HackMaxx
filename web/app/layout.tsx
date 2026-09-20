@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
-import { Inter_Tight, Instrument_Serif, JetBrains_Mono, Merriweather } from "next/font/google";
+import { Outfit, Instrument_Serif, Fira_Code, Merriweather } from "next/font/google";
 import "./globals.css";
 import { Nav } from "../components/Nav";
 import { ThemeToggle } from "../components/ThemeToggle";
 import { CurrencySelector } from "../components/CurrencySelector";
 import { CurrencyProvider } from "../lib/currency";
-import { IconGithub, IconZap, IconChip, IconDatabase, IconCloud } from "../components/Icons";
-import { Button } from "../components/ui/button";
+import { StickyGithubBadge } from "../components/StickyGithubBadge";
+import { IconZap, IconChip, IconDatabase, IconCloud } from "../components/Icons";
 
-const bodyFont = Inter_Tight({
+const bodyFont = Outfit({
   subsets: ["latin"],
   variable: "--font-body",
   display: "swap",
@@ -22,15 +22,13 @@ const serifFont = Instrument_Serif({
   display: "swap",
 });
 
-const monoFont = JetBrains_Mono({
+const monoFont = Fira_Code({
   subsets: ["latin"],
   variable: "--font-mono",
   display: "swap",
 });
 
-// Kodama Grove remix ships Merriweather as its identity face. DESIGN.md wanted a
-// serif-free display (Clash Grotesk) that was never actually loaded; this wires a
-// real one. Body/UI stays Inter Tight — the dense watchlist rows need a sans.
+// Amber Slate theme ships Merriweather as its display serif face.
 const displayFont = Merriweather({
   subsets: ["latin"],
   weight: ["700", "900"],
@@ -39,9 +37,9 @@ const displayFont = Merriweather({
 });
 
 export const metadata: Metadata = {
-  title: "HackMaxx — Maxx your hackathon portfolio ROI",
+  title: "HackMaxx — Hackathon Portfolio Dashboard & ROI Planner",
   description:
-    "Paste your project idea or repo → find the best upcoming hackathons to reuse it in, ranked by AI Worth Score, with an expected-value maxxing submission plan.",
+    "Real-time hackathon portfolio dashboard. Paste your project idea or repo → find the best upcoming hackathons to reuse it in, ranked by AI Worth Score, with an expected-value maxxing submission plan.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }): React.JSX.Element {
@@ -79,25 +77,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }):
                 <div className="h-5 w-px bg-base-content/15 hidden sm:block" />
                 <CurrencySelector />
                 <ThemeToggle />
-                <Button
-                  asChild
-                  variant="ghost"
-                  size="icon"
-                  className="h-9 w-9 rounded-xl border border-base-content/15 hover:border-primary/40 text-base-content/70 hover:text-base-content transition-colors"
-                >
-                  <a
-                    href="https://github.com/sushh-05/HackMaxx"
-                    target="_blank"
-                    rel="noreferrer"
-                    aria-label="GitHub Repository"
-                    title="View on GitHub"
-                  >
-                    <IconGithub className="size-4" />
-                  </a>
-                </Button>
               </div>
             </div>
           </header>
+
+          {/* Sticky minimal GitHub badge in bottom-left corner across all pages */}
+          <StickyGithubBadge />
 
           {/* Main content container */}
           <div className="mx-auto max-w-6xl w-full px-4 sm:px-6 pb-20 flex-1">

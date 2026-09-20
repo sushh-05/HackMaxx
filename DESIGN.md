@@ -24,20 +24,18 @@
 - **Icons:** lucide-react at **1.75 stroke** (not the 2 default), set once via `svg.lucide` in `globals.css`. Every icon goes through `components/Icons.tsx`, which exports *roles* (`IconMoney`, `IconDeadline`, `IconWorth`…) rather than glyphs — swap the assignment there and every call site follows.
 
 ## Color
-- **Approach:** Supplied by the **Kodama Grove remix** theme (21st.dev, by srjaejsry) — https://21st.dev/community/themes/kodama-grove-remix-1782585641809. A warm, editorial palette: **olive/sage green + antique gold + soft coral**, on parchment (light) or warm umber (dark). The theme owns the palette; tokens live in `web/app/globals.css`.
-- **Dark (primary experience):** background `#3a3529` · card `#413c33` · raised `#4a4439` · content `#ede4d4` · muted `#a8a096` · border `#5a5345`
-- **Light (parchment mirror):** background `#e4d7b0` · card `#e7dbbf` · popover `#f3ead2` · content `#5c4b3e` · muted `#85766a` · border `#b19681`
-- **Accents:** primary `#8a9f7b` (light `#8d9d4f`) · secondary `#5a5345` (light `#decea0`) · accent `#a18f5c` (light `#dbc894`) · destructive `#b5766a` (light `#d98b7e`)
+- **Approach:** Supplied by the **Amber Slate** theme (21st.dev, by serafimcloud) — https://21st.dev/community/themes/amber-slate. A warm, high-contrast palette: **terracotta amber (`#df6035`) + slate navy (`#2f4b79`/`#284167`) + golden amber (`#e2b146`) + slate blue (`#7399bf`/`#85a6c7`)**, on clean light slate or deep charcoal slate (`#1a1a1a`). Tokens live in `web/app/globals.css`.
+- **Dark (primary experience):** background `#1a1a1a` · card `#202020` · raised `#2a2a2a` · content `#e5e5e5` · muted `#808080` · border `#353535`
+- **Light (mirror):** background `#e8ebed` · card `#ffffff` · popover `#ffffff` · content `#333333` · muted `#6b7280` · border `#cccccc`
+- **Accents:** primary `#df6035` (terracotta amber) · secondary `#284167` (slate navy) · accent `#2a3656` · destructive `#ef4444`
 - **Semantic slots:**
-  - **`--color-action`** = primary olive — buttons, prompts, focus, live state.
-  - **`--color-data`** = deep sage `#71856a` — analysis accents, chart/plan fills, timeline gradient.
-  - **`--color-money`** = antique gold `#a18f5c` — prize, EV, and worth scores ≥ 75.
-  - **`--color-deadline`** = coral `#b5766a` (light `#d98b7e`) — days-left pressure, errors.
-  - **`--color-win`** = green — `#9db18c` dark / `#5e6e58` light — high-reuse badges, success, pulse-dot.
+  - **`--color-action`** = primary amber `#df6035` — buttons, prompts, focus, live state.
+  - **`--color-data`** = slate blue `#7399bf` / `#85a6c7` — analysis accents, charts, timeline gradient.
+  - **`--color-money`** = golden amber `#e2b146` — prize, EV, and worth scores ≥ 75.
+  - **`--color-deadline`** = alert red `#ef4444` — days-left pressure, closing soon.
+  - **`--color-win`** = green `#4ade80` dark / `#16a34a` light — high-reuse badges, success, pulse-dot.
   - Each has a `--color-*-foreground` ink pair for filled surfaces (e.g. `bg-money text-money-foreground`).
-- **Known limit:** this theme is really three families (green / gold / coral) for five slots, so `data` and `win` sit close by design and are separated by **depth**, not hue. Don't fight it by reaching for a raw Tailwind colour.
-- **Mood shift accepted:** the theme is warm and print-like. The earlier "cold-precise terminal" reading is now *warm quant desk* — still data-dense and mono, but on parchment/umber rather than near-black.
-- **Dark mode:** the default and primary experience, applied as the `.dark` class on `<html>` (shadcn/ui convention; toggled by `ThemeToggle`). The parchment light mode is `:root`.
+- **Dark mode:** the default and primary experience, applied as the `.dark` class on `<html>` (shadcn/ui convention; toggled by `ThemeToggle`). The light mode is `:root`.
 
 ## Tokens
 
@@ -53,8 +51,9 @@ Authoritative values live in `web/app/globals.css` as CSS variables: `:root` hol
 - **Scale:** 2xs(2) xs(4) sm(8) md(16) lg(24) xl(32) 2xl(48) 3xl(64).
 
 ## Layout
-- **Approach:** Grid-disciplined. Hackathon cards render as **watchlist rows**: `score glyph | title+tags | prize | EV | days-left` inline in mono — a ticker, not a marketing card.
-- **Score-as-glyph:** worth score renders as `W86` in mono 800; `--color-money` when ≥75, `--color-action` otherwise; the bar is demoted to secondary. This glyph is the brand mark (logo, favicon, OG image).
+- **Approach:** Grid-disciplined. Hackathons render as **watchlist rows** (`components/ui/hackathon-watchlist.tsx`): `rail | event | worth | prize | deadline` inline in mono — a ticker, not a marketing card. Implemented on `/`; the row pattern comes from the 21st.dev `ssicevs/market-watchlist` component, re-built over real hackathon data.
+- **Score-as-glyph:** worth score renders as `W86` in mono 800 (`WorthScoreGlyph`); `--color-money` when ≥75, `--color-action` otherwise; the bar is demoted to a hairline. This glyph is the brand mark (logo, favicon, OG image).
+- **Interactive primitives** (Radix, via shadcn): `select` for platform/sort/currency dropdowns, `accordion` for the Bedrock formula breakdown, `native`-free `dropdown-menu` available. Icons inside options are the reason to prefer these over `<select>`/`<option>`.
 - **Max content width:** 1100px. Grid: 1 col mobile / 2 col md / 3 col lg.
 - **Border radius:** from the theme — `--radius` 0.425rem (light) / 0.375rem (dark), exposed as `--radius-sm/md/lg/xl`. Tighter and print-like. `rounded-2xl`/`3xl` stay at Tailwind defaults for large hero panels.
 - **Icons:** `size-*` (Tailwind v4), never paired `w-* h-*`. Stroke weight is global — don't set it per call site.
@@ -81,3 +80,5 @@ Authoritative values live in `web/app/globals.css` as CSS variables: `:root` hol
 | 2026-09-20 | Palette + display face from **Kodama Grove remix** (21st.dev) | Second full reskin, applied by token value so no component needed to change. Restores a genuine gold for `--color-money` (which Darkmatter lacked). Wires Merriweather as the display face, finally closing the Clash Grotesk gap. Theme's `--destructive` taken as-is here — it is already a readable coral. |
 | 2026-09-20 | Icons unified behind role names, stroke set globally to 1.75 | `Icons.tsx` exports roles (`IconMoney`, `IconDeadline`), so a glyph swap is one line and every call site follows. GitHub mark rewritten to mirror lucide's prop API so it is interchangeable. |
 | 2026-09-20 | Worth score now renders the `W86` glyph, money at ≥75 | Implements the Layout rule that had been specified but never built; the bar is demoted to a hairline. |
+| 2026-09-20 | Dropdowns + breakdown moved to Radix `select`/`accordion`; `/` rebuilt as watchlist rows | The 21st.dev `market-watchlist` pattern finally lands the "ticker, not marketing card" posture. Radix select is what makes real icons-in-options possible. `native-select` removed as orphaned. |
+| 2026-09-20 | Palette + fonts switched to **Amber Slate** (21st.dev @serafimcloud) | User requested switch to Amber Slate. Warm terracotta amber primary (`#df6035`) with crisp slate accents and golden amber (`#e2b146`) money tokens. Outfit for sans, Fira Code for mono numerics. GitHub link moved from top-right to minimal sticky bottom-left component; Explore renamed to Dashboard. |

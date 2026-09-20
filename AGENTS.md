@@ -18,6 +18,7 @@ Quick reference (full spec in DESIGN.md):
 ## Engineering
 - Bun-only monorepo (workspaces: `web`, `backend`, `shared`). Use `bun`, never npm.
 - Local dev: backend on `:3011` (`bun run dev:backend`), web on `:3000` (`bun run --cwd web start` after `bun run build`). `PORT=3001` belongs to another project — do not use.
+- **`/recommend` hangs without AWS credentials** — the SDK blocks on the EC2 metadata endpoint (169.254.169.254) for ~60s+ before its `catch` fires. Run local dev with it disabled so it fails fast into the seeded fallback: `AWS_EC2_METADATA_DISABLED=true bun run dev`. `/hackathons` is unaffected (it falls back to `data/seed.csv` when `HACKATHONS_TABLE` is unset).
 - Local backend must mirror API Gateway CORS (`*`) incl. `OPTIONS` preflight — see `backend/src/local.ts`.
 - Verify with `bun run typecheck && bun run build` before committing. If `next build` fails on a pages-router `_document` lookup, `rm -rf web/.next` and rebuild.
 - **Never `rm -rf web/.next` or run `bun run build` while a `next dev` server is live.** A dev server cannot survive `.next` being replaced by production output — it 500s every request with `Cannot find module './<chunk>.js'` on every refresh until restarted. Stop `bun run dev` first, or verify on a spare port (`PORT=3100 bun run start`) instead of touching the dev server's build dir.

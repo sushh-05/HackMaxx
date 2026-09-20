@@ -117,7 +117,7 @@ export default function ExplorePage(): React.JSX.Element {
           <div className="space-y-3 max-w-2xl">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-primary/10 text-primary border border-primary/20">
               <IconSparkles className="size-3.5" />
-              <span>AI-Ranked Hackathon Portfolio</span>
+              <span>Hackathon Portfolio Dashboard</span>
             </div>
             <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight">
               Upcoming hackathons,{" "}
@@ -281,7 +281,7 @@ export default function ExplorePage(): React.JSX.Element {
           }))}
           sort={sort}
           onSort={setSort}
-          title="Open hackathons"
+          title="Hackathon Dashboard"
           onTagClick={setQ}
         />
       )}
