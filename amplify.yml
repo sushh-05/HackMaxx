@@ -7,23 +7,24 @@ frontend:
   phases:
     preBuild:
       commands:
-        - curl --fail --silent --show-error --location --retry 5 --retry-all-errors --connect-timeout 30 --max-time 180 https://bun.sh/install -o /tmp/install-bun.sh
-        - BUN_INSTALL="$HOME/.bun" bash /tmp/install-bun.sh
-        - export BUN_INSTALL="$HOME/.bun"
-        - export PATH="$BUN_INSTALL/bin:$PATH"
+        - npm config set fetch-retries 5
+        - npm config set fetch-retry-mintimeout 20000
+        - npm config set fetch-retry-maxtimeout 120000
+        - npm install --global bun@1.4.2 --no-audit --no-fund
+        - export PATH="$(npm prefix --global)/bin:$PATH"
         - bun --version
         - bun install --frozen-lockfile
     build:
       commands:
-        - export BUN_INSTALL="$HOME/.bun"
-        - export PATH="$BUN_INSTALL/bin:$PATH"
+        - export PATH="$(npm prefix --global)/bin:$PATH"
         - bun --version
         - bun run --cwd web build
   artifacts:
-    baseDirectory: web/out
+    baseDirectory: web/.next
     files:
       - '**/*'
   cache:
     paths:
+      - node_modules/**/*
       - .bun/install/cache/**/*
       - web/.next/cache/**/*
