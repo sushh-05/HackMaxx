@@ -1,7 +1,24 @@
 "use client";
 import React from "react";
-import { IconSearch, IconX, IconGlobe, IconMapPin, IconHybrid, IconFilters, IconReset } from "./Icons";
-import { NativeSelect } from "./ui/native-select";
+import {
+  IconSearch,
+  IconX,
+  IconGlobe,
+  IconMapPin,
+  IconHybrid,
+  IconFilters,
+  IconReset,
+  IconDeadline,
+  IconMoney,
+  IconTag,
+} from "./Icons";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
 
 export const MODES = ["all", "online", "offline", "hybrid"] as const;
 export type ModeFilter = (typeof MODES)[number];
@@ -12,6 +29,13 @@ export const SORT_OPTIONS = [
   { id: "title-asc", label: "Title (A–Z)" },
 ] as const;
 export type SortOption = (typeof SORT_OPTIONS)[number]["id"];
+
+/** Real icons in the dropdown — a native <option> can only do emoji, or nothing. */
+const SORT_ICON: Record<SortOption, React.ReactNode> = {
+  "deadline-asc": <IconDeadline className="size-3.5 text-muted-foreground" />,
+  "prize-desc": <IconMoney className="size-3.5 text-muted-foreground" />,
+  "title-asc": <IconTag className="size-3.5 text-muted-foreground" />,
+};
 
 export const QUICK_TAGS = [
   "AI",
@@ -85,37 +109,40 @@ export function FiltersBar({
           )}
         </div>
 
-        {/* Platform Dropdown if available */}
+        {/* Platform Dropdown */}
         {setSelectedPlatform && platforms.length > 0 && (
-          <NativeSelect
-            value={selectedPlatform || "all"}
-            onChange={(e) => setSelectedPlatform(e.target.value)}
-            className="h-10 rounded-lg border-border bg-card/80 text-xs font-semibold focus:border-ring"
-            aria-label="Filter by platform"
-          >
-            <option value="all">All Platforms</option>
-            {platforms.map((p) => (
-              <option key={p} value={p}>
-                {p}
-              </option>
-            ))}
-          </NativeSelect>
+          <Select value={selectedPlatform || "all"} onValueChange={setSelectedPlatform}>
+            <SelectTrigger size="sm" className="h-10 w-[172px] rounded-lg text-xs font-semibold" aria-label="Filter by platform">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Platforms</SelectItem>
+              {platforms.map((p) => (
+                <SelectItem key={p} value={p}>
+                  {p}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         )}
 
-        {/* Sort Dropdown if available */}
+        {/* Sort Dropdown */}
         {setSort && (
-          <NativeSelect
-            value={sort || "deadline-asc"}
-            onChange={(e) => setSort(e.target.value as SortOption)}
-            className="h-10 rounded-lg border-border bg-card/80 text-xs font-semibold focus:border-ring"
-            aria-label="Sort hackathons"
-          >
-            {SORT_OPTIONS.map((opt) => (
-              <option key={opt.id} value={opt.id}>
-                {opt.label}
-              </option>
-            ))}
-          </NativeSelect>
+          <Select value={sort || "deadline-asc"} onValueChange={(v) => setSort(v as SortOption)}>
+            <SelectTrigger size="sm" className="h-10 w-[196px] rounded-lg text-xs font-semibold" aria-label="Sort hackathons">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {SORT_OPTIONS.map((opt) => (
+                <SelectItem key={opt.id} value={opt.id}>
+                  <span className="flex items-center gap-1.5">
+                    {SORT_ICON[opt.id]}
+                    {opt.label}
+                  </span>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         )}
       </div>
 
