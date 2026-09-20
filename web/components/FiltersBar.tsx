@@ -11,6 +11,7 @@ import {
   IconDeadline,
   IconMoney,
   IconTag,
+  type AppIcon,
 } from "./Icons";
 import {
   Select,
@@ -70,14 +71,14 @@ export function FiltersBar({
   sort?: SortOption;
   setSort?: (s: SortOption) => void;
   onReset?: () => void;
-}) {
+}): React.JSX.Element {
   const isFiltered = q.trim().length > 0 || mode !== "all" || (selectedPlatform && selectedPlatform !== "all");
 
-  const modeIcons: Record<ModeFilter, React.ReactNode> = {
+  const modeIcons: Record<ModeFilter, AppIcon | null> = {
     all: null,
-    online: <IconGlobe className="size-3" />,
-    offline: <IconMapPin className="size-3" />,
-    hybrid: <IconHybrid className="size-3" />,
+    online: IconGlobe,
+    offline: IconMapPin,
+    hybrid: IconHybrid,
   };
 
   return (
@@ -152,6 +153,7 @@ export function FiltersBar({
         <div className="flex flex-wrap items-center gap-1.5 rounded-lg border border-border bg-muted/60 p-1">
           {MODES.map((m) => {
             const active = mode === m;
+            const ModeIcon = modeIcons[m];
             return (
               <button
                 key={m}
@@ -164,7 +166,7 @@ export function FiltersBar({
                 }`}
                 onClick={() => setMode(m)}
               >
-                {modeIcons[m]}
+                {ModeIcon && <ModeIcon className="w-3 h-3" />}
                 <span>{m === "all" ? "All Modes" : m}</span>
               </button>
             );

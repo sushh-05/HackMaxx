@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import type { Hackathon } from "@hackmaxx/shared";
 import { fetchHackathons } from "../lib/api";
 import { FiltersBar, type ModeFilter, type SortOption } from "../components/FiltersBar";
@@ -23,7 +23,7 @@ function daysLeft(iso: string): number {
   return Math.max(0, Math.ceil((new Date(iso).getTime() - Date.now()) / 86400000));
 }
 
-export default function ExplorePage() {
+export default function ExplorePage(): React.JSX.Element {
   const { format } = useCurrency();
   const [items, setItems] = useState<Hackathon[]>([]);
   const [q, setQ] = useState("");
@@ -306,13 +306,12 @@ export default function ExplorePage() {
                         </span>
 
                         <span
-                          className={`flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold border ${
-                            d <= 3
+                          className={`flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold border ${d <= 3
                               ? "bg-error/15 text-error border-error/30 animate-pulse"
                               : d <= 7
-                              ? "bg-warning/15 text-warning border-warning/30"
-                              : "bg-base-300/80 text-base-content/70 border-base-content/10"
-                          }`}
+                                ? "bg-warning/15 text-warning border-warning/30"
+                                : "bg-base-300/80 text-base-content/70 border-base-content/10"
+                            }`}
                         >
                           <IconCalendar className="size-3" />
                           <span>{d <= 3 ? `🚨 ${d}d left · Closing soon` : `${d}d left`}</span>

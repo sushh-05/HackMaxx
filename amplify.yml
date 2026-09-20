@@ -1,0 +1,29 @@
+version: 1
+frontend:
+  env:
+    variables:
+      BUN_INSTALL: /root/.bun
+      NEXT_PUBLIC_API_BASE_URL: https://c9y3l3wuma.execute-api.ap-south-1.amazonaws.com/dev
+  phases:
+    preBuild:
+      commands:
+        - curl --fail --silent --show-error --location --retry 5 --retry-all-errors --connect-timeout 30 --max-time 180 https://bun.sh/install -o /tmp/install-bun.sh
+        - BUN_INSTALL="$HOME/.bun" bash /tmp/install-bun.sh
+        - export BUN_INSTALL="$HOME/.bun"
+        - export PATH="$BUN_INSTALL/bin:$PATH"
+        - bun --version
+        - bun install --frozen-lockfile
+    build:
+      commands:
+        - export BUN_INSTALL="$HOME/.bun"
+        - export PATH="$BUN_INSTALL/bin:$PATH"
+        - bun --version
+        - bun run --cwd web build
+  artifacts:
+    baseDirectory: web/out
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - .bun/install/cache/**/*
+      - web/.next/cache/**/*

@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IconSun, IconMoon } from "./Icons";
 import { Button } from "./ui/button";
 
@@ -20,7 +20,7 @@ function applyTheme(theme: Theme) {
   document.documentElement.classList.toggle("dark", theme === "dark");
 }
 
-export function ThemeToggle() {
+export function ThemeToggle(): React.JSX.Element {
   const [theme, setTheme] = useState<Theme>("dark");
   const [mounted, setMounted] = useState(false);
 

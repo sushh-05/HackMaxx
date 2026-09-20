@@ -1,8 +1,9 @@
 "use client";
+import type React from "react";
 import { usePathname } from "next/navigation";
 import { IconGlobe, IconZap } from "./Icons";
 
-export function Nav() {
+export function Nav(): React.JSX.Element {
   const path = usePathname();
 
   const isExplore = path === "/" || path === "";

@@ -44,7 +44,7 @@ export const metadata: Metadata = {
     "Paste your project idea or repo → find the best upcoming hackathons to reuse it in, ranked by AI Worth Score, with an expected-value maxxing submission plan.",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({ children }: { children: React.ReactNode }): React.JSX.Element {
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
       <body className={`${bodyFont.variable} ${serifFont.variable} ${monoFont.variable} ${displayFont.variable} font-sans min-h-screen flex flex-col`}>

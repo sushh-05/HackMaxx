@@ -1,4 +1,5 @@
 import { listHackathons } from "../lib/dynamo.js";
+import { jsonResponse } from "../lib/http.js";
 
 export async function handler(event: { queryStringParameters?: Record<string, string> }) {
   const q = event.queryStringParameters ?? {};
@@ -11,5 +12,5 @@ export async function handler(event: { queryStringParameters?: Record<string, st
   }
   if (q.mode) items = items.filter((h) => h.mode === q.mode);
   if (q.tag) items = items.filter((h) => h.tech_tags.map((t) => t.toLowerCase()).includes(q.tag.toLowerCase()));
-  return { statusCode: 200, headers: { "content-type": "application/json" }, body: JSON.stringify(items) };
+  return jsonResponse(200, items);
 }

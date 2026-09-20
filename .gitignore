@@ -8,3 +8,22 @@ out/
 .aws-sam/
 .DS_Store
 .commandcode/
+
+# Python virtual environment & cache
+venv/
+.venv/
+env/
+ENV/
+__pycache__/
+*.py[cod]
+*$py.class
+
+# IDE & Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Output logs and temp files
+*.log
+tmp/

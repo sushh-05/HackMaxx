@@ -1,17 +1,24 @@
-// DynamoDB access. Phase 0: in-memory seed fallback so `bun run dev` works with zero AWS.
 import type { Hackathon } from "@hackmaxx/shared";
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import { DynamoDBDocumentClient, ScanCommand, PutCommand } from "@aws-sdk/lib-dynamodb";
 import { readFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
 
-let cache: Hackathon[] | null = null;
+const TABLE = process.env.HACKATHONS_TABLE ?? "";
+const ddb = TABLE
+  ? DynamoDBDocumentClient.from(new DynamoDBClient({ region: process.env.AWS_REGION ?? "ap-south-1" }))
+  : null;
+
+let seedCache: Hackathon[] | null = null;
 
 function parseSeed(): Hackathon[] {
+  if (seedCache) return seedCache;
   const path = join(import.meta.dir, "../../../data/seed.csv");
   if (!existsSync(path)) return [];
   const raw = readFileSync(path, "utf8").trim().split("\n");
   const [header, ...rows] = raw;
   const cols = header.split(",");
-  return rows.map((line, i) => {
+  seedCache = rows.map((line, i) => {
     const vals = line.split(",");
     const o: Record<string, string> = {};
     cols.forEach((c, j) => (o[c.trim()] = (vals[j] ?? "").trim()));
@@ -29,10 +36,21 @@ function parseSeed(): Hackathon[] {
       difficulty_score: Number(o.difficulty_score || 0.5),
     } as Hackathon;
   });
+  return seedCache;
 }
 
 export async function listHackathons(): Promise<Hackathon[]> {
-  // TODO Phase 1: replace with DynamoDB Scan (AWS SDK v3) when HACKATHONS_TABLE is set.
-  if (!cache) cache = parseSeed();
-  return cache;
+  if (!ddb) return parseSeed();
+  try {
+    const result = await ddb.send(new ScanCommand({ TableName: TABLE }));
+    const items = (result.Items ?? []) as Hackathon[];
+    return items.length > 0 ? items : parseSeed();
+  } catch {
+    return parseSeed();
+  }
+}
+
+export async function upsertHackathon(h: Hackathon): Promise<void> {
+  if (!ddb) return;
+  await ddb.send(new PutCommand({ TableName: TABLE, Item: h }));
 }

@@ -5,11 +5,17 @@ import {
 import { listHackathons } from "../lib/dynamo.js";
 import { embedText, explainMatch } from "../lib/bedrock.js";
 import { cosine } from "@hackmaxx/shared";
+import { jsonResponse } from "../lib/http.js";
 
 export async function handler(event: { body?: string }) {
-  const project = JSON.parse(event.body ?? "{}") as ProjectInput;
+  const raw = JSON.parse(event.body ?? "{}");
+  const project: ProjectInput = {
+    tech_stack: [],
+    tags: [],
+    ...raw,
+  };
   if (!project.title || !project.description) {
-    return { statusCode: 400, body: JSON.stringify({ error: "title + description required" }) };
+    return jsonResponse(400, { error: "title + description required" });
   }
   const hacks = await listHackathons();
   const maxPrize = Math.max(1, ...hacks.map((h) => h.prize_inr));
@@ -35,5 +41,5 @@ export async function handler(event: { body?: string }) {
     : plan.headline;
 
   const res: RecommendResponse = { recommendations: top, strategy, plan };
-  return { statusCode: 200, headers: { "content-type": "application/json" }, body: JSON.stringify(res) };
+  return jsonResponse(200, res);
 }

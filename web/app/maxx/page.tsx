@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import type { RecommendResponse } from "@hackmaxx/shared";
 import { recommend } from "../../lib/api";
 import { HackathonCard } from "../../components/HackathonCard";
@@ -49,7 +49,7 @@ const EXAMPLES = [
   },
 ];
 
-export default function MaxxPage() {
+export default function MaxxPage(): React.JSX.Element {
   const [selectedExample, setSelectedExample] = useState<number | null>(0);
   const [title, setTitle] = useState(EXAMPLES[0].title);
   const [description, setDescription] = useState(EXAMPLES[0].description);
@@ -430,11 +430,10 @@ export default function MaxxPage() {
                 <button
                   type="button"
                   onClick={() => setReuseFilter("all")}
-                  className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all ${
-                    reuseFilter === "all"
+                  className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all ${reuseFilter === "all"
                       ? "bg-primary text-primary-content shadow-sm"
                       : "text-base-content/60 hover:text-base-content"
-                  }`}
+                    }`}
                 >
                   All ({res.recommendations.length})
                 </button>

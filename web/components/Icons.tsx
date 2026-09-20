@@ -6,7 +6,8 @@
 //
 // Naming convention: Icon<Something> is a *role* in this app, not a glyph. If a
 // glyph should change later, swap the assignment here and every call site follows.
-import type { LucideProps } from "lucide-react";
+import type React from "react";
+import type { LucideIcon, LucideProps } from "lucide-react";
 import {
   Zap,
   Trophy,
@@ -56,69 +57,79 @@ import {
   Boxes,
 } from "lucide-react";
 
+// Bun's isolated linker can expose two identical @types/react paths. Cast at
+// this single boundary so consumers never compare Lucide's ReactNode with the
+// app's ReactNode during Next.js production type checking.
+export type AppIcon = React.ComponentType<LucideProps>;
+
+function appIcon(icon: LucideIcon): AppIcon {
+  return icon as unknown as AppIcon;
+}
+
 // --- core / brand ---
-export const IconZap = Zap;
-export const IconTrophy = Trophy;
-export const IconAward = Award;
-export const IconRocket = Rocket;
+export const IconZap = appIcon(Zap);
+export const IconTrophy = appIcon(Trophy);
+export const IconAward = appIcon(Award);
+export const IconRocket = appIcon(Rocket);
 
 // --- time & deadlines ---
-export const IconCalendar = Calendar;
-export const IconDeadline = CalendarClock;
-export const IconHourglass = Hourglass;
-export const IconFlame = Flame;
+export const IconCalendar = appIcon(Calendar);
+export const IconDeadline = appIcon(CalendarClock);
+export const IconHourglass = appIcon(Hourglass);
+export const IconFlame = appIcon(Flame);
 
 // --- place / mode ---
-export const IconGlobe = Globe;
-export const IconMapPin = MapPin;
-export const IconHybrid = Sparkle;
+export const IconGlobe = appIcon(Globe);
+export const IconMapPin = appIcon(MapPin);
+export const IconHybrid = appIcon(Sparkle);
 
 // --- money & value ---
-export const IconMoney = CircleDollarSign;
-export const IconTrendingUp = TrendingUp;
-export const IconWorth = Gauge;
-export const IconTarget = Target;
+export const IconMoney = appIcon(CircleDollarSign);
+export const IconTrendingUp = appIcon(TrendingUp);
+export const IconWorth = appIcon(Gauge);
+export const IconTarget = appIcon(Target);
 
 // --- reuse & stack ---
-export const IconReuse = Recycle;
-export const IconBranch = GitBranch;
-export const IconLayers = Layers;
-export const IconTag = Tag;
-export const IconCode = CodeXml;
-export const IconBoxes = Boxes;
+export const IconReuse = appIcon(Recycle);
+export const IconBranch = appIcon(GitBranch);
+export const IconLayers = appIcon(Layers);
+export const IconTag = appIcon(Tag);
+export const IconCode = appIcon(CodeXml);
+export const IconBoxes = appIcon(Boxes);
 
 // --- ai / infra ---
-export const IconSparkles = Sparkles;
-export const IconLightbulb = Lightbulb;
-export const IconChip = Cpu;
-export const IconDatabase = Database;
-export const IconCloud = Cloud;
-export const IconTerminal = Terminal;
+export const IconSparkles = appIcon(Sparkles);
+export const IconLightbulb = appIcon(Lightbulb);
+export const IconChip = appIcon(Cpu);
+export const IconDatabase = appIcon(Database);
+export const IconCloud = appIcon(Cloud);
+export const IconTerminal = appIcon(Terminal);
 
 // --- interaction ---
-export const IconSearch = Search;
-export const IconFilters = SlidersVertical;
-export const IconReset = RotateCcw;
-export const IconCopy = Copy;
-export const IconCheck = Check;
-export const IconX = X;
-export const IconChevronDown = ChevronDown;
-export const IconChevronUp = ChevronUp;
-export const IconChevronRight = ChevronRight;
-export const IconArrowRight = ArrowRight;
-export const IconExternal = ArrowUpRight;
-export const IconExternalLink = ExternalLink;
-export const IconQuote = Quote;
+export const IconSearch = appIcon(Search);
+export const IconFilters = appIcon(SlidersVertical);
+export const IconSliders = IconFilters;
+export const IconReset = appIcon(RotateCcw);
+export const IconCopy = appIcon(Copy);
+export const IconCheck = appIcon(Check);
+export const IconX = appIcon(X);
+export const IconChevronDown = appIcon(ChevronDown);
+export const IconChevronUp = appIcon(ChevronUp);
+export const IconChevronRight = appIcon(ChevronRight);
+export const IconArrowRight = appIcon(ArrowRight);
+export const IconExternal = appIcon(ArrowUpRight);
+export const IconExternalLink = appIcon(ExternalLink);
+export const IconQuote = appIcon(Quote);
 
 // --- status ---
-export const IconCheckCircle = CircleCheck;
-export const IconAlertCircle = CircleAlert;
-export const IconWarning = TriangleAlert;
-export const IconInfo = Info;
+export const IconCheckCircle = appIcon(CircleCheck);
+export const IconAlertCircle = appIcon(CircleAlert);
+export const IconWarning = appIcon(TriangleAlert);
+export const IconInfo = appIcon(Info);
 
 // --- theme toggle ---
-export const IconSun = Sun;
-export const IconMoon = Moon;
+export const IconSun = appIcon(Sun);
+export const IconMoon = appIcon(Moon);
 
 /**
  * GitHub mark. lucide dropped brand icons, so this stays a local SVG — but it
@@ -133,7 +144,7 @@ export function IconGithub({
   absoluteStrokeWidth: _absoluteStrokeWidth,
   nonScalingStroke: _nonScalingStroke,
   ...props
-}: LucideProps) {
+}: LucideProps): React.JSX.Element {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

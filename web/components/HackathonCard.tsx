@@ -1,4 +1,5 @@
 "use client";
+import React from "react";
 import type { Recommendation } from "@hackmaxx/shared";
 import { WorthBar, WorthBreakdownView } from "./WorthScoreGauge";
 import {
@@ -50,7 +51,7 @@ export function HackathonCard({
 }: {
   r: Recommendation;
   onTagClick?: (tag: string) => void;
-}) {
+}): React.JSX.Element {
   const { hackathon: h, worth, why, reuse, breakdown } = r;
 
   const { format } = useCurrency();

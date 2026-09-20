@@ -1,5 +1,5 @@
 "use client";
-import { useState, type ReactNode } from "react";
+import React, { useState, type ReactNode } from "react";
 import type { MaxxingPlan } from "@hackmaxx/shared";
 import {
   IconZap,
@@ -72,7 +72,7 @@ export function MaxxingStrategyPanel({
 }: {
   strategy: string;
   plan?: MaxxingPlan;
-}) {
+}): React.JSX.Element {
   const [copied, setCopied] = useState(false);
   const { format } = useCurrency();
 
