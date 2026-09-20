@@ -47,6 +47,19 @@ Pages: `/` Explore · `/maxx` Maxx My Project.
 
 ---
 
+## 🖥️ Terminal client
+
+Same platform, no browser — an OpenTUI app over the same API:
+
+```bash
+bun run tui                                    # local backend on :3011
+HACKMAXX_API_URL=<deployed-api-url> bun run tui  # against the live API
+```
+
+Watchlist view (worth-ranked rows, `/` filter, `t` sort, `r` reload) → `m` on any row streams a Maxx run with the same terminal receipt the web app shows. `q` quits.
+
+---
+
 ## 🏗️ Stack
 
 | Layer | Technology |

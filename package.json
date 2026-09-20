@@ -6,7 +6,8 @@
   "workspaces": [
     "web",
     "backend",
-    "shared"
+    "shared",
+    "cli"
   ],
   "scripts": {
     "dev": "concurrently -k -n \"backend,web\" -c \"cyan.bold,magenta.bold\" \"bun run dev:backend\" \"bun run dev:web\"",
@@ -16,7 +17,8 @@
     "dev:python": "uvicorn app.main:app --reload --port 8000",
     "build": "bun run --cwd web build",
     "typecheck": "tsc -p shared/tsconfig.json --noEmit && tsc -p backend/tsconfig.json --noEmit && tsc -p web/tsconfig.json --noEmit",
-    "seed": "bun scripts/seed.ts"
+    "seed": "bun scripts/seed.ts",
+    "tui": "bun cli/src/index.ts"
   },
   "devDependencies": {
     "concurrently": "^10.0.5",
