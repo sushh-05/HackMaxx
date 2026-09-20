@@ -19,7 +19,7 @@ export function CurrencySelector() {
           {config.symbol} {config.code}
         </span>
       </SelectTrigger>
-      <SelectContent align="end">
+      <SelectContent position="popper" align="start" side="bottom" sideOffset={6} className="min-w-[190px]">
         {Object.values(CURRENCIES).map((c) => (
           <SelectItem key={c.code} value={c.code} className="text-xs">
             <span className="flex items-baseline gap-1.5">
