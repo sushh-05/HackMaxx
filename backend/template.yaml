@@ -39,8 +39,10 @@ Resources:
 
   ListFn:
     Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
     Properties:
-      CodeUri: .aws-sam/build/ListFn/
+      CodeUri: .
       Handler: list.handler
       Policies:
         - DynamoDBCrudPolicy:
@@ -59,8 +61,10 @@ Resources:
 
   RecommendFn:
     Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
     Properties:
-      CodeUri: .aws-sam/build/RecommendFn/
+      CodeUri: .
       Handler: recommend.handler
       Timeout: 30
       Policies:
@@ -80,8 +84,10 @@ Resources:
 
   RefreshFn:
     Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
     Properties:
-      CodeUri: .aws-sam/build/RefreshFn/
+      CodeUri: .
       Handler: refresh.handler
       Timeout: 60
       Policies:
