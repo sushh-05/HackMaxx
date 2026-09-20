@@ -265,6 +265,7 @@ export function HackathonWatchlist({
                       e.stopPropagation();
                       onTagClick?.(t);
                     }}
+                    aria-label={`Filter by tag ${t}`}
                     className="rounded-sm border border-border bg-muted/60 px-1 py-px font-mono text-[9px] transition-colors hover:border-action/40 hover:text-action"
                   >
                     #{t}

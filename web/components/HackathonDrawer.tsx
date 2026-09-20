@@ -11,7 +11,7 @@
  * All colours are Notebook theme semantic tokens (action/data/money/deadline),
  * numbers are mono tabular-nums, icons come from ./Icons role exports.
  */
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { cn } from "cn";
 import {
   IconX,
@@ -127,6 +127,19 @@ export function HackathonDrawer({
     return () => window.removeEventListener("keydown", onKey);
   }, [open, onClose]);
 
+  // Focus management: move focus into the drawer on open, restore on close.
+  const panelRef = useRef<HTMLElement>(null);
+  const previouslyFocused = useRef<Element | null>(null);
+  useEffect(() => {
+    if (open) {
+      previouslyFocused.current = document.activeElement;
+      panelRef.current?.focus();
+    } else if (previouslyFocused.current instanceof HTMLElement) {
+      previouslyFocused.current.focus();
+      previouslyFocused.current = null;
+    }
+  }, [open]);
+
   if (!rendered) return null;
 
   const days = daysLeft(rendered.deadline);
@@ -153,11 +166,13 @@ export function HackathonDrawer({
 
       {/* Panel */}
       <aside
+        ref={panelRef}
         role="dialog"
         aria-modal="true"
         aria-label={`${rendered.title} details`}
+        tabIndex={-1}
         className={cn(
-          "absolute inset-y-0 right-0 flex w-full max-w-[400px] flex-col border-l border-border bg-card shadow-2xl transition-transform duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none",
+          "absolute inset-y-0 right-0 flex w-full max-w-[400px] flex-col border-l border-border bg-card shadow-2xl transition-transform duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none focus:outline-none",
           open ? "translate-x-0" : "translate-x-full",
         )}
       >

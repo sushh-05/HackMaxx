@@ -179,6 +179,7 @@ export function HackathonCard({
               key={t}
               type="button"
               onClick={() => onTagClick?.(t)}
+              aria-label={`Filter by tag ${t}`}
               className="rounded-md border border-border bg-muted/60 px-2 py-0.5 text-[11px] font-medium text-muted-foreground transition-colors hover:border-action/40 hover:bg-action/10 hover:text-action"
             >
               #{t}
