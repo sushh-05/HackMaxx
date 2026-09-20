@@ -53,6 +53,7 @@ for (const relativeFile of requiredServerFiles.files) {
   await mkdir(dirname(targetFile), { recursive: true });
   await cp(sourceFile, targetFile);
 }
+await cp(requiredServerFilesPath, join(bundleRoot, "required-server-files.json"));
 
 // Public files are served by the standalone server and by Amplify's static primitive.
 try {
