@@ -17,6 +17,7 @@ import {
 } from "../components/Icons";
 import { useCurrency } from "../lib/currency";
 import { Button } from "../components/ui/button";
+import { HackathonWatchlist } from "../components/ui/hackathon-watchlist";
 import { Alert, AlertTitle, AlertDescription } from "../components/ui/alert";
 
 function daysLeft(iso: string): number {
@@ -269,118 +270,24 @@ export default function ExplorePage(): React.JSX.Element {
         </div>
       )}
 
-      {/* Results List */}
+      {/* Results — watchlist rows, not marketing cards (DESIGN.md > Layout) */}
       {!loading && !err && filteredItems.length > 0 && (
-        <div className="space-y-4">
-          <div className="flex items-center justify-between text-xs text-base-content/50 px-1">
-            <span>
-              Showing <strong className="text-base-content font-mono">{filteredItems.length}</strong> hackathon
-              {filteredItems.length === 1 ? "" : "s"}
-            </span>
-            <span>Sorted by: {sort === "deadline-asc" ? "Deadline soonest" : sort === "prize-desc" ? "Highest prize" : "Title"}</span>
-          </div>
-
-          <div className="grid gap-4">
-            {filteredItems.map((h) => {
-              const d = daysLeft(h.deadline);
-              const platformStyle = getPlatformBadgeStyle(h.platform);
-
-              return (
-                <article
-                  key={h.id}
-                  className="card-glass rounded-2xl p-5 sm:p-6 card-in transition-all duration-200 hover:-translate-y-0.5 group"
-                >
-                  <div className="flex flex-col gap-4">
-                    {/* Top row: Platform, Mode, Countdown */}
-                    <div className="flex flex-wrap items-center justify-between gap-2.5">
-                      <div className="flex flex-wrap items-center gap-2 text-xs">
-                        <span className={`px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider text-[11px] border ${platformStyle.bg} ${platformStyle.text} ${platformStyle.border}`}>
-                          {h.platform}
-                        </span>
-
-                        <span className="flex items-center gap-1 rounded-full border border-border bg-muted/70 px-2.5 py-0.5 text-[11px] font-medium text-muted-foreground capitalize">
-                          {h.mode === "online" && <IconGlobe className="size-3 text-action" />}
-                          {h.mode === "offline" && <IconMapPin className="size-3 text-data" />}
-                          {h.mode === "hybrid" && <IconHybrid className="size-3 text-money" />}
-                          <span>{h.mode}</span>
-                        </span>
-
-                        <span
-                          className={`flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold border ${d <= 3
-                              ? "bg-error/15 text-error border-error/30 animate-pulse"
-                              : d <= 7
-                                ? "bg-warning/15 text-warning border-warning/30"
-                                : "bg-base-300/80 text-base-content/70 border-base-content/10"
-                            }`}
-                        >
-                          <IconCalendar className="size-3" />
-                          <span>{d <= 3 ? `🚨 ${d}d left · Closing soon` : `${d}d left`}</span>
-                        </span>
-                      </div>
-
-                      {/* Prize display */}
-                      <div className="px-3 py-1 rounded-xl bg-money/10 border border-money/25 text-right">
-                        <span className="text-[10px] uppercase font-bold tracking-wider text-money/80 flex items-center gap-1 justify-end">
-                          <IconTrophy className="size-3 text-money" /> Prize
-                        </span>
-                        <span className="font-mono text-base font-black tabular-nums text-money block">
-                          {format(h.prize_inr)}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Title and description */}
-                    <div className="space-y-1.5">
-                      <h3 className="font-display text-lg sm:text-xl font-bold tracking-tight text-base-content group-hover:text-primary transition-colors">
-                        <a href={h.url} target="_blank" rel="noreferrer" className="no-underline hover:underline">
-                          {h.title}
-                        </a>
-                      </h3>
-                      <p className="text-xs sm:text-sm text-base-content/70 leading-relaxed line-clamp-2">
-                        {h.description}
-                      </p>
-                    </div>
-
-                    {/* Tech tags */}
-                    <div className="flex flex-wrap items-center gap-1.5">
-                      {h.tech_tags.map((t) => (
-                        <button
-                          key={t}
-                          type="button"
-                          onClick={() => setQ(t)}
-                          className="px-2.5 py-0.5 rounded-lg text-[11px] font-medium bg-primary/10 text-primary hover:bg-primary/20 border border-primary/20 transition-colors"
-                        >
-                          #{t}
-                        </button>
-                      ))}
-                    </div>
-
-                    {/* Actions */}
-                    <div className="flex items-center justify-end gap-3 pt-3 border-t border-base-content/8">
-                      <Button
-                        asChild
-                        variant="ghost"
-                        size="sm"
-                        className="text-xs font-bold text-primary hover:bg-primary/10"
-                      >
-                        <a href={`/maxx?title=${encodeURIComponent(h.title)}&tags=${encodeURIComponent(h.tech_tags.join(", "))}`}>
-                          <IconZap className="size-3.5" />
-                          <span>Maxx around this</span>
-                        </a>
-                      </Button>
-                      <Button asChild size="sm" className="rounded-xl text-xs font-bold shadow-sm shadow-primary/30">
-                        <a href={h.url} target="_blank" rel="noreferrer">
-                          <span>Open Hackathon</span>
-                          <IconExternalLink className="size-3.5" />
-                        </a>
-                      </Button>
-                    </div>
-                  </div>
-                </article>
-              );
-            })}
-          </div>
-        </div>
+        <HackathonWatchlist
+          rows={filteredItems.map((h) => ({
+            id: h.id,
+            title: h.title,
+            url: h.url,
+            platform: h.platform,
+            mode: h.mode,
+            deadline: h.deadline,
+            prize_inr: h.prize_inr,
+            tech_tags: h.tech_tags,
+          }))}
+          sort={sort}
+          onSort={setSort}
+          title="Open hackathons"
+          onTagClick={setQ}
+        />
       )}
     </section>
   );
