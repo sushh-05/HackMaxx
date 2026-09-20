@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import type { MaxxingPlan } from "@hackmaxx/shared";
 import {
   IconZap,
@@ -26,7 +26,7 @@ export function MaxxingStrategyPanel({
 }: {
   strategy: string;
   plan?: MaxxingPlan;
-}) {
+}): ReactNode {
   const [copied, setCopied] = useState(false);
 
   function copyToClipboard() {

@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { type ReactNode } from "react";
 import { IconSearch, IconX, IconGlobe, IconMapPin, IconZap, IconSliders } from "./Icons";
 
 export const MODES = ["all", "online", "offline", "hybrid"] as const;
@@ -45,7 +45,7 @@ export function FiltersBar({
   sort?: SortOption;
   setSort?: (s: SortOption) => void;
   onReset?: () => void;
-}) {
+}): ReactNode {
   const isFiltered = q.trim().length > 0 || mode !== "all" || (selectedPlatform && selectedPlatform !== "all");
 
   const modeIcons: Record<ModeFilter, React.ReactNode> = {
