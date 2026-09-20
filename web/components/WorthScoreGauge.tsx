@@ -63,7 +63,7 @@ export function WorthScoreGlyph({
 }: {
   worth: number;
   className?: string;
-}) {
+}): React.JSX.Element {
   const tier = getWorthTier(worth);
   return (
     <span

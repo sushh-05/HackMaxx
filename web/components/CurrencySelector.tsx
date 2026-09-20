@@ -2,7 +2,7 @@
 import { useCurrency, CURRENCIES, type CurrencyCode } from "../lib/currency";
 import { Select, SelectContent, SelectItem, SelectTrigger } from "./ui/select";
 
-export function CurrencySelector() {
+export function CurrencySelector(): React.JSX.Element {
   const { currency, setCurrency, config } = useCurrency();
 
   return (

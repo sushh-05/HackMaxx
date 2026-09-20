@@ -46,7 +46,7 @@ function Kpi({
   unit?: string;
   tone: string;
   small?: boolean;
-}) {
+}): React.JSX.Element {
   return (
     <div className="rounded-lg border border-border bg-card/70 p-3.5">
       <span

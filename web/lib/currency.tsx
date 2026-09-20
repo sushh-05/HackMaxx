@@ -86,7 +86,7 @@ const CurrencyContext = createContext<CurrencyContextType>({
   config: CURRENCIES.INR,
 });
 
-export function CurrencyProvider({ children }: { children: React.ReactNode }) {
+export function CurrencyProvider({ children }: { children: React.ReactNode }): React.JSX.Element {
   // HackMaxx is built for the India-first AWS community; keep stored values in
   // INR and make the first-run display local. Users can still switch currencies.
   const [currency, setCurrencyState] = useState<CurrencyCode>("INR");

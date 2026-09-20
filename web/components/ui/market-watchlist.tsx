@@ -31,7 +31,7 @@ function Sparkline({ asset }: { asset: Asset }) {
   return <svg viewBox="0 0 80 30" className="h-7 w-20" aria-hidden><path d={path} fill="none" stroke={asset.change >= 0 ? CHART.green : 'var(--chart-down, #e06a6a)'} strokeWidth="1.5" strokeLinecap="round" /></svg>
 }
 
-export default function MarketWatchlist() {
+export default function MarketWatchlist(): React.JSX.Element {
   const [sort, setSort] = useState<'symbol' | 'change'>('change')
   const [descending, setDescending] = useState(true)
   const [active, setActive] = useState('NVDA')
@@ -69,6 +69,6 @@ export default function MarketWatchlist() {
   )
 }
 
-export function Demo() { return <div className="flex min-h-[460px] w-full items-center justify-center p-3"><MarketWatchlist /></div> }
+export function Demo(): React.JSX.Element { return <div className="flex min-h-[460px] w-full items-center justify-center p-3"><MarketWatchlist /></div> }
 
 export { MarketWatchlist as Component }

@@ -121,7 +121,7 @@ export function HackathonWatchlist({
   compareRejected?: boolean;
   /** trigger slide-over drawer */
   onRowClick?: (row: WatchlistRow) => void;
-}) {
+}): React.JSX.Element {
   const [activeId, setActiveId] = useState<string | null>(rows[0]?.id ?? null);
   const { format } = useCurrency();
 

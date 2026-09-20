@@ -25,7 +25,7 @@ export function PinTicker({
   items: Pick<WatchlistRow, "id" | "title" | "url" | "deadline" | "worth">[];
   pins: string[];
   onUnpin: (id: string) => void;
-}) {
+}): React.JSX.Element | null {
   // Resolve pinned ids against the fetched list, preserving pin order.
   const pinned = pins
     .map((id) => items.find((h) => h.id === id))

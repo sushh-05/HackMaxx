@@ -98,7 +98,7 @@ export function HackathonDrawer({
   onTagClick?: (tag: string) => void;
   isPinned?: boolean;
   onTogglePin?: (id: string) => void;
-}) {
+}): React.JSX.Element | null {
   const { format } = useCurrency();
   // Keep the last row mounted during the exit transition so content doesn't
   // vanish mid-slide.
