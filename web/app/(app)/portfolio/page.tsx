@@ -18,15 +18,15 @@ import {
   IconArrowRight,
   IconTrophy,
   IconTrendingUp,
-} from "../../components/Icons";
-import { WorthScoreGlyph } from "../../components/WorthScoreGauge";
-import { Button } from "../../components/ui/button";
-import { useCurrency } from "../../lib/currency";
+} from "../../../components/Icons";
+import { WorthScoreGlyph } from "../../../components/WorthScoreGauge";
+import { Button } from "../../../components/ui/button";
+import { useCurrency } from "../../../lib/currency";
 import {
   listProjects,
   deleteProject,
   type PortfolioProject,
-} from "../../lib/portfolio";
+} from "../../../lib/portfolio";
 
 function formatDate(ts: number): string {
   const d = new Date(ts);

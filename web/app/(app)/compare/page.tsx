@@ -10,10 +10,10 @@
  */
 import React, { useEffect, useMemo, useState } from "react";
 import type { Hackathon } from "@hackmaxx/shared";
-import { fetchHackathons } from "../../lib/api";
-import { useCurrency } from "../../lib/currency";
-import { getPlatformBadgeStyle } from "../../components/HackathonCard";
-import { WorthScoreGlyph } from "../../components/WorthScoreGauge";
+import { fetchHackathons } from "../../../lib/api";
+import { useCurrency } from "../../../lib/currency";
+import { getPlatformBadgeStyle } from "../../../components/HackathonCard";
+import { WorthScoreGlyph } from "../../../components/WorthScoreGauge";
 import {
   IconGlobe,
   IconMapPin,
@@ -24,9 +24,9 @@ import {
   IconZap,
   IconScale,
   IconX,
-} from "../../components/Icons";
-import { Button } from "../../components/ui/button";
-import { Alert, AlertTitle, AlertDescription } from "../../components/ui/alert";
+} from "../../../components/Icons";
+import { Button } from "../../../components/ui/button";
+import { Alert, AlertTitle, AlertDescription } from "../../../components/ui/alert";
 
 const COMPARE_KEY = "hackmaxx:compare:v1";
 
@@ -192,7 +192,7 @@ export default function ComparePage(): React.JSX.Element {
           </p>
         </div>
         <Button asChild variant="outline" size="sm" className="rounded-xl font-bold self-start sm:self-auto">
-          <a href="/">Back to dashboard</a>
+          <a href="/dashboard">Back to dashboard</a>
         </Button>
       </div>
 
@@ -224,7 +224,7 @@ export default function ComparePage(): React.JSX.Element {
             Check the compare boxes on 2–3 watchlist rows on the dashboard, then press Compare.
           </p>
           <Button asChild size="sm" className="rounded-xl font-bold">
-            <a href="/">Open dashboard</a>
+            <a href="/dashboard">Open dashboard</a>
           </Button>
         </div>
       )}

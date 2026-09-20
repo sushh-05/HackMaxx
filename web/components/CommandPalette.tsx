@@ -107,12 +107,12 @@ function PaletteDialog({ onClose }: { onClose: () => void }): React.JSX.Element 
       {
         id: "go-dashboard",
         label: "Go to Dashboard",
-        hint: "/",
+        hint: "/dashboard",
         keywords: "explore hackathons home dashboard",
         icon: <IconDashboard className="size-4" />,
         run: () => {
           close();
-          router.push("/");
+          router.push("/dashboard");
         },
       },
       {

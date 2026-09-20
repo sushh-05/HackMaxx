@@ -14,7 +14,7 @@ import { Kbd } from "./ui/kbd";
 export function Nav(): React.JSX.Element {
   const path = usePathname();
 
-  const isDashboard = path === "/" || path === "";
+  const isDashboard = path.startsWith("/dashboard");
   const isMaxx = path.startsWith("/maxx");
   const isTimeline = path.startsWith("/timeline");
   const isPortfolio = path.startsWith("/portfolio");
@@ -29,7 +29,7 @@ export function Nav(): React.JSX.Element {
 
   return (
     <nav className="flex items-center gap-0.5 sm:gap-1 p-1 bg-muted/70 rounded-2xl border border-border shadow-inner" aria-label="Main navigation">
-      <a href="/" className={linkClass(isDashboard)} title="Dashboard">
+      <a href="/dashboard" className={linkClass(isDashboard)} title="Dashboard">
         <IconDashboard className="size-3.5" />
         <span className="hidden sm:inline">Dashboard</span>
       </a>
