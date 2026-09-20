@@ -6,7 +6,8 @@ frontend:
   phases:
     preBuild:
       commands:
-        - curl -fsSL https://bun.sh/install | bash
+        - curl --fail --silent --show-error --location --retry 5 --retry-all-errors --connect-timeout 30 --max-time 180 https://bun.sh/install -o /tmp/install-bun.sh
+        - BUN_INSTALL="$HOME/.bun" bash /tmp/install-bun.sh
         - export BUN_INSTALL="$HOME/.bun"
         - export PATH="$BUN_INSTALL/bin:$PATH"
         - bun --version
