@@ -65,9 +65,9 @@ export const CURRENCIES: Record<CurrencyCode, CurrencyConfig> = {
 
 export function formatCurrencyAmount(
   amountInr: number,
-  currencyCode: CurrencyCode = "USD"
+  currencyCode: CurrencyCode = "INR"
 ): string {
-  const cfg = CURRENCIES[currencyCode] ?? CURRENCIES.USD;
+  const cfg = CURRENCIES[currencyCode] ?? CURRENCIES.INR;
   const converted = Math.round(amountInr * cfg.rateFromInr);
   return `${cfg.symbol}${converted.toLocaleString(cfg.locale)}`;
 }
@@ -80,14 +80,16 @@ interface CurrencyContextType {
 }
 
 const CurrencyContext = createContext<CurrencyContextType>({
-  currency: "USD",
+  currency: "INR",
   setCurrency: () => {},
-  format: (amt) => formatCurrencyAmount(amt, "USD"),
-  config: CURRENCIES.USD,
+  format: (amt) => formatCurrencyAmount(amt, "INR"),
+  config: CURRENCIES.INR,
 });
 
 export function CurrencyProvider({ children }: { children: React.ReactNode }) {
-  const [currency, setCurrencyState] = useState<CurrencyCode>("USD");
+  // HackMaxx is built for the India-first AWS community; keep stored values in
+  // INR and make the first-run display local. Users can still switch currencies.
+  const [currency, setCurrencyState] = useState<CurrencyCode>("INR");
 
   useEffect(() => {
     try {
@@ -106,7 +108,7 @@ export function CurrencyProvider({ children }: { children: React.ReactNode }) {
     } catch {}
   }
 
-  const config = CURRENCIES[currency] ?? CURRENCIES.USD;
+  const config = CURRENCIES[currency] ?? CURRENCIES.INR;
 
   function format(amountInr: number) {
     return formatCurrencyAmount(amountInr, currency);

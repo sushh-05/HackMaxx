@@ -37,6 +37,8 @@ export default function ExplorePage(): React.JSX.Element {
   const [sort, setSort] = useState<SortOption>("deadline-asc");
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState("");
+  const [dataSource, setDataSource] = useState("AWS API Gateway");
+  const [fetchedAt, setFetchedAt] = useState<string | null>(null);
 
   // Drawer state
   const [drawerRow, setDrawerRow] = useState<WatchlistRow | null>(null);
@@ -105,7 +107,9 @@ export default function ExplorePage(): React.JSX.Element {
       fetchHackathons(q, mode)
         .then((data) => {
           if (!cancelled) {
-            setItems(data);
+            setItems(data.items);
+            setDataSource(data.source);
+            setFetchedAt(data.fetchedAt);
             setErr("");
           }
         })
@@ -275,6 +279,20 @@ export default function ExplorePage(): React.JSX.Element {
           </div>
         )}
       </div>
+
+      {!loading && !err && items.length > 0 && (
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 border-y border-border/70 py-2 text-[11px] font-medium tracking-wide text-muted-foreground">
+          <span className="inline-flex items-center gap-1.5 uppercase">
+            <span className="size-1.5 rounded-full bg-win shadow-[0_0_8px_var(--color-win)]" />
+            Live index
+          </span>
+          <span>{dataSource}</span>
+          <span className="font-mono tabular-nums">
+            {fetchedAt ? `Fetched ${new Date(fetchedAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}` : "Fetched just now"}
+          </span>
+          <span className="text-base-content/40">Deadlines and prizes are checked at request time.</span>
+        </div>
+      )}
 
       {/* Filters Bar */}
       <FiltersBar

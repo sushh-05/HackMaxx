@@ -132,12 +132,15 @@ export function WorthBar({
 
 export function WorthBreakdownView({ breakdown }: { breakdown: WorthBreakdown }): React.JSX.Element {
   const items = [
-    { label: "Skill Similarity", weight: "30%", value: Math.round(breakdown.skill * 100) },
-    { label: "Learning & Tags", weight: "20%", value: Math.round(breakdown.learning * 100) },
-    { label: "Platform Trust", weight: "20%", value: Math.round(breakdown.rep * 100) },
-    { label: "Difficulty Fit", weight: "15%", value: Math.round(breakdown.difficulty_fit * 100) },
-    { label: "Prize Scale", weight: "15%", value: Math.round(breakdown.prize * 100) },
+    { label: "Skill Similarity", weight: 30, value: Math.round(breakdown.skill * 100) },
+    { label: "Learning & Tags", weight: 20, value: Math.round(breakdown.learning * 100) },
+    { label: "Platform Trust", weight: 20, value: Math.round(breakdown.rep * 100) },
+    { label: "Difficulty Fit", weight: 15, value: Math.round(breakdown.difficulty_fit * 100) },
+    { label: "Prize Scale", weight: 15, value: Math.round(breakdown.prize * 100) },
   ];
+  const strongest = items.reduce((best, item) =>
+    item.value * item.weight > best.value * best.weight ? item : best,
+  );
 
   return (
     <div className="mt-3 space-y-2.5 rounded-xl border border-border bg-muted/60 p-3.5 text-xs">
@@ -146,7 +149,14 @@ export function WorthBreakdownView({ breakdown }: { breakdown: WorthBreakdown })
           <IconSparkles className="size-3.5 text-action" />
           Worth Score Breakdown (Bedrock)
         </span>
-        <span className="text-[10px] normal-case text-muted-foreground">formula weights</span>
+        <span className="text-[10px] normal-case text-muted-foreground">weighted points</span>
+      </div>
+
+      <div className="rounded-lg border border-action/20 bg-action/8 px-2.5 py-2 text-[11px] text-base-content/75">
+        Strongest driver: <span className="font-semibold text-action">{strongest.label}</span>
+        <span className="font-mono tabular-nums text-base-content/60">
+          {" "}({Math.round((strongest.value * strongest.weight) / 100)} pts)
+        </span>
       </div>
 
       <div className="grid gap-2">
@@ -156,10 +166,10 @@ export function WorthBreakdownView({ breakdown }: { breakdown: WorthBreakdown })
               <span className="flex items-center gap-1 text-base-content/70">
                 <IconTarget className="size-3 shrink-0 text-data opacity-70" />
                 {it.label}
-                <span className="text-muted-foreground">({it.weight})</span>
+                <span className="text-muted-foreground">({it.weight}%)</span>
               </span>
               <span className="font-mono text-[11px] font-semibold tabular-nums text-base-content/90">
-                {it.value}%
+                +{Math.round((it.value * it.weight) / 100)} pts
               </span>
             </div>
             <div className="h-1 w-full overflow-hidden rounded-full bg-base-content/10">

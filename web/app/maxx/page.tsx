@@ -448,7 +448,7 @@ export default function MaxxPage(): React.JSX.Element {
         {res && (
           <>
             {/* Maxxing Strategy & Submission Pipeline */}
-            <MaxxingStrategyPanel strategy={res.strategy} plan={res.plan} />
+            <MaxxingStrategyPanel strategy={res.strategy} plan={res.plan} projectTitle={title} />
 
             {/* Recommendations List Header with Filter Tabs & Save to Portfolio */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-4 border-t border-border">
