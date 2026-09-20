@@ -3,6 +3,7 @@ frontend:
   env:
     variables:
       BUN_INSTALL: /root/.bun
+      NEXT_PUBLIC_API_BASE_URL: https://c9y3l3wuma.execute-api.ap-south-1.amazonaws.com/dev
   phases:
     preBuild:
       commands:
