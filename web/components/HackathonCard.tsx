@@ -1,5 +1,4 @@
 "use client";
-import { useState } from "react";
 import type { Recommendation } from "@hackmaxx/shared";
 import { WorthBar, WorthBreakdownView } from "./WorthScoreGauge";
 import {
@@ -12,12 +11,17 @@ import {
   IconDeadline,
   IconFlame,
   IconSparkles,
-  IconChevronDown,
-  IconChevronUp,
+  IconWorth,
   IconReuse,
 } from "./Icons";
 import { useCurrency } from "../lib/currency";
 import { Button } from "./ui/button";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "./ui/accordion";
 
 /**
  * Platform chips resolve from the theme's chart slots rather than a fixed Tailwind
@@ -48,7 +52,6 @@ export function HackathonCard({
   onTagClick?: (tag: string) => void;
 }) {
   const { hackathon: h, worth, why, reuse, breakdown } = r;
-  const [showBreakdown, setShowBreakdown] = useState(false);
 
   const { format } = useCurrency();
   const formattedWhy = why
