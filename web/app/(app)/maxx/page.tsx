@@ -212,9 +212,8 @@ export default function MaxxPage(): React.JSX.Element {
           </span>
         </h1>
         <p className="text-sm sm:text-base text-muted-foreground max-w-3xl leading-relaxed">
-          Don&apos;t let your project die after a single weekend. Paste your project details below —
-          AWS Bedrock Titan generates semantic embeddings, queries the hackathon vector space, and
-          builds a high-ROI submission schedule ordered by deadline.
+          Paste the project once. Bedrock scores every open event against it and
+          returns a deadline-ordered plan — expected value in rupees, not vibes.
         </p>
 
         {/* 3-Step Visual Stepper */}

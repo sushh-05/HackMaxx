@@ -201,12 +201,8 @@ export default function ExplorePage(): React.JSX.Element {
               </span>
             </h1>
             <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
-              Stop hunting one hackathon at a time. Browse active hackathons across Devpost, Devfolio,
-              Unstop and MLH, then jump to{" "}
-              <a href="/maxx" className="text-primary font-semibold underline underline-offset-4 hover:text-primary/80 transition-colors">
-                Maxx My Project
-              </a>{" "}
-              to build a multi-submission portfolio with maximum expected value.
+              The live index across Devpost, Devfolio, Unstop and MLH — sorted by what your
+              stack can actually win. Maxx a project to get its submission plan.
             </p>
           </div>
 

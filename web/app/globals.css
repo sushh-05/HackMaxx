@@ -1,4 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -196,8 +195,8 @@
 }
 
 @theme {
-  --font-display: "Architects Daughter", var(--font-body), "Outfit", ui-sans-serif, sans-serif;
-  --font-sans: "Architects Daughter", var(--font-body), "Outfit", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: var(--font-sans), system-ui, -apple-system, sans-serif;
+  --font-sans: var(--font-sans), system-ui, -apple-system, sans-serif;
   --font-serif: var(--font-serif), Georgia, Cambria, serif;
   --font-mono: var(--font-mono), "Fira Code", "Courier New", monospace;
 }
@@ -370,6 +369,39 @@ svg.lucide {
     opacity: 0.45;
     transform: scale(0.85);
   }
+}
+
+/* ---------- ASCII field backdrop (landing) ---------- */
+
+.ascii-field {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1.6;
+  letter-spacing: 0.14em;
+  white-space: pre;
+  color: var(--data);
+  opacity: 0.13;
+  /* Radial mask: dense at edges, clear behind the hero copy */
+  -webkit-mask-image: radial-gradient(ellipse 70% 55% at 50% 42%, transparent 28%, black 72%);
+  mask-image: radial-gradient(ellipse 70% 55% at 50% 42%, transparent 28%, black 72%);
+}
+
+.dark .ascii-field {
+  opacity: 0.16;
+}
+
+.ascii-field::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(900px 340px at 85% 8%, color-mix(in srgb, var(--money) 9%, transparent), transparent 70%),
+    radial-gradient(700px 300px at 8% 90%, color-mix(in srgb, var(--data) 12%, transparent), transparent 70%);
 }
 
 @media (prefers-reduced-motion: reduce) {
