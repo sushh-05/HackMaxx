@@ -3,13 +3,9 @@ import React, { useEffect, useMemo, useState } from "react";
 import type { Hackathon } from "@hackmaxx/shared";
 import { fetchHackathons } from "../lib/api";
 import { FiltersBar, type ModeFilter, type SortOption } from "../components/FiltersBar";
-import { getPlatformBadgeStyle } from "../components/HackathonCard";
 import {
   IconCalendar,
-  IconExternalLink,
   IconGlobe,
-  IconMapPin,
-  IconHybrid,
   IconSparkles,
   IconTrophy,
   IconZap,
