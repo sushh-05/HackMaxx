@@ -1,72 +1,202 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
-@plugin "daisyui" {
-  themes: hackmaxx --default, hackmaxx-light;
-}
+@custom-variant dark (&:is(.dark *));
 
-@plugin "daisyui/theme" {
-  name: hackmaxx;
-  default: true;
-  prefersdark: true;
-  color-scheme: dark;
-  --color-base-100: #07090e;
-  --color-base-200: #0d121e;
-  --color-base-300: #131b2e;
-  --color-base-content: #f1f5f9;
-  --color-primary: #06b6d4;
-  --color-primary-content: #04121a;
-  --color-secondary: #6366f1;
-  --color-secondary-content: #ffffff;
-  --color-accent: #f59e0b;
-  --color-accent-content: #1a1204;
-  --color-neutral: #1a2234;
-  --color-neutral-content: #cbd5e1;
-  --color-info: #38bdf8;
-  --color-info-content: #04101f;
-  --color-success: #10b981;
-  --color-success-content: #021a0e;
-  --color-warning: #f59e0b;
-  --color-warning-content: #1a1204;
-  --color-error: #f43f5e;
-  --color-error-content: #ffffff;
-  --radius-selector: 0.75rem;
-  --radius-field: 0.625rem;
-  --radius-box: 0.875rem;
-}
+/* ---------- Theme: Kodama Grove remix ----------
+ * 21st.dev theme by srjaejsry
+ * https://21st.dev/community/themes/kodama-grove-remix-1782585641809
+ * Colours are the theme's, applied verbatim. `:root` is the parchment light mode,
+ * `.dark` the warm-brown primary experience (DESIGN.md keeps dark-first).
+ * See DESIGN.md > Color for how the semantic slots resolve onto this palette.
+ */
 
-@plugin "daisyui/theme" {
-  name: hackmaxx-light;
-  default: false;
-  prefersdark: false;
+:root {
   color-scheme: light;
-  --color-base-100: #f8fafc;
-  --color-base-200: #ffffff;
-  --color-base-300: #f1f5f9;
-  --color-base-content: #0f172a;
-  --color-primary: #0891b2;
-  --color-primary-content: #ffffff;
-  --color-secondary: #4f46e5;
-  --color-secondary-content: #ffffff;
-  --color-accent: #d97706;
-  --color-accent-content: #ffffff;
-  --color-neutral: #e2e8f0;
-  --color-neutral-content: #1e293b;
-  --color-info: #0284c7;
-  --color-info-content: #ffffff;
-  --color-success: #059669;
-  --color-success-content: #ffffff;
-  --color-warning: #d97706;
-  --color-warning-content: #ffffff;
-  --color-error: #e11d48;
-  --color-error-content: #ffffff;
-  --radius-selector: 0.75rem;
-  --radius-field: 0.625rem;
-  --radius-box: 0.875rem;
+
+  --background: #e4d7b0;
+  --card: #e7dbbf;
+  --popover: #f3ead2;
+  --foreground: #5c4b3e;
+  --primary: #8d9d4f;
+  --primary-fg: #fdfbf6;
+  --secondary: #decea0;
+  --secondary-fg: #5c4b3e;
+  --muted: #decea0;
+  --muted-fg: #85766a;
+  --accent: #dbc894;
+  --accent-fg: #5c4b3e;
+  --destructive: #d98b7e;
+  --destructive-fg: #faf8f2;
+  --border: #b19681;
+  --input: #dbc894;
+  --ring: #9db18c;
+
+  --chart-1: #9db18c;
+  --chart-2: #8a9f7b;
+  --chart-3: #bac9b4;
+  --chart-4: #71856a;
+  --chart-5: #5e6e58;
+
+  --sidebar: #e2d1a2;
+  --sidebar-fg: #5c4b3e;
+  --sidebar-primary: #9db18c;
+  --sidebar-primary-fg: #fdfbf6;
+  --sidebar-accent: #eae5d9;
+  --sidebar-accent-fg: #5c4b3e;
+  --sidebar-border: #e5e0d4;
+  --sidebar-ring: #9db18c;
+
+  /* surface ramp: page -> card -> raised */
+  --surface: #e7dbbf;
+  --raised: #decea0;
+
+  /* semantic slots -- this theme is green + gold + coral, so data/win are
+     separated by depth rather than hue. See DESIGN.md > Color. */
+  --data: #71856a;
+  --money: #a18f5c;
+  --deadline: #d98b7e;
+  --win: #5e6e58;
+  /* ink that sits *on* the money/win fills (buttons, chips) */
+  --money-fg: #fdfbf6;
+  --win-fg: #fdfbf6;
+
+  /* Kodama Grove remix ships 0.425rem here (0.375rem in dark). */
+  --radius: 0.425rem;
+
+  --wash-1: rgba(141, 157, 79, 0.1);
+  --wash-2: rgba(157, 177, 140, 0.09);
+  --wash-3: rgba(161, 143, 92, 0.07);
+  --grad-brand: linear-gradient(135deg, #8d9d4f 0%, #a18f5c 50%, #71856a 100%);
+  --grad-money: linear-gradient(135deg, #dbc894 0%, #a18f5c 100%);
+  --grad-win: linear-gradient(135deg, #8a9f7b 0%, #5e6e58 100%);
+}
+
+.dark {
+  color-scheme: dark;
+
+  --background: #3a3529;
+  --card: #413c33;
+  --popover: #413c33;
+  --foreground: #ede4d4;
+  --primary: #8a9f7b;
+  --primary-fg: #2a2521;
+  --secondary: #5a5345;
+  --secondary-fg: #ede4d4;
+  --muted: #4a4439;
+  --muted-fg: #a8a096;
+  --accent: #a18f5c;
+  --accent-fg: #2a2521;
+  --destructive: #b5766a;
+  --destructive-fg: #f0e9db;
+  --border: #5a5345;
+  --input: #5a5345;
+  --ring: #8a9f7b;
+
+  --chart-1: #8a9f7b;
+  --chart-2: #9db18c;
+  --chart-3: #71856a;
+  --chart-4: #a18f5c;
+  --chart-5: #5e6e58;
+
+  --sidebar: #3a3529;
+  --sidebar-fg: #ede4d4;
+  --sidebar-primary: #8a9f7b;
+  --sidebar-primary-fg: #2a2521;
+  --sidebar-accent: #a18f5c;
+  --sidebar-accent-fg: #2a2521;
+  --sidebar-border: #5a5345;
+  --sidebar-ring: #8a9f7b;
+
+  --surface: #413c33;
+  --raised: #4a4439;
+
+  --data: #71856a;
+  --money: #a18f5c;
+  --deadline: #b5766a;
+  --win: #9db18c;
+  --money-fg: #2a2521;
+  --win-fg: #2a2521;
+
+  --radius: 0.375rem;
+
+  --wash-1: rgba(138, 159, 123, 0.13);
+  --wash-2: rgba(157, 177, 140, 0.1);
+  --wash-3: rgba(161, 143, 92, 0.08);
+  --grad-brand: linear-gradient(135deg, #9db18c 0%, #8a9f7b 50%, #a18f5c 100%);
+  --grad-money: linear-gradient(135deg, #dbc894 0%, #a18f5c 100%);
+  --grad-win: linear-gradient(135deg, #9db18c 0%, #71856a 100%);
+}
+
+@theme inline {
+  /* --- shadcn contract: shadcn + 21st.dev primitives theme themselves --- */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-fg);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-fg);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-fg);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-fg);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-fg);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-fg);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-fg);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-fg);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* --- semantic slots as first-class utilities --- */
+  --color-action: var(--primary);
+  --color-data: var(--data);
+  --color-money: var(--money);
+  --color-money-foreground: var(--money-fg);
+  --color-deadline: var(--deadline);
+  --color-win: var(--win);
+  --color-win-foreground: var(--win-fg);
+
+  /* --- token names consumed across the app --- */
+  --color-base-100: var(--background);
+  --color-base-200: var(--surface);
+  --color-base-300: var(--raised);
+  --color-base-content: var(--foreground);
+  --color-primary-content: var(--primary-fg);
+  --color-secondary-content: var(--secondary-fg);
+  --color-error: var(--deadline);
+  --color-error-content: var(--destructive-fg);
+  --color-success: var(--win);
+  --color-warning: var(--money);
+
+  /* Theme radius, wired the shadcn v4 way. 2xl/3xl stay at Tailwind defaults so
+     large hero panels keep their softer curve. */
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
 }
 
 @theme {
   --font-sans: var(--font-body), "Inter Tight", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-display: var(--font-body), "Inter Tight", ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-display-face), "Merriweather", ui-serif, Georgia, Cambria, serif;
   --font-serif: var(--font-serif), "Instrument Serif", ui-serif, Georgia, Cambria, serif;
   --font-mono: var(--font-mono), "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
@@ -74,24 +204,16 @@
 /* ---------- Typography & Base ---------- */
 
 body {
-  background-color: var(--color-base-100);
+  background-color: var(--background);
   background-image:
-    radial-gradient(1200px 700px at 80% -10%, rgba(6, 182, 212, 0.08), transparent 60%),
-    radial-gradient(1000px 600px at 15% 100%, rgba(99, 102, 241, 0.06), transparent 60%),
-    radial-gradient(800px 500px at 50% 30%, rgba(245, 158, 11, 0.03), transparent 70%);
+    radial-gradient(1200px 700px at 80% -10%, var(--wash-1), transparent 60%),
+    radial-gradient(1000px 600px at 15% 100%, var(--wash-2), transparent 60%),
+    radial-gradient(800px 500px at 50% 30%, var(--wash-3), transparent 70%);
   min-height: 100vh;
-  color: var(--color-base-content);
+  color: var(--foreground);
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-[data-theme="hackmaxx-light"] body {
-  background-color: var(--color-base-100);
-  background-image:
-    radial-gradient(1200px 700px at 80% -10%, rgba(8, 145, 178, 0.05), transparent 60%),
-    radial-gradient(1000px 600px at 15% 100%, rgba(79, 70, 229, 0.04), transparent 60%),
-    radial-gradient(800px 500px at 50% 30%, rgba(217, 119, 6, 0.02), transparent 70%);
 }
 
 .font-display {
@@ -110,31 +232,33 @@ body {
   font-variant-numeric: tabular-nums;
 }
 
+/* ---------- Icons ----------
+ * One stroke weight for the whole app instead of per-call-site props. lucide
+ * ships 2 by default; 1.75 sits closer to this theme's print-like density.
+ * Every icon here carries the `lucide` class, the local GitHub mark included.
+ */
+svg.lucide {
+  stroke-width: 1.75;
+}
+
 /* ---------- Gradients & Brand Text ---------- */
 
 .grad-text {
-  background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-[data-theme="hackmaxx-light"] .grad-text {
-  background: linear-gradient(135deg, #0284c7 0%, #4f46e5 50%, #7c3aed 100%);
+  background: var(--grad-brand);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
 .grad-text-gold {
-  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
+  background: var(--grad-money);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
 .grad-text-emerald {
-  background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+  background: var(--grad-win);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -145,10 +269,10 @@ body {
   height: 32px;
   display: grid;
   place-items: center;
-  border-radius: 9px;
-  background: linear-gradient(135deg, #06b6d4, #6366f1);
-  box-shadow: 0 0 16px rgba(6, 182, 212, 0.35);
-  color: #ffffff;
+  border-radius: calc(var(--radius) + 2px);
+  background: linear-gradient(135deg, var(--primary), var(--data));
+  box-shadow: 0 0 16px color-mix(in srgb, var(--primary) 35%, transparent);
+  color: var(--primary-fg);
   font-size: 16px;
   font-weight: 900;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -156,29 +280,33 @@ body {
 
 .logo-mark:hover {
   transform: scale(1.06) rotate(-3deg);
-  box-shadow: 0 0 22px rgba(6, 182, 212, 0.55);
+  box-shadow: 0 0 22px color-mix(in srgb, var(--primary) 55%, transparent);
 }
 
 /* ---------- Cards & Glassmorphism ---------- */
 
 .card-glass {
-  background: color-mix(in srgb, var(--color-base-200) 88%, transparent);
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  border: 1px solid color-mix(in srgb, var(--color-base-content) 10%, transparent);
-  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.18);
+  border: 1px solid color-mix(in srgb, var(--foreground) 14%, transparent);
+  box-shadow: 3px 3px 2px color-mix(in srgb, hsl(88 22% 35% / 15%), transparent);
   transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
+.dark .card-glass {
+  box-shadow: 0 4px 8px -1px color-mix(in srgb, #000 10%, transparent);
+}
+
 .card-glass:hover {
-  border-color: color-mix(in srgb, var(--color-primary) 35%, transparent);
-  box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.28), 0 0 20px -4px color-mix(in srgb, var(--color-primary) 18%, transparent);
+  border-color: color-mix(in srgb, var(--primary) 45%, transparent);
+  box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.18), 0 0 20px -4px color-mix(in srgb, var(--primary) 22%, transparent);
 }
 
 /* ---------- Worth Score Meter ---------- */
 
 .worth-fill {
-  background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  background: linear-gradient(90deg, var(--primary) 0%, var(--data) 100%);
   animation: bar-grow 600ms cubic-bezier(0.23, 1, 0.32, 1) both;
   transform-origin: left;
 }
@@ -206,9 +334,9 @@ body {
 
 .strategy-bg {
   background:
-    radial-gradient(800px 300px at 95% 0%, rgba(6, 182, 212, 0.12), transparent 70%),
-    radial-gradient(600px 300px at 5% 100%, rgba(99, 102, 241, 0.08), transparent 70%),
-    var(--color-base-200);
+    radial-gradient(800px 300px at 95% 0%, color-mix(in srgb, var(--primary) 14%, transparent), transparent 70%),
+    radial-gradient(600px 300px at 5% 100%, color-mix(in srgb, var(--data) 12%, transparent), transparent 70%),
+    var(--surface);
 }
 
 .step-num {
@@ -218,11 +346,11 @@ body {
   display: grid;
   place-items: center;
   border-radius: 9999px;
-  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
-  color: #ffffff;
+  background: linear-gradient(135deg, var(--primary), var(--data));
+  color: var(--primary-fg);
   font-weight: 800;
   font-size: 13px;
-  box-shadow: 0 0 12px color-mix(in srgb, var(--color-primary) 40%, transparent);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--primary) 40%, transparent);
 }
 
 .pulse-dot {
@@ -230,8 +358,8 @@ body {
   width: 8px;
   height: 8px;
   border-radius: 9999px;
-  background-color: #10b981;
-  box-shadow: 0 0 10px #10b981;
+  background-color: var(--win);
+  box-shadow: 0 0 10px var(--win);
   animation: pulse-glow 2s infinite ease-in-out;
 }
 

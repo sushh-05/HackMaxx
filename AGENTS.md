@@ -9,9 +9,10 @@ Do not deviate without explicit user approval.
 In QA mode, flag any code that doesn't match DESIGN.md.
 
 Quick reference (full spec in DESIGN.md):
-- Display: Clash Grotesk (headings/hero/logo only). Body/UI: Inter Tight. Numbers: JetBrains Mono + tabular-nums — ALWAYS.
-- Color semantics: cyan `#06b6d4` action · indigo `#6366f1` data · gold `#f59e0b` every money number (prize, EV, score ≥75) · rose `#f43f5e` deadline/error · emerald `#10b981` win/high-reuse. Amber is never a generic accent.
-- Dark theme `hackmaxx` is primary; `hackmaxx-light` mirrors it.
+- Display: **Merriweather** (headings/hero/score glyph). Body/UI: Inter Tight. Numbers: JetBrains Mono + tabular-nums — ALWAYS. Icons: lucide via `components/Icons.tsx`, `size-*` not `w-* h-*`, stroke set globally.
+- Color semantics: palette comes from the **Kodama Grove remix** 21st.dev theme (olive `#8a9f7b` · sage `#71856a` · gold `#a18f5c` · coral `#b5766a` on umber `#3a3529`). Use the semantic token names, not raw hues: `--color-action` · `--color-data` · `--color-money` · `--color-deadline` · `--color-win` (each with a `-foreground` ink pair).
+- Dark mode is primary: `.dark` on `<html>`; `:root` is the parchment light mirror.
+- Never hardcode a Tailwind palette colour (`text-amber-400`, `bg-emerald-500`…) in components — it fights whatever theme is applied.
 - `/maxx` results = TERM-FULL-BLEED terminal session (see DESIGN.md "Signature Risk"). Honor `prefers-reduced-motion` with a static fallback.
 
 ## Engineering
@@ -19,4 +20,6 @@ Quick reference (full spec in DESIGN.md):
 - Local dev: backend on `:3011` (`bun run dev:backend`), web on `:3000` (`bun run --cwd web start` after `bun run build`). `PORT=3001` belongs to another project — do not use.
 - Local backend must mirror API Gateway CORS (`*`) incl. `OPTIONS` preflight — see `backend/src/local.ts`.
 - Verify with `bun run typecheck && bun run build` before committing. If `next build` fails on a pages-router `_document` lookup, `rm -rf web/.next` and rebuild.
+- **Never `rm -rf web/.next` or run `bun run build` while a `next dev` server is live.** A dev server cannot survive `.next` being replaced by production output — it 500s every request with `Cannot find module './<chunk>.js'` on every refresh until restarted. Stop `bun run dev` first, or verify on a spare port (`PORT=3100 bun run start`) instead of touching the dev server's build dir.
+- `next dev` requires `NODE_ENV` unset or `development`. A `NODE_ENV=production` in the shell makes the dev server fail its CSS pipeline (`Module parse failed: Unexpected character '@'` on `app/globals.css`) and 500 everything. Run it clean if needed: `env -u NODE_ENV bun run dev`.
 - Commits: conventional-commit style, meaningful history, push to `origin/main` (repo: sushh-05/HackMaxx).

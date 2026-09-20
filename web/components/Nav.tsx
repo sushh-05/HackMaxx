@@ -18,7 +18,7 @@ export function Nav() {
             : "text-base-content/70 hover:text-base-content hover:bg-base-300/60"
         }`}
       >
-        <IconGlobe className="w-3.5 h-3.5" />
+        <IconGlobe className="size-3.5" />
         <span>Explore</span>
       </a>
 
@@ -30,7 +30,7 @@ export function Nav() {
             : "text-base-content/70 hover:text-base-content hover:bg-base-300/60"
         }`}
       >
-        <IconZap className="w-3.5 h-3.5" />
+        <IconZap className="size-3.5" />
         <span>Maxx My Project</span>
       </a>
     </nav>

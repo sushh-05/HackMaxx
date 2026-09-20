@@ -9,17 +9,22 @@ import {
   IconExternalLink,
   IconGlobe,
   IconMapPin,
+  IconHybrid,
   IconSparkles,
   IconTrophy,
   IconZap,
   IconLayers,
 } from "../components/Icons";
+import { useCurrency } from "../lib/currency";
+import { Button } from "../components/ui/button";
+import { Alert, AlertTitle, AlertDescription } from "../components/ui/alert";
 
 function daysLeft(iso: string): number {
   return Math.max(0, Math.ceil((new Date(iso).getTime() - Date.now()) / 86400000));
 }
 
 export default function ExplorePage() {
+  const { format } = useCurrency();
   const [items, setItems] = useState<Hackathon[]>([]);
   const [q, setQ] = useState("");
   const [mode, setMode] = useState<ModeFilter>("all");
@@ -114,7 +119,7 @@ export default function ExplorePage() {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div className="space-y-3 max-w-2xl">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-primary/10 text-primary border border-primary/20">
-              <IconSparkles className="w-3.5 h-3.5" />
+              <IconSparkles className="size-3.5" />
               <span>AI-Ranked Hackathon Portfolio</span>
             </div>
             <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight">
@@ -126,7 +131,7 @@ export default function ExplorePage() {
             <p className="text-sm sm:text-base text-base-content/70 leading-relaxed">
               Stop hunting one hackathon at a time. Browse active hackathons across Devpost, Devfolio,
               Unstop and MLH, then jump to{" "}
-              <a href="/maxx" className="link link-primary font-semibold">
+              <a href="/maxx" className="text-primary font-semibold underline underline-offset-4 hover:text-primary/80 transition-colors">
                 Maxx My Project
               </a>{" "}
               to build a multi-submission portfolio with maximum expected value.
@@ -134,13 +139,12 @@ export default function ExplorePage() {
           </div>
 
           <div className="flex-none">
-            <a
-              href="/maxx"
-              className="btn btn-primary rounded-2xl px-5 shadow-lg shadow-primary/25 font-bold flex items-center gap-2"
-            >
-              <IconZap className="w-4 h-4" />
-              <span>Maxx My Project</span>
-            </a>
+            <Button asChild className="rounded-2xl px-5 shadow-lg shadow-primary/25 font-bold">
+              <a href="/maxx">
+                <IconZap className="size-4" />
+                <span>Maxx My Project</span>
+              </a>
+            </Button>
           </div>
         </div>
 
@@ -148,11 +152,11 @@ export default function ExplorePage() {
         {!err && items.length > 0 && (
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
             <div className="card-glass rounded-2xl p-4">
-              <span className="text-[11px] uppercase tracking-wider font-bold text-accent flex items-center gap-1.5">
-                <IconTrophy className="w-3.5 h-3.5 text-accent" /> Total Prize Pool
+              <span className="text-[11px] uppercase tracking-wider font-bold text-money flex items-center gap-1.5">
+                <IconTrophy className="size-3.5 text-money" /> Total Prize Pool
               </span>
-              <span className="font-mono text-xl sm:text-2xl font-black tabular-nums text-accent block mt-1">
-                ₹{totalPrizePool.toLocaleString("en-IN")}
+              <span className="font-mono text-xl sm:text-2xl font-black tabular-nums text-money block mt-1">
+                {format(totalPrizePool)}
               </span>
               <span className="text-[11px] text-base-content/50 block mt-0.5">
                 across all open events
@@ -161,7 +165,7 @@ export default function ExplorePage() {
 
             <div className="card-glass rounded-2xl p-4">
               <span className="text-[11px] uppercase tracking-wider font-bold text-primary flex items-center gap-1.5">
-                <IconLayers className="w-3.5 h-3.5 text-primary" /> Active Hackathons
+                <IconLayers className="size-3.5 text-primary" /> Active Hackathons
               </span>
               <span className="font-mono text-xl sm:text-2xl font-black tabular-nums text-primary block mt-1">
                 {items.length} Events
@@ -173,7 +177,7 @@ export default function ExplorePage() {
 
             <div className="card-glass rounded-2xl p-4">
               <span className="text-[11px] uppercase tracking-wider font-bold text-warning flex items-center gap-1.5">
-                <IconCalendar className="w-3.5 h-3.5 text-warning" /> Closing Soon
+                <IconCalendar className="size-3.5 text-warning" /> Closing Soon
               </span>
               <span className="font-mono text-xl sm:text-2xl font-black tabular-nums text-warning block mt-1">
                 {urgentCount} Hackathons
@@ -185,7 +189,7 @@ export default function ExplorePage() {
 
             <div className="card-glass rounded-2xl p-4">
               <span className="text-[11px] uppercase tracking-wider font-bold text-secondary flex items-center gap-1.5">
-                <IconGlobe className="w-3.5 h-3.5 text-secondary" /> Tracked Platforms
+                <IconGlobe className="size-3.5 text-secondary" /> Tracked Platforms
               </span>
               <span className="font-mono text-xl sm:text-2xl font-black tabular-nums text-secondary block mt-1">
                 {platforms.length || 4} Platforms
@@ -214,13 +218,11 @@ export default function ExplorePage() {
 
       {/* Error Alert */}
       {err && (
-        <div role="alert" className="alert alert-error rounded-2xl border border-error/30 shadow-lg">
-          <IconZap className="w-5 h-5 text-white" />
-          <div>
-            <h4 className="font-bold">Backend Connection Issue</h4>
-            <p className="text-xs opacity-90">{err}</p>
-          </div>
-        </div>
+        <Alert className="rounded-2xl border border-error/30 shadow-lg bg-error text-error-content">
+          <IconZap className="size-5" />
+          <AlertTitle className="font-bold">Backend Connection Issue</AlertTitle>
+          <AlertDescription className="text-xs opacity-90 text-error-content">{err}</AlertDescription>
+        </Alert>
       )}
 
       {/* Loading Skeletons */}
@@ -246,8 +248,8 @@ export default function ExplorePage() {
       {/* Empty State */}
       {!loading && !err && filteredItems.length === 0 && (
         <div className="rounded-3xl border border-dashed border-base-content/20 bg-base-200/40 p-12 text-center space-y-4">
-          <div className="w-12 h-12 rounded-2xl bg-base-300 flex items-center justify-center mx-auto text-base-content/50">
-            <IconSparkles className="w-6 h-6" />
+          <div className="size-12 rounded-2xl bg-base-300 flex items-center justify-center mx-auto text-base-content/50">
+            <IconSparkles className="size-6" />
           </div>
           <div className="space-y-1 max-w-md mx-auto">
             <h3 className="font-display font-bold text-lg">No matching hackathons</h3>
@@ -255,13 +257,15 @@ export default function ExplorePage() {
               No open hackathons match your current search or filters. Try adjusting your query or resetting all filters.
             </p>
           </div>
-          <button
+          <Button
             type="button"
+            variant="outline"
+            size="sm"
             onClick={handleReset}
-            className="btn btn-outline btn-sm rounded-xl font-semibold"
+            className="rounded-xl font-semibold"
           >
             Reset All Filters
-          </button>
+          </Button>
         </div>
       )}
 
@@ -294,10 +298,10 @@ export default function ExplorePage() {
                           {h.platform}
                         </span>
 
-                        <span className="flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-base-300/80 text-base-content/70 border border-base-content/10 capitalize">
-                          {h.mode === "online" && <IconGlobe className="w-3 h-3 text-primary" />}
-                          {h.mode === "offline" && <IconMapPin className="w-3 h-3 text-amber-400" />}
-                          {h.mode === "hybrid" && <IconZap className="w-3 h-3 text-secondary" />}
+                        <span className="flex items-center gap-1 rounded-full border border-border bg-muted/70 px-2.5 py-0.5 text-[11px] font-medium text-muted-foreground capitalize">
+                          {h.mode === "online" && <IconGlobe className="size-3 text-action" />}
+                          {h.mode === "offline" && <IconMapPin className="size-3 text-data" />}
+                          {h.mode === "hybrid" && <IconHybrid className="size-3 text-money" />}
                           <span>{h.mode}</span>
                         </span>
 
@@ -310,18 +314,18 @@ export default function ExplorePage() {
                               : "bg-base-300/80 text-base-content/70 border-base-content/10"
                           }`}
                         >
-                          <IconCalendar className="w-3 h-3" />
+                          <IconCalendar className="size-3" />
                           <span>{d <= 3 ? `🚨 ${d}d left · Closing soon` : `${d}d left`}</span>
                         </span>
                       </div>
 
                       {/* Prize display */}
-                      <div className="px-3 py-1 rounded-xl bg-accent/10 border border-accent/25 text-right">
-                        <span className="text-[10px] uppercase font-bold tracking-wider text-accent/80 flex items-center gap-1 justify-end">
-                          <IconTrophy className="w-3 h-3 text-accent" /> Prize
+                      <div className="px-3 py-1 rounded-xl bg-money/10 border border-money/25 text-right">
+                        <span className="text-[10px] uppercase font-bold tracking-wider text-money/80 flex items-center gap-1 justify-end">
+                          <IconTrophy className="size-3 text-money" /> Prize
                         </span>
-                        <span className="font-mono text-base font-black tabular-nums text-accent block">
-                          ₹{h.prize_inr.toLocaleString("en-IN")}
+                        <span className="font-mono text-base font-black tabular-nums text-money block">
+                          {format(h.prize_inr)}
                         </span>
                       </div>
                     </div>
@@ -354,22 +358,23 @@ export default function ExplorePage() {
 
                     {/* Actions */}
                     <div className="flex items-center justify-end gap-3 pt-3 border-t border-base-content/8">
-                      <a
-                        href={`/maxx?title=${encodeURIComponent(h.title)}&tags=${encodeURIComponent(h.tech_tags.join(", "))}`}
-                        className="btn btn-ghost btn-sm text-xs font-bold text-primary hover:bg-primary/10"
+                      <Button
+                        asChild
+                        variant="ghost"
+                        size="sm"
+                        className="text-xs font-bold text-primary hover:bg-primary/10"
                       >
-                        <IconZap className="w-3.5 h-3.5" />
-                        <span>Maxx around this</span>
-                      </a>
-                      <a
-                        href={h.url}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="btn btn-primary btn-sm rounded-xl text-xs font-bold shadow-sm shadow-primary/30"
-                      >
-                        <span>Open Hackathon</span>
-                        <IconExternalLink className="w-3.5 h-3.5" />
-                      </a>
+                        <a href={`/maxx?title=${encodeURIComponent(h.title)}&tags=${encodeURIComponent(h.tech_tags.join(", "))}`}>
+                          <IconZap className="size-3.5" />
+                          <span>Maxx around this</span>
+                        </a>
+                      </Button>
+                      <Button asChild size="sm" className="rounded-xl text-xs font-bold shadow-sm shadow-primary/30">
+                        <a href={h.url} target="_blank" rel="noreferrer">
+                          <span>Open Hackathon</span>
+                          <IconExternalLink className="size-3.5" />
+                        </a>
+                      </Button>
                     </div>
                   </div>
                 </article>

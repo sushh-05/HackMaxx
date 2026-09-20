@@ -12,26 +12,41 @@
 ## Aesthetic Direction
 - **Direction:** Industrial / Utilitarian — a **trading terminal for hackathons**. Dark-first, data-dense, mono numerics. The posture IS the design: portfolio math, played at night.
 - **Decoration level:** Intentional — existing radial gradient wash + glass cards. Nothing more.
-- **Mood:** Cold-precise but alive: glow accents, gold money numbers, a live pulse. Serious quant energy, not corporate SaaS.
+- **Mood:** Warm-precise but alive: olive glow, gold money numbers, a live pulse. Serious quant energy on parchment/umber, not corporate SaaS.
 - **Reference sites:** linear.app (dark-first + glow accent), vercel.com (info density, mono data, functional empty states). Deliberate departure from the marketplace feel of Devpost/Unstop.
 
 ## Typography
-- **Display/Hero:** **Clash Grotesk** (500–700) — h1–h3, hero, logo wordmark. Geometric and punchy; breaks the Inter convergence trap. Load via Fontshare: `https://api.fontshare.com/v2/css?f[]=clash-grotesk@500,600,700&display=swap`
-- **Body/UI:** **Inter Tight** — everything else (paragraphs, buttons, labels, nav). Already wired via `next/font`.
-- **Data/Tables:** **JetBrains Mono** — ALL numbers: EV, prize, worth score, days-left, odds. Always with `tabular-nums`.
-- **Code:** JetBrains Mono (same).
+- **Display/Hero:** **Merriweather** (700/900) — h1–h3, hero, score glyph. Comes from the Kodama Grove remix theme; wired via `next/font/google` as `--font-display-face`. (Supersedes the earlier Clash Grotesk plan, which was never actually loaded.)
+- **Body/UI:** **Inter Tight** — everything else (paragraphs, buttons, labels, nav). Wired via `next/font`. Kept as a sans deliberately: the theme proposes Merriweather for UI too, but the dense watchlist rows need a sans for legibility.
+- **Data/Tables:** **JetBrains Mono** — ALL numbers: EV, prize, worth score, days-left, odds. Always with `tabular-nums`. The theme agrees here.
+- **Wordmark serif:** **Instrument Serif** italic — the "Maxx" in the logo; unchanged brand mark.
 - **Scale:** display-hero 40–64px/700 · h2 24–28px/600 · h3 18–20px/600 · body 15px/400 · labels 11–13px/500 mono uppercase w/ 0.08–0.12em tracking.
+- **Icons:** lucide-react at **1.75 stroke** (not the 2 default), set once via `svg.lucide` in `globals.css`. Every icon goes through `components/Icons.tsx`, which exports *roles* (`IconMoney`, `IconDeadline`, `IconWorth`…) rather than glyphs — swap the assignment there and every call site follows.
 
 ## Color
-- **Approach:** Balanced — semantic color carries meaning, never decoration.
-- **Semantics (the rule that makes HackMaxx memorable):**
-  - **Cyan `#06b6d4` = action** — primary buttons, prompts, focus, live state.
-  - **Indigo `#6366f1` = data/analysis** — secondary fills, chart/plan accents, gradient partner.
-  - **Gold `#f59e0b` = money** — EVERY money number renders gold: prize, EV, and worth scores ≥ 75 (with faint glow). Amber is never used as generic accent.
-  - **Rose `#f43f5e` = deadline pressure** — "days left" when close, errors.
-  - **Emerald `#10b981` = win** — high-reuse badges, success, pulse-dot.
-- **Neutrals:** cool slate — base `#07090e`, surface `#0d121e`, raised `#131b2e`, content `#f1f5f9`, muted `#8b95a9`.
-- **Dark mode:** the default and primary experience (DaisyUI theme `hackmaxx`). `hackmaxx-light` exists as the fallback mirror: same semantics, deeper primaries (`#0891b2`, `#4f46e5`, `#d97706`).
+- **Approach:** Supplied by the **Kodama Grove remix** theme (21st.dev, by srjaejsry) — https://21st.dev/community/themes/kodama-grove-remix-1782585641809. A warm, editorial palette: **olive/sage green + antique gold + soft coral**, on parchment (light) or warm umber (dark). The theme owns the palette; tokens live in `web/app/globals.css`.
+- **Dark (primary experience):** background `#3a3529` · card `#413c33` · raised `#4a4439` · content `#ede4d4` · muted `#a8a096` · border `#5a5345`
+- **Light (parchment mirror):** background `#e4d7b0` · card `#e7dbbf` · popover `#f3ead2` · content `#5c4b3e` · muted `#85766a` · border `#b19681`
+- **Accents:** primary `#8a9f7b` (light `#8d9d4f`) · secondary `#5a5345` (light `#decea0`) · accent `#a18f5c` (light `#dbc894`) · destructive `#b5766a` (light `#d98b7e`)
+- **Semantic slots:**
+  - **`--color-action`** = primary olive — buttons, prompts, focus, live state.
+  - **`--color-data`** = deep sage `#71856a` — analysis accents, chart/plan fills, timeline gradient.
+  - **`--color-money`** = antique gold `#a18f5c` — prize, EV, and worth scores ≥ 75.
+  - **`--color-deadline`** = coral `#b5766a` (light `#d98b7e`) — days-left pressure, errors.
+  - **`--color-win`** = green — `#9db18c` dark / `#5e6e58` light — high-reuse badges, success, pulse-dot.
+  - Each has a `--color-*-foreground` ink pair for filled surfaces (e.g. `bg-money text-money-foreground`).
+- **Known limit:** this theme is really three families (green / gold / coral) for five slots, so `data` and `win` sit close by design and are separated by **depth**, not hue. Don't fight it by reaching for a raw Tailwind colour.
+- **Mood shift accepted:** the theme is warm and print-like. The earlier "cold-precise terminal" reading is now *warm quant desk* — still data-dense and mono, but on parchment/umber rather than near-black.
+- **Dark mode:** the default and primary experience, applied as the `.dark` class on `<html>` (shadcn/ui convention; toggled by `ThemeToggle`). The parchment light mode is `:root`.
+
+## Tokens
+
+Authoritative values live in `web/app/globals.css` as CSS variables: `:root` holds the light mirror, `.dark` the primary experience. Never hardcode a hex in a component.
+
+- **Semantic API:** `--color-action` (olive) · `--color-data` (sage) · `--color-money` (gold) · `--color-deadline` (coral) · `--color-win` (green), each with a `-foreground` ink pair. Use these names — e.g. `text-money`, `border-deadline`, `bg-win text-win-foreground`.
+- **shadcn contract:** `--background` · `--foreground` · `--card` · `--popover` · `--primary` · `--secondary` · `--muted` · `--accent` · `--destructive` · `--border` · `--input` · `--ring`, plus `--chart-1..5` and `--sidebar-*`. Straight from the Kodama Grove remix theme, so shadcn/ui and 21st.dev primitives arrive already on-theme.
+- **Two collisions to know:** shadcn's `--accent` is a *hover surface* (the theme's gold-tan), not the money colour — money is `--color-money`. And `--muted` is a background; the muted *text* colour is `--muted-foreground`.
+- **Applied from the theme:** colours, radii, and the Merriweather display face. **Not applied:** the theme's `--font-sans: Merriweather` for body/UI — see Typography. Its dark block ships generic system font stacks, so fonts are taken from the light block only.
 
 ## Spacing
 - **Base unit:** 4px. Density: compact (terminal feel).
@@ -39,9 +54,10 @@
 
 ## Layout
 - **Approach:** Grid-disciplined. Hackathon cards render as **watchlist rows**: `score glyph | title+tags | prize | EV | days-left` inline in mono — a ticker, not a marketing card.
-- **Score-as-glyph:** worth score renders as `W86` in mono 800; gold when ≥75, cyan otherwise; the bar is demoted to secondary. This glyph is the brand mark (logo, favicon, OG image).
+- **Score-as-glyph:** worth score renders as `W86` in mono 800; `--color-money` when ≥75, `--color-action` otherwise; the bar is demoted to secondary. This glyph is the brand mark (logo, favicon, OG image).
 - **Max content width:** 1100px. Grid: 1 col mobile / 2 col md / 3 col lg.
-- **Border radius:** field 0.625rem · box 0.875rem · selector 0.75rem · full 9999px (keep existing DaisyUI values).
+- **Border radius:** from the theme — `--radius` 0.425rem (light) / 0.375rem (dark), exposed as `--radius-sm/md/lg/xl`. Tighter and print-like. `rounded-2xl`/`3xl` stay at Tailwind defaults for large hero panels.
+- **Icons:** `size-*` (Tailwind v4), never paired `w-* h-*`. Stroke weight is global — don't set it per call site.
 
 ## Motion
 - **Approach:** Intentional — only existing patterns, nothing heavier.
@@ -50,13 +66,18 @@
 - **Rule:** honor `prefers-reduced-motion` (already wired globally).
 
 ## Signature Risk — TERM-FULL-BLEED
-`/maxx` results render as a **streaming terminal session**: near-black panel (`#04060a`), cyan border glow, traffic-light title bar, JetBrains Mono, `❯` prompt echo of the user's idea, plan lines streamed with typewriter timing, gold EV values, muted dim log lines (`[engine] scoring…`), blinking cyan cursor at the end. This is the demo moment — the product's hero output looks like a shell because its users live in one. Fallback: static render when `prefers-reduced-motion` is set.
+`/maxx` results render as a **streaming terminal session**: near-black panel (`#04060a`), action-coloured border glow, traffic-light title bar, JetBrains Mono, `❯` prompt echo of the user's idea, plan lines streamed with typewriter timing, money-coloured EV values, muted dim log lines (`[engine] scoring…`), blinking cursor at the end. This is the demo moment — the product's hero output looks like a shell because its users live in one. Fallback: static render when `prefers-reduced-motion` is set.
 
 ## Decisions Log
 | Date | Decision | Rationale |
 |------|----------|-----------|
 | 2026-09-20 | Industrial dark-terminal aesthetic formalized from existing DaisyUI `hackmaxx` theme | Refine, not rebuild; matches the "farm hackathons" posture |
-| 2026-09-20 | Clash Grotesk for display only | Breaks Inter convergence; one extra ~20kb font load accepted |
+| 2026-09-20 | Clash Grotesk for display only | *(superseded — never loaded; see Merriweather below)* |
 | 2026-09-20 | Gold = money semantic (prize/EV/score≥75) | Instant "this is about odds and money" memory; amber no longer generic accent |
 | 2026-09-20 | TERM-FULL-BLEED for /maxx results (user-chosen wild risk) | Highest demo wow per build-minute; posture statement |
 | 2026-09-20 | Watchlist rows + W-glyph scores | Makes portfolio math visible; breaks marketplace-card convention |
+| 2026-09-20 | daisyUI → shadcn/ui for the component layer | 21st.dev components ship as shadcn registry items; the palette is re-declared as CSS variables so the look is unchanged. The `rounded-*` scale is deliberately left at Tailwind defaults so existing radii don't shift. |
+| 2026-09-20 | Palette replaced by the **Darkmatter** 21st.dev theme | User chose a full reskin over keeping semantics. Tokens were swapped by value only, so no component changed. Two consequences accepted: `data`/`win` collapse onto one teal, and `money` is no longer a distinct gold. Darkmatter's dark `--destructive` (teal) is overridden with the theme's own red so errors stay legible. *(superseded by Kodama Grove remix below)* |
+| 2026-09-20 | Palette + display face from **Kodama Grove remix** (21st.dev) | Second full reskin, applied by token value so no component needed to change. Restores a genuine gold for `--color-money` (which Darkmatter lacked). Wires Merriweather as the display face, finally closing the Clash Grotesk gap. Theme's `--destructive` taken as-is here — it is already a readable coral. |
+| 2026-09-20 | Icons unified behind role names, stroke set globally to 1.75 | `Icons.tsx` exports roles (`IconMoney`, `IconDeadline`), so a glyph swap is one line and every call site follows. GitHub mark rewritten to mirror lucide's prop API so it is interchangeable. |
+| 2026-09-20 | Worth score now renders the `W86` glyph, money at ≥75 | Implements the Layout rule that had been specified but never built; the bar is demoted to a hairline. |

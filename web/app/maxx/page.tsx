@@ -11,9 +11,12 @@ import {
   IconGithub,
   IconCode,
   IconTag,
-  IconSliders,
   IconTrendingUp,
 } from "../../components/Icons";
+import { Button } from "../../components/ui/button";
+import { Alert, AlertTitle, AlertDescription } from "../../components/ui/alert";
+import { Kbd } from "../../components/ui/kbd";
+import { Spinner } from "../../components/ui/spinner";
 
 function splitList(s: string): string[] {
   return s.split(",").map((x) => x.trim()).filter(Boolean);
@@ -153,7 +156,7 @@ export default function MaxxPage() {
       {/* Hero Header */}
       <div className="space-y-3">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-primary/10 text-primary border border-primary/20">
-          <IconZap className="w-3.5 h-3.5" />
+          <IconZap className="size-3.5" />
           <span>AI Portfolio Optimization</span>
         </div>
         <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight">
@@ -171,7 +174,7 @@ export default function MaxxPage() {
         {/* 3-Step Visual Stepper */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-3">
           <div className="flex items-center gap-3 p-3 rounded-xl bg-base-200/60 border border-base-content/10">
-            <span className="w-7 h-7 rounded-lg bg-primary/20 text-primary font-mono font-bold text-xs flex items-center justify-center flex-none">
+            <span className="size-7 rounded-lg bg-primary/20 text-primary font-mono font-bold text-xs flex items-center justify-center flex-none">
               1
             </span>
             <div className="text-xs">
@@ -181,7 +184,7 @@ export default function MaxxPage() {
           </div>
 
           <div className="flex items-center gap-3 p-3 rounded-xl bg-base-200/60 border border-base-content/10">
-            <span className="w-7 h-7 rounded-lg bg-secondary/20 text-secondary font-mono font-bold text-xs flex items-center justify-center flex-none">
+            <span className="size-7 rounded-lg bg-secondary/20 text-secondary font-mono font-bold text-xs flex items-center justify-center flex-none">
               2
             </span>
             <div className="text-xs">
@@ -191,7 +194,7 @@ export default function MaxxPage() {
           </div>
 
           <div className="flex items-center gap-3 p-3 rounded-xl bg-base-200/60 border border-base-content/10">
-            <span className="w-7 h-7 rounded-lg bg-accent/20 text-accent font-mono font-bold text-xs flex items-center justify-center flex-none">
+            <span className="size-7 rounded-lg bg-money/20 text-money font-mono font-bold text-xs flex items-center justify-center flex-none">
               3
             </span>
             <div className="text-xs">
@@ -208,21 +211,23 @@ export default function MaxxPage() {
         <div className="flex flex-wrap items-center justify-between gap-3 pb-2 border-b border-base-content/10">
           <div className="flex flex-wrap items-center gap-2">
             <span className="text-xs font-semibold text-base-content/50 mr-1 flex items-center gap-1">
-              <IconSparkles className="w-3.5 h-3.5 text-primary" /> Load a sample project:
+              <IconSparkles className="size-3.5 text-primary" /> Load a sample project:
             </span>
             {EXAMPLES.map((ex, i) => (
-              <button
+              <Button
                 key={ex.label}
                 type="button"
+                variant={selectedExample === i ? "default" : "ghost"}
+                size="xs"
                 onClick={() => loadExample(i)}
-                className={`btn btn-xs rounded-xl px-3 py-1 font-semibold text-xs transition-all ${
+                className={`rounded-xl px-3 py-1 font-semibold text-xs transition-all ${
                   selectedExample === i
                     ? "bg-primary text-primary-content border-primary shadow-sm"
-                    : "btn-ghost border border-base-content/15 hover:border-primary/40 text-base-content/75"
+                    : "border border-base-content/15 hover:border-primary/40 text-base-content/75"
                 }`}
               >
                 {ex.label}
-              </button>
+              </Button>
             ))}
           </div>
 
@@ -240,7 +245,7 @@ export default function MaxxPage() {
           {/* Title */}
           <div className="space-y-1.5">
             <label className="text-xs font-bold uppercase tracking-wider text-base-content/70 flex items-center gap-1.5">
-              <IconCode className="w-3.5 h-3.5 text-primary" />
+              <IconCode className="size-3.5 text-primary" />
               <span>Project Title *</span>
             </label>
             <input
@@ -259,7 +264,7 @@ export default function MaxxPage() {
           <div className="space-y-1.5">
             <div className="flex items-center justify-between">
               <label className="text-xs font-bold uppercase tracking-wider text-base-content/70 flex items-center gap-1.5">
-                <IconSparkles className="w-3.5 h-3.5 text-secondary" />
+                <IconSparkles className="size-3.5 text-secondary" />
                 <span>Description & Architecture (2–4 lines) *</span>
               </label>
               <span className="text-[11px] text-base-content/40 font-mono">
@@ -282,7 +287,7 @@ export default function MaxxPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-1.5">
               <label className="text-xs font-bold uppercase tracking-wider text-base-content/70 flex items-center gap-1.5">
-                <IconLayers className="w-3.5 h-3.5 text-primary" />
+                <IconLayers className="size-3.5 text-primary" />
                 <span>Tech Stack (comma-separated)</span>
               </label>
               <input
@@ -299,7 +304,7 @@ export default function MaxxPage() {
 
             <div className="space-y-1.5">
               <label className="text-xs font-bold uppercase tracking-wider text-base-content/70 flex items-center gap-1.5">
-                <IconTag className="w-3.5 h-3.5 text-secondary" />
+                <IconTag className="size-3.5 text-secondary" />
                 <span>Domain Tags (comma-separated)</span>
               </label>
               <input
@@ -318,7 +323,7 @@ export default function MaxxPage() {
           {/* GitHub Repo URL */}
           <div className="space-y-1.5">
             <label className="text-xs font-bold uppercase tracking-wider text-base-content/70 flex items-center gap-1.5">
-              <IconGithub className="w-3.5 h-3.5 text-base-content/70" />
+              <IconGithub className="size-3.5 text-base-content/70" />
               <span>GitHub Repo URL (optional)</span>
             </label>
             <input
@@ -335,51 +340,50 @@ export default function MaxxPage() {
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-base-content/10">
           <div className="text-xs text-base-content/50 flex items-center gap-2">
             <span className="hidden sm:inline-block">Shortcut:</span>
-            <kbd className="kbd kbd-sm rounded-lg bg-base-200 text-[10px] font-mono">
+            <Kbd className="rounded-lg bg-base-200 text-[10px] font-mono">
               ⌘ / Ctrl + Enter
-            </kbd>
+            </Kbd>
             <span>to trigger Maxx</span>
           </div>
 
-          <button
+          <Button
             type="button"
+            size="lg"
             onClick={go}
             disabled={!canSubmit}
-            className={`btn btn-primary btn-lg rounded-2xl font-extrabold px-8 shadow-xl shadow-primary/25 transition-all duration-300 gap-2.5 w-full sm:w-auto ${
+            className={`rounded-2xl font-extrabold px-8 shadow-xl shadow-primary/25 transition-all duration-300 gap-2.5 w-full sm:w-auto ${
               canSubmit ? "hover:scale-[1.02] active:scale-[0.98]" : "opacity-50 cursor-not-allowed"
             }`}
           >
             {loading ? (
               <>
-                <span className="loading loading-spinner loading-sm" />
+                <Spinner />
                 <span>Maxxing with Bedrock…</span>
               </>
             ) : (
               <>
-                <IconZap className="w-5 h-5 text-white" />
+                <IconZap className="size-5 text-white" />
                 <span>Maxx My Project</span>
               </>
             )}
-          </button>
+          </Button>
         </div>
       </div>
 
       {/* Error Alert */}
       {error && (
-        <div role="alert" className="alert alert-error rounded-2xl border border-error/30 shadow-lg">
-          <IconZap className="w-5 h-5 text-white" />
-          <div>
-            <h4 className="font-bold">Recommendation Error</h4>
-            <p className="text-xs opacity-90">{error}</p>
-          </div>
-        </div>
+        <Alert className="rounded-2xl border border-error/30 shadow-lg bg-error text-error-content">
+          <IconZap className="size-5" />
+          <AlertTitle className="font-bold">Recommendation Error</AlertTitle>
+          <AlertDescription className="text-xs opacity-90 text-error-content">{error}</AlertDescription>
+        </Alert>
       )}
 
       {/* Dynamic Bedrock AI Loading State */}
       {loading && (
         <div className="card-glass rounded-3xl p-8 space-y-6 text-center animate-pulse">
-          <div className="w-14 h-14 rounded-2xl bg-primary/20 text-primary flex items-center justify-center mx-auto shadow-lg shadow-primary/30">
-            <IconSparkles className="w-7 h-7 animate-spin" />
+          <div className="size-14 rounded-2xl bg-primary/20 text-primary flex items-center justify-center mx-auto shadow-lg shadow-primary/30">
+            <IconSparkles className="size-7 animate-spin" />
           </div>
 
           <div className="space-y-2 max-w-md mx-auto">
@@ -395,7 +399,7 @@ export default function MaxxPage() {
 
           <div className="w-full max-w-sm mx-auto h-2 bg-base-300 rounded-full overflow-hidden">
             <div
-              className="h-full bg-gradient-to-r from-primary via-secondary to-accent transition-all duration-500 rounded-full"
+              className="h-full bg-gradient-to-r from-primary via-secondary to-money transition-all duration-500 rounded-full"
               style={{ width: `${(loadingStep + 1) * 33}%` }}
             />
           </div>
@@ -413,7 +417,7 @@ export default function MaxxPage() {
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-4 border-t border-base-content/10">
               <div>
                 <h3 className="font-display text-xl font-bold tracking-tight text-base-content flex items-center gap-2">
-                  <IconTrendingUp className="w-5 h-5 text-primary" />
+                  <IconTrendingUp className="size-5 text-primary" />
                   <span>All Ranked Hackathon Matches</span>
                 </h3>
                 <p className="text-xs text-base-content/60">
@@ -437,10 +441,10 @@ export default function MaxxPage() {
                 <button
                   type="button"
                   onClick={() => setReuseFilter("High")}
-                  className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all ${
+                  className={`rounded-lg px-3 py-1 text-xs font-semibold transition-all ${
                     reuseFilter === "High"
-                      ? "bg-emerald-500 text-white shadow-sm"
-                      : "text-base-content/60 hover:text-base-content"
+                      ? "bg-win text-win-foreground shadow-sm"
+                      : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
                   High Reuse Only
@@ -448,10 +452,10 @@ export default function MaxxPage() {
                 <button
                   type="button"
                   onClick={() => setReuseFilter("Medium")}
-                  className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all ${
+                  className={`rounded-lg px-3 py-1 text-xs font-semibold transition-all ${
                     reuseFilter === "Medium"
-                      ? "bg-amber-500 text-white shadow-sm"
-                      : "text-base-content/60 hover:text-base-content"
+                      ? "bg-money text-money-foreground shadow-sm"
+                      : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
                   Medium Reuse

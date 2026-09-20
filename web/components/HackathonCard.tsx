@@ -6,29 +6,38 @@ import {
   IconExternalLink,
   IconGlobe,
   IconMapPin,
+  IconHybrid,
   IconZap,
   IconTrophy,
-  IconCalendar,
+  IconDeadline,
+  IconFlame,
   IconSparkles,
   IconChevronDown,
   IconChevronUp,
+  IconReuse,
 } from "./Icons";
+import { useCurrency } from "../lib/currency";
+import { Button } from "./ui/button";
 
+/**
+ * Platform chips resolve from the theme's chart slots rather than a fixed Tailwind
+ * palette, so they stay legible under whichever 21st.dev theme is applied.
+ */
 export function getPlatformBadgeStyle(platform: string): { bg: string; text: string; border: string } {
   const p = platform.toLowerCase();
   if (p.includes("devpost")) {
-    return { bg: "bg-blue-500/10", text: "text-blue-400", border: "border-blue-500/30" };
+    return { bg: "bg-chart-1/12", text: "text-chart-1", border: "border-chart-1/35" };
   }
   if (p.includes("devfolio")) {
-    return { bg: "bg-indigo-500/10", text: "text-indigo-400", border: "border-indigo-500/30" };
+    return { bg: "bg-chart-2/12", text: "text-chart-2", border: "border-chart-2/35" };
   }
   if (p.includes("unstop")) {
-    return { bg: "bg-amber-500/10", text: "text-amber-400", border: "border-amber-500/30" };
+    return { bg: "bg-chart-4/14", text: "text-chart-4", border: "border-chart-4/35" };
   }
   if (p.includes("mlh")) {
-    return { bg: "bg-rose-500/10", text: "text-rose-400", border: "border-rose-500/30" };
+    return { bg: "bg-chart-3/12", text: "text-chart-3", border: "border-chart-3/35" };
   }
-  return { bg: "bg-slate-500/10", text: "text-slate-300", border: "border-slate-500/30" };
+  return { bg: "bg-muted", text: "text-muted-foreground", border: "border-border" };
 }
 
 export function HackathonCard({
@@ -41,26 +50,34 @@ export function HackathonCard({
   const { hackathon: h, worth, why, reuse, breakdown } = r;
   const [showBreakdown, setShowBreakdown] = useState(false);
 
+  const { format } = useCurrency();
+  const formattedWhy = why
+    ? why.replace(/₹([\d,]+)/g, (_, match) => format(Number(match.replace(/,/g, ""))))
+    : why;
+
   const days = Math.max(0, Math.ceil((new Date(h.deadline).getTime() - Date.now()) / 86400000));
   const platformStyle = getPlatformBadgeStyle(h.platform);
 
   const reuseInfo = {
     High: {
-      badge: "bg-emerald-500/15 text-emerald-400 border-emerald-500/30",
-      dot: "bg-emerald-400",
+      badge: "bg-win/14 text-win border-win/40",
+      dot: "bg-win",
       hint: "High reuse (~80%+ as-is, minor pitch tweaks)",
     },
     Medium: {
-      badge: "bg-amber-500/15 text-amber-400 border-amber-500/30",
-      dot: "bg-amber-400",
+      badge: "bg-money/14 text-money border-money/40",
+      dot: "bg-money",
       hint: "Medium reuse (~50% rework, feature additions)",
     },
     Low: {
-      badge: "bg-slate-500/15 text-slate-400 border-slate-500/30",
-      dot: "bg-slate-400",
+      badge: "bg-muted text-muted-foreground border-border",
+      dot: "bg-muted-foreground",
       hint: "Low reuse (heavy adaptation needed)",
     },
   }[reuse];
+
+  const urgent = days <= 3;
+  const soon = days > 3 && days <= 7;
 
   return (
     <article className="card-glass rounded-2xl p-5 sm:p-6 card-in transition-all duration-200 hover:-translate-y-0.5 relative group">
@@ -74,33 +91,37 @@ export function HackathonCard({
             </span>
 
             {/* Mode badge */}
-            <span className="flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-base-300/80 text-base-content/70 border border-base-content/10 capitalize">
-              {h.mode === "online" && <IconGlobe className="w-3 h-3 text-primary" />}
-              {h.mode === "offline" && <IconMapPin className="w-3 h-3 text-amber-400" />}
-              {h.mode === "hybrid" && <IconZap className="w-3 h-3 text-secondary" />}
+            <span className="flex items-center gap-1 rounded-full border border-border bg-muted/70 px-2.5 py-0.5 text-[11px] font-medium text-muted-foreground capitalize">
+              {h.mode === "online" && <IconGlobe className="size-3 text-action" />}
+              {h.mode === "offline" && <IconMapPin className="size-3 text-data" />}
+              {h.mode === "hybrid" && <IconHybrid className="size-3 text-money" />}
               <span>{h.mode}</span>
             </span>
 
             {/* Deadline Urgency Pill */}
             <span
-              className={`flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold border ${
-                days <= 3
-                  ? "bg-error/15 text-error border-error/30 animate-pulse"
-                  : days <= 7
-                  ? "bg-warning/15 text-warning border-warning/30"
-                  : "bg-base-300/80 text-base-content/70 border-base-content/10"
+              className={`flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-[11px] font-semibold ${
+                urgent
+                  ? "animate-pulse bg-deadline/15 text-deadline border-deadline/40"
+                  : soon
+                  ? "bg-money/14 text-money border-money/35"
+                  : "border-border bg-muted/70 text-muted-foreground"
               }`}
             >
-              <IconCalendar className="w-3 h-3" />
-              <span>{days <= 3 ? `🚨 ${days}d left · Closing soon` : `${days}d left`}</span>
+              {urgent ? <IconFlame className="size-3" /> : <IconDeadline className="size-3" />}
+              <span className="font-mono tabular-nums">{days}d left</span>
+              {urgent && <span className="font-sans">· closing soon</span>}
             </span>
           </div>
 
           {/* Reuse badge */}
           <div className="flex items-center" title={reuseInfo.hint}>
-            <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold border ${reuseInfo.badge}`}>
-              <span className={`w-1.5 h-1.5 rounded-full ${reuseInfo.dot}`} />
+            <span
+              className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-semibold ${reuseInfo.badge}`}
+            >
+              <IconReuse className="size-3" />
               <span>{reuse} Reuse</span>
+              <span className={`size-1.5 rounded-full ${reuseInfo.dot}`} />
             </span>
           </div>
         </div>
@@ -118,13 +139,13 @@ export function HackathonCard({
             </p>
           </div>
 
-          {/* Prize pool box */}
-          <div className="flex-none self-start sm:self-auto px-3.5 py-2 rounded-xl bg-accent/10 border border-accent/25 text-right">
-            <span className="text-[10px] uppercase font-bold tracking-wider text-accent/80 flex items-center gap-1 justify-end">
-              <IconTrophy className="w-3 h-3 text-accent" /> Prize Pool
+          {/* Prize pool plate — the money surface */}
+          <div className="flex-none self-start rounded-lg border border-money/30 bg-money/10 px-3.5 py-2 text-right sm:self-auto">
+            <span className="flex items-center justify-end gap-1 text-[10px] font-bold tracking-wider text-money/85 uppercase">
+              <IconTrophy className="size-3 text-money" /> Prize Pool
             </span>
-            <span className="font-mono text-base sm:text-lg font-black tabular-nums text-accent block">
-              ₹{h.prize_inr.toLocaleString("en-IN")}
+            <span className="block font-mono text-base font-black tabular-nums text-money sm:text-lg">
+              {format(h.prize_inr)}
             </span>
           </div>
         </div>
@@ -135,14 +156,14 @@ export function HackathonCard({
         </div>
 
         {/* Why this matches quote box */}
-        {why && (
-          <div className="p-3 rounded-xl bg-base-200/70 border border-base-content/8 text-xs text-base-content/80 flex items-start gap-2.5">
-            <IconSparkles className="w-4 h-4 text-primary flex-none mt-0.5" />
+        {formattedWhy && (
+          <div className="flex items-start gap-2.5 rounded-xl border border-l-2 border-border border-l-action/60 bg-muted/60 p-3 text-xs text-base-content/80">
+            <IconSparkles className="mt-0.5 size-4 shrink-0 text-action" />
             <div className="space-y-0.5">
-              <span className="font-semibold text-primary text-[11px] uppercase tracking-wider block">
+              <span className="block text-[11px] font-semibold tracking-wider text-action uppercase">
                 Bedrock Match Rationale
               </span>
-              <p className="leading-normal">{why}</p>
+              <p className="leading-normal">{formattedWhy}</p>
             </div>
           </div>
         )}
@@ -154,46 +175,53 @@ export function HackathonCard({
               key={t}
               type="button"
               onClick={() => onTagClick?.(t)}
-              className="px-2 py-0.5 rounded-lg text-[11px] font-medium bg-primary/10 text-primary hover:bg-primary/20 border border-primary/25 transition-colors"
+              className="rounded-md border border-border bg-muted/60 px-2 py-0.5 text-[11px] font-medium text-muted-foreground transition-colors hover:border-action/40 hover:bg-action/10 hover:text-action"
             >
               #{t}
             </button>
           ))}
         </div>
 
-        {/* Score Breakdown Accordion if available */}
+        {/* Score Breakdown accordion */}
         {breakdown && (
-          <div>
-            <button
-              type="button"
-              onClick={() => setShowBreakdown(!showBreakdown)}
-              className="flex items-center gap-1 text-[11px] font-semibold text-base-content/50 hover:text-primary transition-colors"
-            >
-              <span>{showBreakdown ? "Hide Bedrock Formula Details" : "View Bedrock Formula Details"}</span>
-              {showBreakdown ? <IconChevronUp className="w-3 h-3" /> : <IconChevronDown className="w-3 h-3" />}
-            </button>
-            {showBreakdown && <WorthBreakdownView breakdown={breakdown} />}
-          </div>
+          <Accordion
+            type="single"
+            collapsible
+            className="rounded-xl border border-border bg-muted/40 px-3 [&_[data-slot=accordion-item]]:border-0"
+          >
+            <AccordionItem value="breakdown">
+              <AccordionTrigger className="py-2.5 text-[11px] font-semibold tracking-wide text-muted-foreground uppercase hover:no-underline hover:text-action data-[state=open]:text-action data-[state=open]:hover:no-underline">
+                <span className="flex items-center gap-1.5">
+                  <IconWorth className="size-3" />
+                  Bedrock Formula Details
+                </span>
+              </AccordionTrigger>
+              <AccordionContent className="text-xs">
+                <WorthBreakdownView breakdown={breakdown} />
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
         )}
 
         {/* Bottom Actions */}
         <div className="flex items-center justify-end gap-3 pt-2 border-t border-base-content/8">
-          <a
-            href={`/maxx?title=${encodeURIComponent(h.title)}&tags=${encodeURIComponent(h.tech_tags.join(", "))}`}
-            className="btn btn-ghost btn-sm text-xs font-bold text-primary hover:bg-primary/10"
+          <Button
+            asChild
+            variant="ghost"
+            size="sm"
+            className="text-xs font-bold text-primary hover:bg-primary/10"
           >
-            <IconZap className="w-3.5 h-3.5" />
-            <span>Maxx around this</span>
-          </a>
-          <a
-            href={h.url}
-            target="_blank"
-            rel="noreferrer"
-            className="btn btn-primary btn-sm rounded-xl text-xs font-bold shadow-sm shadow-primary/30"
-          >
-            <span>Open Hackathon</span>
-            <IconExternalLink className="w-3.5 h-3.5" />
-          </a>
+            <a href={`/maxx?title=${encodeURIComponent(h.title)}&tags=${encodeURIComponent(h.tech_tags.join(", "))}`}>
+              <IconZap className="size-3.5" />
+              <span>Maxx around this</span>
+            </a>
+          </Button>
+          <Button asChild size="sm" className="rounded-xl text-xs font-bold shadow-sm shadow-primary/30">
+            <a href={h.url} target="_blank" rel="noreferrer">
+              <span>Open Hackathon</span>
+              <IconExternalLink className="size-3.5" />
+            </a>
+          </Button>
         </div>
       </div>
     </article>
