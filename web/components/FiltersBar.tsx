@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import type { LucideIcon } from "lucide-react";
 import { IconSearch, IconX, IconGlobe, IconMapPin, IconZap, IconSliders } from "./Icons";
 
 export const MODES = ["all", "online", "offline", "hybrid"] as const;
@@ -48,11 +49,11 @@ export function FiltersBar({
 }): React.JSX.Element {
   const isFiltered = q.trim().length > 0 || mode !== "all" || (selectedPlatform && selectedPlatform !== "all");
 
-  const modeIcons: Record<ModeFilter, React.ReactNode> = {
+  const modeIcons: Record<ModeFilter, LucideIcon | null> = {
     all: null,
-    online: <IconGlobe className="w-3 h-3" />,
-    offline: <IconMapPin className="w-3 h-3" />,
-    hybrid: <IconZap className="w-3 h-3" />,
+    online: IconGlobe,
+    offline: IconMapPin,
+    hybrid: IconZap,
   };
 
   return (
@@ -128,6 +129,7 @@ export function FiltersBar({
         <div className="flex flex-wrap items-center gap-1.5 p-1 bg-base-200/60 rounded-xl border border-base-content/10">
           {MODES.map((m) => {
             const active = mode === m;
+            const ModeIcon = modeIcons[m];
             return (
               <button
                 key={m}
@@ -139,7 +141,7 @@ export function FiltersBar({
                 }`}
                 onClick={() => setMode(m)}
               >
-                {modeIcons[m]}
+                {ModeIcon && <ModeIcon className="w-3 h-3" />}
                 <span>{m === "all" ? "All Modes" : m}</span>
               </button>
             );

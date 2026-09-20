@@ -19,7 +19,7 @@ function daysLeft(iso: string): number {
   return Math.max(0, Math.ceil((new Date(iso).getTime() - Date.now()) / 86400000));
 }
 
-export default function ExplorePage(): React.ReactNode {
+export default function ExplorePage(): React.JSX.Element {
   const [items, setItems] = useState<Hackathon[]>([]);
   const [q, setQ] = useState("");
   const [mode, setMode] = useState<ModeFilter>("all");

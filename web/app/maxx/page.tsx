@@ -46,7 +46,7 @@ const EXAMPLES = [
   },
 ];
 
-export default function MaxxPage(): React.ReactNode {
+export default function MaxxPage(): React.JSX.Element {
   const [selectedExample, setSelectedExample] = useState<number | null>(0);
   const [title, setTitle] = useState(EXAMPLES[0].title);
   const [description, setDescription] = useState(EXAMPLES[0].description);
