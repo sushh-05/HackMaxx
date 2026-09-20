@@ -31,9 +31,9 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }): React.JSX.Element {
   return (
-    <ClerkProvider>
-      <html lang="en" className="dark" suppressHydrationWarning>
-        <body className={`${geistSans.variable} ${serifFont.variable} ${geistMono.variable} font-sans min-h-screen flex flex-col`}>
+    <html lang="en" className="dark" suppressHydrationWarning>
+      <body className={`${geistSans.variable} ${serifFont.variable} ${geistMono.variable} font-sans min-h-screen flex flex-col`}>
+        <ClerkProvider>
           <script
             dangerouslySetInnerHTML={{
               __html:
@@ -41,8 +41,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }):
             }}
           />
           {children}
-        </body>
-      </html>
-    </ClerkProvider>
+        </ClerkProvider>
+      </body>
+    </html>
   );
 }
