@@ -4,6 +4,8 @@
 import { handler as list } from "./handlers/list.js";
 import { handler as recommend } from "./handlers/recommend.js";
 import { handler as refresh } from "./handlers/refresh.js";
+import { handler as githubConnect } from "./handlers/github-connect.js";
+import { handler as githubRepos } from "./handlers/github-repos.js";
 
 const port = Number(process.env.PORT ?? 3011);
 
@@ -39,6 +41,14 @@ Bun.serve({
     }
     if (url.pathname === "/hackathons/refresh" && req.method === "POST") {
       const r = await refresh();
+      return json(r.body, r.statusCode, r.headers);
+    }
+    if (url.pathname === "/github/connect" && req.method === "POST") {
+      const r = await githubConnect({ body: await req.text() });
+      return json(r.body, r.statusCode, r.headers);
+    }
+    if (url.pathname === "/github/repos" && req.method === "POST") {
+      const r = await githubRepos({ body: await req.text() });
       return json(r.body, r.statusCode, r.headers);
     }
     if (url.pathname === "/healthz") {

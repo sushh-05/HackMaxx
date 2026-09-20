@@ -2,6 +2,31 @@ import type { Hackathon, ProjectInput, RecommendResponse } from "@hackmaxx/share
 
 const BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:3011";
 
+export interface GithubConnectionResult {
+  redirect_url: string;
+  connected_account_id: string;
+}
+
+export async function connectGithub(userId: string): Promise<GithubConnectionResult> {
+  const r = await fetch(`${BASE}/github/connect`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ user_id: userId }),
+  });
+  if (!r.ok) throw new Error("Could not create a GitHub connection link");
+  return r.json();
+}
+
+export async function fetchGithubRepos(userId: string, connectedAccountId: string): Promise<unknown> {
+  const r = await fetch(`${BASE}/github/repos`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ user_id: userId, connected_account_id: connectedAccountId }),
+  });
+  if (!r.ok) throw new Error("Could not load GitHub repositories");
+  return r.json();
+}
+
 export async function checkBackendHealth(): Promise<boolean> {
   try {
     const r = await fetch(`${BASE}/healthz`, { cache: "no-store" });
