@@ -4,6 +4,7 @@ import "./globals.css";
 import { Nav } from "../components/Nav";
 import { ThemeToggle } from "../components/ThemeToggle";
 import { CurrencySelector } from "../components/CurrencySelector";
+import { BackendHealth } from "../components/BackendHealth";
 import { CurrencyProvider } from "../lib/currency";
 import { IconGithub, IconZap, IconChip, IconDatabase, IconCloud } from "../components/Icons";
 import { Button } from "../components/ui/button";
@@ -77,6 +78,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }):
               <div className="flex items-center gap-2 sm:gap-2.5">
                 <Nav />
                 <div className="h-5 w-px bg-base-content/15 hidden sm:block" />
+                <BackendHealth />
                 <CurrencySelector />
                 <ThemeToggle />
                 <Button

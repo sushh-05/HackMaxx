@@ -108,6 +108,21 @@ Resources:
             Path: /hackathons/refresh
             Method: post
 
+  HealthFn:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      CodeUri: .
+      Handler: health.handler
+      Events:
+        Health:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Api
+            Path: /healthz
+            Method: get
+
 Outputs:
   ApiUrl:
     Description: API Gateway endpoint URL

@@ -2,6 +2,17 @@ import type { Hackathon, ProjectInput, RecommendResponse } from "@hackmaxx/share
 
 const BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:3011";
 
+export async function checkBackendHealth(): Promise<boolean> {
+  try {
+    const r = await fetch(`${BASE}/healthz`, { cache: "no-store" });
+    if (!r.ok) return false;
+    const body = (await r.json()) as { ok?: boolean };
+    return body.ok === true;
+  } catch {
+    return false;
+  }
+}
+
 export interface HackathonListResult {
   items: Hackathon[];
   source: string;

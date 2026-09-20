@@ -6,3 +6,6 @@ build-RecommendFn:
 
 build-RefreshFn:
 	bun build src/handlers/refresh.ts --outfile $(ARTIFACTS_DIR)/refresh.js --target node --format cjs --external "@aws-sdk/*"
+
+build-HealthFn:
+	bun build src/handlers/health.ts --outfile $(ARTIFACTS_DIR)/health.js --target node --format cjs --external "@aws-sdk/*"
