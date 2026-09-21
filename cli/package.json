@@ -6,7 +6,7 @@
     "hackmaxx": "./src/index.ts"
   },
   "scripts": {
-    "start": "bun src/index.ts",
+    "start": "node init && bun src/index.ts",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
