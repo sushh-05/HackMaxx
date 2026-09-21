@@ -1,0 +1,25 @@
+version: 1.0
+runtime: nodejs22
+
+build:
+  env:
+    - name: NEXT_PUBLIC_API_BASE_URL
+      value: https://c9y3l3wuma.execute-api.ap-south-1.amazonaws.com/dev
+    - name: NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+      value: REPLACE_WITH_YOUR_PK_CLERK_KEY
+  commands:
+    pre-build:
+      - npx --yes bun@1.4.2 install --frozen-lockfile
+    build:
+      - npx --yes bun@1.4.2 run --cwd web build
+      - mkdir -p web/.next/standalone/web/.next/static
+      - cp -RL web/.next/static/. web/.next/standalone/web/.next/static/
+
+run:
+  command: node web/.next/standalone/web/server.js
+  network:
+    port: 8080
+    env: PORT
+  env:
+    - name: HOSTNAME
+      value: 0.0.0.0
