@@ -1,27 +1,26 @@
 version: 1
 applications:
-  - frontend:
+  - appRoot: web
+    frontend:
       buildPath: /
-      env:
-        variables:
-          BUN_INSTALL: /root/.bun
-          AMPLIFY_MONOREPO_APP_ROOT: web
-          NEXT_PUBLIC_API_BASE_URL: https://c9y3l3wuma.execute-api.ap-south-1.amazonaws.com/dev
       phases:
         preBuild:
           commands:
-            - rm -rf node_modules web/node_modules web/.next
             - npx --yes bun@1.4.2 --version
             - npx --yes bun@1.4.2 install --frozen-lockfile
         build:
           commands:
             - npx --yes bun@1.4.2 --version
             - npx --yes bun@1.4.2 run --cwd web build
+            - rm -rf web/.next/amplify
+            - mkdir -p web/.next/amplify
+            - cp -RL web/.next/. web/.next/amplify/
+            - rm -rf web/.next/amplify/standalone web/.next/amplify/node_modules
+            - cp -RL web/.next/standalone/web/node_modules web/.next/amplify/node_modules
       artifacts:
-        baseDirectory: web/.next
+        baseDirectory: web/.next/amplify
         files:
           - '**/*'
       cache:
         paths:
           - .bun/install/cache/**/*
-    appRoot: web
