@@ -4,8 +4,6 @@ dist/
 .amplify-hosting/
 out/
 *.tsbuildinfo
-.env
-.env.local
 .aws-sam/
 .DS_Store
 .commandcode/
@@ -20,7 +18,6 @@ __pycache__/
 *$py.class
 
 # IDE & Editor files
-.vscode/
 .idea/
 *.swp
 *.swo
@@ -28,3 +25,4 @@ __pycache__/
 # Output logs and temp files
 *.log
 tmp/
+config.bat
