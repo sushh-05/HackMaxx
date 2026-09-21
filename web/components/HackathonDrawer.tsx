@@ -114,6 +114,33 @@ export function HackathonDrawer({
     if (row) setRendered(row);
   }, [row]);
 
+  const [prefs, setPrefs] = useState(() => getUserPreferences());
+  useEffect(() => {
+    const handler = () => setPrefs(getUserPreferences());
+    window.addEventListener(PREFERENCES_UPDATED_EVENT, handler);
+    return () => window.removeEventListener(PREFERENCES_UPDATED_EVENT, handler);
+  }, []);
+
+  const personalFit = useMemo(() => {
+    if (!rendered) return null;
+    return calculatePersonalFit(
+      {
+        id: rendered.id,
+        title: rendered.title,
+        platform: rendered.platform,
+        mode: rendered.mode as "online" | "offline" | "hybrid",
+        prize_inr: rendered.prize_inr,
+        deadline: rendered.deadline,
+        tech_tags: rendered.tech_tags,
+        description: "",
+        reputation_score: 0.8,
+        difficulty_score: 0.5,
+        url: rendered.url,
+      },
+      prefs
+    );
+  }, [rendered, prefs]);
+
   // Lock background scroll when drawer is open.
   useEffect(() => {
     if (!open) return;
@@ -156,33 +183,6 @@ export function HackathonDrawer({
   const maxxHref = `/maxx?title=${encodeURIComponent(rendered.title)}&tags=${encodeURIComponent(
     rendered.tech_tags.join(", "),
   )}`;
-
-  const [prefs, setPrefs] = useState(() => getUserPreferences());
-  useEffect(() => {
-    const handler = () => setPrefs(getUserPreferences());
-    window.addEventListener(PREFERENCES_UPDATED_EVENT, handler);
-    return () => window.removeEventListener(PREFERENCES_UPDATED_EVENT, handler);
-  }, []);
-
-  const personalFit = useMemo(() => {
-    if (!rendered) return null;
-    return calculatePersonalFit(
-      {
-        id: rendered.id,
-        title: rendered.title,
-        platform: rendered.platform,
-        mode: rendered.mode as "online" | "offline" | "hybrid",
-        prize_inr: rendered.prize_inr,
-        deadline: rendered.deadline,
-        tech_tags: rendered.tech_tags,
-        description: "",
-        reputation_score: 0.8,
-        difficulty_score: 0.5,
-        url: rendered.url,
-      },
-      prefs
-    );
-  }, [rendered, prefs]);
 
   return (
     <div
