@@ -10,10 +10,13 @@ import { UserButton } from "@clerk/nextjs";
 import { IconZap } from "../../components/Icons";
 
 export default async function AppLayout({ children }: { children: React.ReactNode }): Promise<React.JSX.Element> {
-  const { userId } = await auth();
+  const clerkEnabled = process.env.CLERK_ENABLED === "true" || process.env.NEXT_PUBLIC_CLERK_ENABLED === "true";
 
-  if (!userId) {
-    redirect("/sign-in");
+  if (clerkEnabled) {
+    const { userId } = await auth();
+    if (!userId) {
+      redirect("/sign-in");
+    }
   }
 
   return (
