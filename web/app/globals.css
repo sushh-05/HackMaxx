@@ -3,129 +3,153 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* ---------- Theme: Notebook ----------
+/* ---------- Theme: Sunset Horizon ----------
  * 21st.dev theme by serafimcloud
- * https://21st.dev/community/themes/notebook
- * Architectural sketch / notebook paper aesthetic.
- * :root is light mode (paper white #f9f9f9), .dark is dark slate paper (#2b2b2b).
+ * https://21st.dev/community/themes/sunset-horizon
+ * Warm sunset gradient and rich horizon aesthetic.
+ * :root is light mode (sunset glow #fff9f5), .dark is deep dusk plum (#2a2024).
  */
 
 :root {
   color-scheme: light;
 
-  --background: #f9f9f9;
-  --foreground: #3a3a3a;
+  --background: #fff9f5;
+  --foreground: #3d3436;
   --card: #ffffff;
+  --card-foreground: #3d3436;
   --popover: #ffffff;
-  --primary: #606060;
-  --primary-fg: #f0f0f0;
-  --secondary: #dedede;
-  --secondary-fg: #3a3a3a;
-  --muted: #e3e3e3;
-  --muted-fg: #505050;
-  --accent: #f3eac8;
-  --accent-fg: #5d4037;
-  --destructive: #c87a7a;
+  --popover-foreground: #3d3436;
+  --primary: #ff7e5f;
+  --primary-fg: #ffffff;
+  --secondary: #ffedea;
+  --secondary-fg: #b35340;
+  --muted: #fff0eb;
+  --muted-fg: #78716c;
+  --accent: #feb47b;
+  --accent-fg: #3d3436;
+  --destructive: #e63946;
   --destructive-fg: #ffffff;
-  --border: #747272;
-  --input: #ffffff;
-  --ring: #a0a0a0;
+  --border: #ffe0d6;
+  --input: #ffe0d6;
+  --ring: #ff7e5f;
 
-  --chart-1: #333333;
-  --chart-2: #555555;
-  --chart-3: #777777;
-  --chart-4: #999999;
-  --chart-5: #bbbbbb;
+  --chart-1: #ff7e5f;
+  --chart-2: #feb47b;
+  --chart-3: #ffcaa7;
+  --chart-4: #ffad8f;
+  --chart-5: #ce6a57;
 
-  --sidebar: #f0f0f0;
-  --sidebar-fg: #3a3a3a;
-  --sidebar-primary: #606060;
-  --sidebar-primary-fg: #f0f0f0;
-  --sidebar-accent: #f3eac8;
-  --sidebar-accent-fg: #5d4037;
-  --sidebar-border: #c0c0c0;
-  --sidebar-ring: #a0a0a0;
+  --sidebar: #fff0eb;
+  --sidebar-fg: #3d3436;
+  --sidebar-primary: #ff7e5f;
+  --sidebar-primary-fg: #ffffff;
+  --sidebar-accent: #feb47b;
+  --sidebar-accent-fg: #3d3436;
+  --sidebar-border: #ffe0d6;
+  --sidebar-ring: #ff7e5f;
 
   /* surface ramp: page -> card -> raised */
   --surface: #ffffff;
-  --raised: #f0f0f0;
+  --raised: #ffedea;
 
-  /* semantic slots — light-mode values raised for WCAG AA (≥4.5:1 on #f9f9f9) */
-  --data: #44607a;
-  --money: #8a5a0a;
-  --deadline: #a03030;
-  --win: #3a7052;
+  /* semantic slots — WCAG AA compliant (≥4.5:1 on #fff9f5) */
+  --data: #845663;
+  --money: #b85d19;
+  --deadline: #e63946;
+  --win: #1b7a5a;
   --money-fg: #ffffff;
   --win-fg: #ffffff;
 
   --radius: 0.625rem;
-  --letter-spacing: 0.5px;
+  --letter-spacing: 0em;
   --spacing: 0.25rem;
 
-  --wash-1: rgba(96, 96, 96, 0.06);
-  --wash-2: rgba(243, 234, 200, 0.20);
-  --wash-3: rgba(200, 122, 122, 0.05);
-  --grad-brand: linear-gradient(135deg, #3a3a3a 0%, #606060 50%, #8c7e63 100%);
-  --grad-money: linear-gradient(135deg, #c89324 0%, #996515 100%);
-  --grad-win: linear-gradient(135deg, #4e8c65 0%, #3a3a3a 100%);
+  --wash-1: rgba(255, 126, 95, 0.05);
+  --wash-2: rgba(254, 180, 123, 0.12);
+  --wash-3: rgba(230, 57, 70, 0.04);
+  --grad-brand: linear-gradient(135deg, #ff7e5f 0%, #feb47b 100%);
+  --grad-money: linear-gradient(135deg, #b85d19 0%, #ff7e5f 100%);
+  --grad-win: linear-gradient(135deg, #1b7a5a 0%, #2ec4b6 100%);
+
+  /* CopilotKit Sunset Horizon bindings */
+  --copilot-kit-primary-color: var(--primary);
+  --copilot-kit-contrast-color: var(--primary-fg);
+  --copilot-kit-background-color: var(--card);
+  --copilot-kit-input-background-color: var(--background);
+  --copilot-kit-muted-color: var(--muted-fg);
+  --copilot-kit-separator-color: var(--border);
+  --copilot-kit-secondary-color: var(--secondary);
+  --copilot-kit-secondary-contrast-color: var(--secondary-fg);
 }
 
 .dark {
   color-scheme: dark;
 
-  --background: #2b2b2b;
-  --foreground: #dcdcdc;
-  --card: #333333;
-  --popover: #333333;
-  --primary: #b0b0b0;
-  --primary-fg: #2b2b2b;
-  --secondary: #5a5a5a;
-  --secondary-fg: #c0c0c0;
-  --muted: #454545;
-  --muted-fg: #a0a0a0;
-  --accent: #e0e0e0;
-  --accent-fg: #333333;
-  --destructive: #d9afaf;
-  --destructive-fg: #2b2b2b;
-  --border: #4f4f4f;
-  --input: #333333;
-  --ring: #c0c0c0;
+  --background: #2a2024;
+  --foreground: #f2e9e4;
+  --card: #392f35;
+  --card-foreground: #f2e9e4;
+  --popover: #392f35;
+  --popover-foreground: #f2e9e4;
+  --primary: #ff7e5f;
+  --primary-fg: #ffffff;
+  --secondary: #463a41;
+  --secondary-fg: #f2e9e4;
+  --muted: #30272c;
+  --muted-fg: #d7c6bc;
+  --accent: #feb47b;
+  --accent-fg: #2a2024;
+  --destructive: #e63946;
+  --destructive-fg: #ffffff;
+  --border: #463a41;
+  --input: #463a41;
+  --ring: #ff7e5f;
 
-  --chart-1: #efefef;
-  --chart-2: #d0d0d0;
-  --chart-3: #b0b0b0;
-  --chart-4: #909090;
-  --chart-5: #707070;
+  --chart-1: #ff7e5f;
+  --chart-2: #feb47b;
+  --chart-3: #ffcaa7;
+  --chart-4: #ffad8f;
+  --chart-5: #ce6a57;
 
-  --sidebar: #212121;
-  --sidebar-fg: #dcdcdc;
-  --sidebar-primary: #b0b0b0;
-  --sidebar-primary-fg: #212121;
-  --sidebar-accent: #e0e0e0;
-  --sidebar-accent-fg: #333333;
-  --sidebar-border: #4f4f4f;
-  --sidebar-ring: #c0c0c0;
+  --sidebar: #2a2024;
+  --sidebar-fg: #f2e9e4;
+  --sidebar-primary: #ff7e5f;
+  --sidebar-primary-fg: #ffffff;
+  --sidebar-accent: #feb47b;
+  --sidebar-accent-fg: #2a2024;
+  --sidebar-border: #463a41;
+  --sidebar-ring: #ff7e5f;
 
-  --surface: #333333;
-  --raised: #3d3d3d;
+  --surface: #392f35;
+  --raised: #463a41;
 
-  --data: #94a3b8;
-  --money: #f3eac8;
-  --deadline: #d9afaf;
-  --win: #7ec294;
-  --money-fg: #2b2b2b;
-  --win-fg: #2b2b2b;
+  --data: #d7c6bc;
+  --money: #feb47b;
+  --deadline: #ff6b7a;
+  --win: #5eead4;
+  --money-fg: #2a2024;
+  --win-fg: #2a2024;
 
   --radius: 0.625rem;
-  --letter-spacing: 0.5px;
+  --letter-spacing: 0em;
   --spacing: 0.25rem;
 
-  --wash-1: rgba(176, 176, 176, 0.08);
-  --wash-2: rgba(243, 234, 200, 0.08);
-  --wash-3: rgba(217, 175, 175, 0.05);
-  --grad-brand: linear-gradient(135deg, #ffffff 0%, #b0b0b0 50%, #f3eac8 100%);
-  --grad-money: linear-gradient(135deg, #f3eac8 0%, #e2b146 100%);
-  --grad-win: linear-gradient(135deg, #7ec294 0%, #b0b0b0 100%);
+  --wash-1: rgba(255, 126, 95, 0.08);
+  --wash-2: rgba(254, 180, 123, 0.10);
+  --wash-3: rgba(94, 234, 212, 0.04);
+  --grad-brand: linear-gradient(135deg, #ff7e5f 0%, #feb47b 100%);
+  --grad-money: linear-gradient(135deg, #feb47b 0%, #ff7e5f 100%);
+  --grad-win: linear-gradient(135deg, #5eead4 0%, #2ec4b6 100%);
+
+  /* CopilotKit Sunset Horizon bindings */
+  --copilot-kit-primary-color: var(--primary);
+  --copilot-kit-contrast-color: var(--primary-fg);
+  --copilot-kit-background-color: var(--card);
+  --copilot-kit-input-background-color: var(--background);
+  --copilot-kit-muted-color: var(--muted-fg);
+  --copilot-kit-separator-color: var(--border);
+  --copilot-kit-secondary-color: var(--secondary);
+  --copilot-kit-secondary-contrast-color: var(--secondary-fg);
 }
 
 @theme inline {
@@ -411,3 +435,94 @@ svg.lucide {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ---------- CopilotKit Bespoke UI/UX (Sunset Horizon) ---------- */
+
+.copilotKitPopup {
+  z-index: 50 !important;
+}
+
+.copilotKitWindow {
+  border-radius: 1.25rem !important;
+  border: 1px solid color-mix(in srgb, var(--primary) 35%, var(--border)) !important;
+  background: var(--card) !important;
+  box-shadow: 0 24px 50px -12px rgba(0, 0, 0, 0.5), 0 0 35px -5px color-mix(in srgb, var(--primary) 22%, transparent) !important;
+  backdrop-filter: blur(16px) !important;
+  overflow: hidden !important;
+  font-family: var(--font-sans) !important;
+}
+
+.copilotKitHeader {
+  background: color-mix(in srgb, var(--card) 85%, var(--muted)) !important;
+  border-bottom: 1px solid var(--border) !important;
+  padding: 0.85rem 1rem !important;
+}
+
+.copilotKitButton {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%) !important;
+  color: var(--primary-fg) !important;
+  border: 1px solid color-mix(in srgb, var(--primary) 65%, transparent) !important;
+  box-shadow: 0 8px 24px -4px color-mix(in srgb, var(--primary) 55%, transparent), 0 0 16px color-mix(in srgb, var(--accent) 35%, transparent) !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  border-radius: 9999px !important;
+}
+
+.copilotKitButton:hover {
+  transform: scale(1.08) !important;
+  box-shadow: 0 12px 30px -4px color-mix(in srgb, var(--primary) 65%, transparent), 0 0 22px color-mix(in srgb, var(--accent) 45%, transparent) !important;
+}
+
+.copilotKitMessages {
+  padding: 1rem !important;
+  gap: 0.75rem !important;
+}
+
+.copilotKitUserMessage {
+  background: var(--primary) !important;
+  color: var(--primary-fg) !important;
+  border-radius: 1rem 1rem 0.25rem 1rem !important;
+  padding: 0.65rem 0.9rem !important;
+  font-weight: 500 !important;
+}
+
+.copilotKitAssistantMessage {
+  background: color-mix(in srgb, var(--muted) 60%, var(--card)) !important;
+  color: var(--foreground) !important;
+  border-radius: 1rem 1rem 1rem 0.25rem !important;
+  padding: 0.75rem 1rem !important;
+  border: 1px solid var(--border) !important;
+}
+
+.copilotKitInput {
+  background: var(--background) !important;
+  border-top: 1px solid var(--border) !important;
+  padding: 0.75rem 1rem !important;
+}
+
+.copilotKitInputTextarea {
+  font-family: var(--font-sans) !important;
+  font-size: 0.85rem !important;
+  color: var(--foreground) !important;
+  background: var(--card) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 0.75rem !important;
+  padding: 0.6rem 0.85rem !important;
+  outline: none !important;
+}
+
+.copilotKitInputTextarea:focus {
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary) 25%, transparent) !important;
+}
+
+.copilotKitSendButton {
+  background: var(--primary) !important;
+  color: var(--primary-fg) !important;
+  border-radius: 0.6rem !important;
+  transition: transform 0.15s ease !important;
+}
+
+.copilotKitSendButton:hover {
+  transform: scale(1.05) !important;
+}
+

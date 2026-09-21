@@ -8,10 +8,10 @@
  * Zero layout shift when closed — the panel is `fixed` and translated fully
  * off-canvas, so it never participates in document flow.
  *
- * All colours are Notebook theme semantic tokens (action/data/money/deadline),
+ * All colours are Chalk Slate theme semantic tokens (action/data/money/deadline),
  * numbers are mono tabular-nums, icons come from ./Icons role exports.
  */
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { cn } from "cn";
 import {
   IconX,
@@ -29,9 +29,16 @@ import {
   IconTrendingUp,
   IconPin,
   IconPinOff,
+  IconUser,
+  IconCheck,
 } from "./Icons";
 import { getPlatformBadgeStyle } from "./HackathonCard";
 import { useCurrency } from "../lib/currency";
+import {
+  getUserPreferences,
+  calculatePersonalFit,
+  PREFERENCES_UPDATED_EVENT,
+} from "../lib/preferences";
 import { Button } from "./ui/button";
 import {
   Accordion,
@@ -149,6 +156,33 @@ export function HackathonDrawer({
   const maxxHref = `/maxx?title=${encodeURIComponent(rendered.title)}&tags=${encodeURIComponent(
     rendered.tech_tags.join(", "),
   )}`;
+
+  const [prefs, setPrefs] = useState(() => getUserPreferences());
+  useEffect(() => {
+    const handler = () => setPrefs(getUserPreferences());
+    window.addEventListener(PREFERENCES_UPDATED_EVENT, handler);
+    return () => window.removeEventListener(PREFERENCES_UPDATED_EVENT, handler);
+  }, []);
+
+  const personalFit = useMemo(() => {
+    if (!rendered) return null;
+    return calculatePersonalFit(
+      {
+        id: rendered.id,
+        title: rendered.title,
+        platform: rendered.platform,
+        mode: rendered.mode as "online" | "offline" | "hybrid",
+        prize_inr: rendered.prize_inr,
+        deadline: rendered.deadline,
+        tech_tags: rendered.tech_tags,
+        description: "",
+        reputation_score: 0.8,
+        difficulty_score: 0.5,
+        url: rendered.url,
+      },
+      prefs
+    );
+  }, [rendered, prefs]);
 
   return (
     <div
@@ -272,26 +306,71 @@ export function HackathonDrawer({
             </div>
           </div>
 
+          {/* Personal Fit Section */}
+          {personalFit && (
+            <div className="rounded-xl border border-primary/20 bg-primary/5 p-3 space-y-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-1.5 text-xs font-bold text-foreground">
+                  <IconUser className="size-3.5 text-primary" />
+                  <span>Personal Fit</span>
+                </div>
+                <span className="font-mono text-xs font-black text-primary px-2 py-0.5 rounded-full bg-primary/15 border border-primary/30">
+                  {personalFit.fitScore}% Fit
+                </span>
+              </div>
+              {personalFit.reasons.length > 0 && (
+                <div className="flex flex-wrap gap-1 pt-0.5">
+                  {personalFit.reasons.map((reason) => (
+                    <span
+                      key={reason}
+                      className="inline-flex items-center gap-1 text-[10px] font-mono px-2 py-0.5 rounded-md bg-muted/80 text-foreground border border-border"
+                    >
+                      <IconCheck className="size-2.5 text-win" />
+                      <span>{reason}</span>
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Tech tags */}
           {rendered.tech_tags.length > 0 && (
             <div className="space-y-1.5">
-              <span className="text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
-                Stack
-              </span>
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
+                  Stack
+                </span>
+                {personalFit && personalFit.matchedSkills.length > 0 && (
+                  <span className="text-[10px] font-mono text-primary font-semibold">
+                    {personalFit.matchedSkills.length} matches your profile
+                  </span>
+                )}
+              </div>
               <div className="flex flex-wrap items-center gap-1.5">
-                {rendered.tech_tags.map((t) => (
-                  <button
-                    key={t}
-                    type="button"
-                    onClick={() => {
-                      onTagClick?.(t);
-                      onClose();
-                    }}
-                    className="rounded-md border border-border bg-muted/60 px-2 py-0.5 font-mono text-[11px] text-muted-foreground transition-colors hover:border-action/40 hover:text-action"
-                  >
-                    #{t}
-                  </button>
-                ))}
+                {rendered.tech_tags.map((t) => {
+                  const isMatched = personalFit?.matchedSkills.some(
+                    (m) => m.toLowerCase() === t.toLowerCase()
+                  );
+                  return (
+                    <button
+                      key={t}
+                      type="button"
+                      onClick={() => {
+                        onTagClick?.(t);
+                        onClose();
+                      }}
+                      className={cn(
+                        "rounded-md border px-2 py-0.5 font-mono text-[11px] transition-colors",
+                        isMatched
+                          ? "border-primary/50 bg-primary/15 text-primary font-bold shadow-xs hover:bg-primary/25"
+                          : "border-border bg-muted/60 text-muted-foreground hover:border-action/40 hover:text-action"
+                      )}
+                    >
+                      #{t}
+                    </button>
+                  );
+                })}
               </div>
             </div>
           )}

@@ -12,7 +12,7 @@
 ## Aesthetic Direction
 - **Direction:** Industrial / Utilitarian — a **trading terminal for hackathons**. Dark-first, data-dense, mono numerics. The posture IS the design: portfolio math, played at night.
 - **Decoration level:** Intentional — existing radial gradient wash + glass cards. Nothing more.
-- **Mood:** Warm-precise but alive: olive glow, gold money numbers, a live pulse. Serious quant energy on parchment/umber, not corporate SaaS.
+- **Mood:** Crisp, cool-precise: chalk on deep slate blue-gray, luminous chalk gold money numbers, mint win badges, live pulse. Serious quant energy on slate, not corporate SaaS.
 - **Reference sites:** linear.app (dark-first + glow accent), vercel.com (info density, mono data, functional empty states). Deliberate departure from the marketplace feel of Devpost/Unstop.
 
 ## Typography
@@ -23,16 +23,16 @@
 - **Icons:** lucide-react at **1.75 stroke** (not the 2 default), set once via `svg.lucide` in `globals.css`. Every icon goes through `components/Icons.tsx`, which exports *roles* (`IconMoney`, `IconDeadline`, `IconWorth`…) rather than glyphs — swap the assignment there and every call site follows.
 
 ## Color
-- **Approach:** Supplied by the **Notebook** theme (21st.dev, by serafimcloud) — https://21st.dev/community/themes/notebook. An architectural blueprint / notebook paper palette: **graphite pencil (`#606060` / `#b0b0b0`) + parchment cream (`#f3eac8`) + slate pencil lead (`#62758d` / `#94a3b8`) + yellow highlighter ochre (`#c89324` / `#f3eac8`)**, on clean paper white (`#f9f9f9`) or dark slate notebook paper (`#2b2b2b`). Tokens live in `web/app/globals.css`.
-- **Dark (primary experience):** background `#2b2b2b` · card `#333333` · raised `#3d3d3d` · content `#dcdcdc` · muted `#a0a0a0` · border `#4f4f4f`
-- **Light (mirror):** background `#f9f9f9` · card `#ffffff` · popover `#ffffff` · content `#3a3a3a` · muted `#505050` · border `#747272`
-- **Accents:** primary `#b0b0b0` (dark) / `#606060` (light) · secondary `#5a5a5a` · accent `#e0e0e0` · destructive `#d9afaf`
+- **Approach:** Supplied by the **Sunset Horizon** theme (21st.dev, by serafimcloud) — https://21st.dev/community/themes/sunset-horizon. Warm sunset gradient and rich horizon aesthetic: **sunset coral lead (`#ff7e5f`) + sunset peach/gold (`#b85d19` / `#feb47b`) + ruby red (`#e63946` / `#ff6b7a`) + pine jade/mint green (`#1b7a5a` / `#5eead4`)**, on sunset glow light paper (`#fff9f5`) or deep dusk plum (`#2a2024`). Tokens live in `web/app/globals.css`.
+- **Dark (primary experience):** background `#2a2024` · card `#392f35` · raised `#463a41` · content `#f2e9e4` · muted `#d7c6bc` · border `#463a41`
+- **Light (mirror):** background `#fff9f5` · card `#ffffff` · popover `#ffffff` · content `#3d3436` · muted `#78716c` · border `#ffe0d6`
+- **Accents:** primary `#ff7e5f` · secondary `#463a41` (dark) / `#ffedea` (light) · accent `#feb47b` · destructive `#e63946`
 - **Semantic slots:**
-  - **`--color-action`** = primary pencil `#606060` (light) / `#b0b0b0` (dark) — buttons, prompts, focus, live state.
-  - **`--color-data`** = slate pencil `#62758d` (light) / `#94a3b8` (dark) — analysis accents, charts, timeline gradient.
-  - **`--color-money`** = highlighter gold `#c89324` (light) / `#f3eac8` (dark) — prize, EV, and worth scores ≥ 75.
-  - **`--color-deadline`** = red pencil `#c87a7a` (light) / `#d9afaf` (dark) — days-left pressure, closing soon.
-  - **`--color-win`** = green pencil `#4e8c65` (light) / `#7ec294` (dark) — high-reuse badges, success, pulse-dot.
+  - **`--color-action`** = primary `#ff7e5f` — buttons, prompts, focus, live state.
+  - **`--color-data`** = plum / rose cream `#845663` (light) / `#d7c6bc` (dark) — analysis accents, charts, timeline gradient.
+  - **`--color-money`** = sunset bronze/gold `#b85d19` (light) / `#feb47b` (dark) — prize, EV, and worth scores ≥ 75.
+  - **`--color-deadline`** = ruby red `#e63946` (light) / `#ff6b7a` (dark) — days-left pressure, closing soon.
+  - **`--color-win`** = pine jade / sunset mint `#1b7a5a` (light) / `#5eead4` (dark) — high-reuse badges, success, pulse-dot.
   - Each has a `--color-*-foreground` ink pair for filled surfaces (e.g. `bg-money text-money-foreground`).
 - **Dark mode:** the default and primary experience, applied as the `.dark` class on `<html>` (shadcn/ui convention; toggled by `ThemeToggle`). The light mode is `:root`.
 
@@ -81,5 +81,8 @@ Authoritative values live in `web/app/globals.css` as CSS variables: `:root` hol
 | 2026-09-20 | Worth score now renders the `W86` glyph, money at ≥75 | Implements the Layout rule that had been specified but never built; the bar is demoted to a hairline. |
 | 2026-09-20 | Dropdowns + breakdown moved to Radix `select`/`accordion`; `/` rebuilt as watchlist rows | The 21st.dev `market-watchlist` pattern finally lands the "ticker, not marketing card" posture. Radix select is what makes real icons-in-options possible. `native-select` removed as orphaned. |
 | 2026-09-20 | Palette + fonts switched to **Amber Slate** (21st.dev @serafimcloud) | User requested switch to Amber Slate. Warm terracotta amber primary (`#df6035`) with crisp slate accents and golden amber (`#e2b146`) money tokens. Outfit for sans, Fira Code for mono numerics. GitHub link moved from top-right to minimal sticky bottom-left component; Explore renamed to Dashboard. *(superseded by Notebook below)* |
-| 2026-09-20 | Palette + fonts switched to **Notebook** (21st.dev @serafimcloud) | User requested switch to Notebook theme (https://21st.dev/community/themes/notebook). Architectural sketch / notebook paper aesthetic: graphite pencil primary (`#606060`/`#b0b0b0`), parchment cream accent (`#f3eac8`), slate pencil lead (`#62758d`/`#94a3b8`), yellow highlighter ochre (`#c89324`/`#f3eac8`). Architects Daughter loaded as `--font-notebook` for authentic blueprint/notebook handwriting across headings and cards. |
+| 2026-09-20 | Palette + fonts switched to **Notebook** (21st.dev @serafimcloud) | User requested switch to Notebook theme (https://21st.dev/community/themes/notebook). Architectural sketch / notebook paper aesthetic: graphite pencil primary (`#606060`/`#b0b0b0`), parchment cream accent (`#f3eac8`), slate pencil lead (`#62758d`/`#94a3b8`), yellow highlighter ochre (`#c89324`/`#f3eac8`). Architects Daughter loaded as `--font-notebook` for authentic blueprint/notebook handwriting across headings and cards. *(superseded by Chalk Slate below)* |
 | 2026-09-20 | Typography switched from Architects Daughter to **Geist** + **Geist Mono** | User requested a slimmer, cleaner, modern font while keeping Instrument Serif for the brand wordmark. Geist brings crisp precision, high legibility, and modern developer tool posture. |
+| 2026-09-21 | Palette switched to **Chalk Slate** (21st.dev @serafimcloud) | User requested switch to Chalk Slate theme (https://21st.dev/community/themes/chalk-slate). Crisp chalk on deep slate blue-gray palette: slate background (`#141d2b` dark / `#f3f7fc` light), card (`#1a2533` dark / `#f9fcff` light), chalk slate lead (`#8da0b5` dark / `#364f6b` light), luminous chalk gold money tokens (`#f3d082` dark / `#966600` light), and mint win tokens (`#6ee7b7` dark / `#1d7348` light). All contrast ratios tested for WCAG AA. *(superseded by Sunset Horizon below)* |
+| 2026-09-21 | Palette switched to **Sunset Horizon** (21st.dev @serafimcloud) | User requested final switch to Sunset Horizon (https://21st.dev/community/themes/sunset-horizon). Warm sunset glow on deep dusk plum: background (`#2a2024` dark / `#fff9f5` light), card (`#392f35` dark / `#ffffff` light), sunset coral lead (`#ff7e5f`), warm sunset peach-gold (`#feb47b` dark / `#b85d19` light), ruby deadline (`#ff6b7a` dark / `#e63946` light), and pine jade/mint win (`#5eead4` dark / `#1b7a5a` light). All contrast ratios tested for WCAG AA. |
+

@@ -10,7 +10,7 @@
  *   - Pin button on the right pins to the top ticker
  *   - Clicking anywhere on the row opens the detail slide-over
  *   - Monospace tabular-nums for all figures (worth, prize, deadline days)
- *   - Semantic Notebook tokens only (money, win, deadline, action, data)
+ *   - Semantic Chalk Slate tokens only (money, win, deadline, action, data)
  */
 import { useState } from "react";
 import { cn } from "cn";

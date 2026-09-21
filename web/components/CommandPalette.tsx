@@ -11,6 +11,7 @@ import {
   IconTimeline,
   IconPortfolio,
   IconScale,
+  IconSettings,
   IconSun,
   IconMoon,
   IconMoney,
@@ -160,9 +161,20 @@ function PaletteDialog({ onClose }: { onClose: () => void }): React.JSX.Element 
         },
       },
       {
+        id: "go-settings",
+        label: "Go to Profile & Developer Settings",
+        hint: "/settings",
+        keywords: "profile settings preferences tech stack context copilot personalize",
+        icon: <IconSettings className="size-4" />,
+        run: () => {
+          close();
+          router.push("/settings");
+        },
+      },
+      {
         id: "toggle-theme",
         label: theme === "dark" ? "Toggle theme — switch to light" : "Toggle theme — switch to dark",
-        keywords: "dark light mode appearance notebook",
+        keywords: "dark light mode appearance sunset horizon",
         icon:
           theme === "dark" ? (
             <IconSun className="size-4" />

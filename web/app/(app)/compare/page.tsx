@@ -6,7 +6,7 @@
  * Reads staged ids from localStorage (client-only, guarded) with ?ids=a,b,c
  * as the URL fallback, fetches the catalog via fetchHackathons, and renders
  * attribute rows against 2-3 hackathon columns. The best value per row is
- * highlighted in the win colour. Semantic Notebook tokens only.
+ * highlighted in the win colour. Semantic Chalk Slate tokens only.
  */
 import React, { useEffect, useMemo, useState } from "react";
 import type { Hackathon } from "@hackmaxx/shared";

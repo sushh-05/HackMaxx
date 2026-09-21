@@ -7,6 +7,7 @@ import {
   IconTimeline,
   IconPortfolio,
   IconScale,
+  IconSettings,
   IconSearch,
 } from "./Icons";
 import { Kbd } from "./ui/kbd";
@@ -19,6 +20,7 @@ export function Nav(): React.JSX.Element {
   const isTimeline = path.startsWith("/timeline");
   const isPortfolio = path.startsWith("/portfolio");
   const isCompare = path.startsWith("/compare");
+  const isSettings = path.startsWith("/settings");
 
   const linkClass = (active: boolean) =>
     `flex items-center gap-1.5 px-1.5 sm:px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-xl transition-all duration-200 no-underline ${
@@ -53,6 +55,11 @@ export function Nav(): React.JSX.Element {
       <a href="/compare" className={linkClass(isCompare)} title="Compare">
         <IconScale className="size-3.5" />
         <span className="hidden lg:inline">Compare</span>
+      </a>
+
+      <a href="/settings" className={linkClass(isSettings)} title="Profile & Settings">
+        <IconSettings className="size-3.5" />
+        <span className="hidden xl:inline">Profile</span>
       </a>
 
       <button
