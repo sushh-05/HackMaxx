@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useMemo, useState } from "react";
 import type { Hackathon } from "@hackmaxx/shared";
-import { fetchHackathons } from "../../../lib/api";
+import { fetchHackathons, refreshHackathons } from "../../../lib/api";
 import { FiltersBar, type ModeFilter, type SortOption } from "../../../components/FiltersBar";
 import {
   IconCalendar,
@@ -11,14 +11,21 @@ import {
   IconZap,
   IconLayers,
   IconScale,
+  IconRefresh,
 } from "../../../components/Icons";
+import { PinTicker } from "../../../components/PinTicker";
+import { usePins } from "../../../lib/pins";
+import { quickFillProjects } from "../../../lib/quick-fill";
 import { useCurrency } from "../../../lib/currency";
 import { Button } from "../../../components/ui/button";
 import { HackathonWatchlist, type WatchlistRow } from "../../../components/ui/hackathon-watchlist";
 import { Alert, AlertTitle, AlertDescription } from "../../../components/ui/alert";
-import { PinTicker } from "../../../components/PinTicker";
 import { HackathonDrawer } from "../../../components/HackathonDrawer";
-import { usePins } from "../../../lib/pins";
+import {
+  getUserPreferences,
+  PREFERENCES_UPDATED_EVENT,
+  type UserPreferences,
+} from "../../../lib/preferences";
 
 const COMPARE_KEY = "hackmaxx:compare:v1";
 const COMPARE_MIN = 2;
@@ -39,6 +46,9 @@ export default function ExplorePage(): React.JSX.Element {
   const [err, setErr] = useState("");
   const [dataSource, setDataSource] = useState("Live index");
   const [fetchedAt, setFetchedAt] = useState<string | null>(null);
+  const [refreshing, setRefreshing] = useState(false);
+  const [quickFills] = useState(quickFillProjects);
+  const [prefs, setPrefs] = useState<UserPreferences>(getUserPreferences());
 
   // Drawer state
   const [drawerRow, setDrawerRow] = useState<WatchlistRow | null>(null);
@@ -49,6 +59,37 @@ export default function ExplorePage(): React.JSX.Element {
   // Compare state
   const [compareIds, setCompareIds] = useState<string[]>([]);
   const [compareRejected, setCompareRejected] = useState(false);
+
+  // Synchronize Copilot filter events & user preferences
+  useEffect(() => {
+    function onCopilotFilter(e: Event) {
+      const custom = e as CustomEvent<{ query?: string; format?: string; platform?: string }>;
+      if (!custom.detail) return;
+      if (typeof custom.detail.query === "string") setQ(custom.detail.query);
+      if (custom.detail.format) {
+        const fmt = custom.detail.format.toLowerCase();
+        if (fmt === "online" || fmt === "offline" || fmt === "hybrid" || fmt === "all") {
+          setMode(fmt as ModeFilter);
+        }
+      }
+      if (custom.detail.platform) {
+        setSelectedPlatform(custom.detail.platform);
+      }
+    }
+
+    function onPrefsUpdate(e: Event) {
+      const custom = e as CustomEvent<UserPreferences>;
+      if (custom.detail) setPrefs(custom.detail);
+      else setPrefs(getUserPreferences());
+    }
+
+    window.addEventListener("hackmaxx:copilot-filter", onCopilotFilter);
+    window.addEventListener(PREFERENCES_UPDATED_EVENT, onPrefsUpdate);
+    return () => {
+      window.removeEventListener("hackmaxx:copilot-filter", onCopilotFilter);
+      window.removeEventListener(PREFERENCES_UPDATED_EVENT, onPrefsUpdate);
+    };
+  }, []);
 
   useEffect(() => {
     try {
@@ -127,7 +168,10 @@ export default function ExplorePage(): React.JSX.Element {
       cancelled = true;
       clearTimeout(t);
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [q, mode]);
+
+  // Quick-fill cards for hackathoner convenience
 
   // Extract unique platforms
   const platforms = useMemo(() => {
@@ -181,6 +225,35 @@ export default function ExplorePage(): React.JSX.Element {
     setSort("deadline-asc");
   }
 
+  async function handleRefresh() {
+    setRefreshing(true);
+    setErr("");
+    try {
+      const result = await refreshHackathons();
+      setDataSource(`Live index · +${result.upserted} refreshed`);
+      await loadHackathons();
+    } catch {
+      setErr("Refresh failed — the discovery service may be unavailable.");
+    } finally {
+      setRefreshing(false);
+    }
+  }
+
+  async function loadHackathons() {
+    setLoading(true);
+    try {
+      const data = await fetchHackathons(q, mode);
+      setItems(data.items);
+      setDataSource(data.source);
+      setFetchedAt(data.fetchedAt);
+      setErr("");
+    } catch {
+      setErr("The hackathon index is unreachable right now — retry in a few seconds.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <section className="space-y-6 pt-4 sm:pt-6">
       {/* Pinned Hackathons Ticker */}
@@ -218,6 +291,16 @@ export default function ExplorePage(): React.JSX.Element {
                 <IconZap className="size-4" />
                 <span>Maxx My Project</span>
               </a>
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleRefresh}
+              disabled={refreshing}
+              className="rounded-2xl px-4 font-semibold border-border"
+            >
+              <IconRefresh className={`size-4 ${refreshing ? "animate-spin" : ""}`} />
+              <span>{refreshing ? "Refreshing…" : "Refresh index"}</span>
             </Button>
           </div>
         </div>
@@ -280,13 +363,38 @@ export default function ExplorePage(): React.JSX.Element {
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1 border-y border-border/70 py-2 text-[11px] font-medium tracking-wide text-muted-foreground">
           <span className="inline-flex items-center gap-1.5 uppercase">
             <span className="size-1.5 rounded-full bg-win shadow-[0_0_8px_var(--color-win)] motion-reduce:shadow-none" />
-            Live index
+            {dataSource}
           </span>
-          <span>{dataSource}</span>
           <span className="font-mono tabular-nums">
             {fetchedAt ? `Fetched ${new Date(fetchedAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}` : "Fetched just now"}
           </span>
           <span className="text-muted-foreground/70">Deadlines and prizes are checked at request time.</span>
+        </div>
+      )}
+
+      {/* Personalized Context Banner */}
+      {prefs && (
+        <div className="flex items-center justify-between gap-3 px-4 py-2.5 rounded-xl border border-primary/20 bg-card/40 backdrop-blur-sm text-xs">
+          <div className="flex items-center gap-2 overflow-hidden">
+            <span className="size-2 rounded-full bg-primary shrink-0" />
+            <span className="font-semibold text-foreground truncate">
+              {prefs.name} <span className="text-muted-foreground font-normal">(@{prefs.handle})</span>
+            </span>
+            <span className="hidden sm:inline text-muted-foreground">·</span>
+            <span className="hidden sm:inline text-primary font-mono font-medium truncate">
+              {prefs.role}
+            </span>
+            <span className="hidden md:inline text-muted-foreground">·</span>
+            <span className="hidden md:inline text-muted-foreground truncate">
+              Targeting {prefs.skills.slice(0, 3).join(", ")}{prefs.skills.length > 3 ? ` +${prefs.skills.length - 3}` : ""}
+            </span>
+          </div>
+          <a
+            href="/settings"
+            className="text-[11px] font-semibold text-primary hover:underline shrink-0 font-mono"
+          >
+            Tune Profile ❯
+          </a>
         </div>
       )}
 

@@ -114,13 +114,13 @@ export default function LandingPage(): React.JSX.Element {
           </a>
           <div className="flex items-center gap-2 sm:gap-3">
             <a
-              href="/sign-in"
+              href="/dashboard"
               className="rounded-xl px-4 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground"
             >
-              Sign in
+              Explore
             </a>
             <a
-              href="/sign-up"
+              href="/maxx"
               className="rounded-xl bg-primary px-4 py-2 text-sm font-bold text-primary-foreground shadow-sm shadow-primary/25 transition-opacity hover:opacity-90"
             >
               Start maxxing
@@ -149,17 +149,17 @@ export default function LandingPage(): React.JSX.Element {
 
           <div className="flex flex-col items-center justify-center gap-3 pt-1 sm:flex-row">
             <a
-              href="/sign-up"
+              href="/maxx"
               className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-primary px-8 py-3.5 text-base font-bold text-primary-foreground shadow-lg shadow-primary/25 transition-all hover:opacity-90 hover:shadow-xl sm:w-auto"
             >
-              Start maxxing
+              Maxx My Project
               <IconArrowRight className="size-4" />
             </a>
             <a
-              href="/sign-in"
+              href="/dashboard"
               className="w-full rounded-2xl border border-border bg-card/60 px-8 py-3.5 text-center text-base font-semibold text-foreground backdrop-blur-sm transition-colors hover:bg-muted sm:w-auto"
             >
-              Sign in
+              Explore hackathons
             </a>
           </div>
 

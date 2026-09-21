@@ -68,6 +68,15 @@ export async function fetchHackathons(q = "", mode = "", retries = 2): Promise<H
   }
 }
 
+export async function refreshHackathons(): Promise<{ upserted: number; found: number; note?: string }> {
+  const r = await fetch(`${BASE}/hackathons/refresh`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+  });
+  if (!r.ok) throw new Error(`Refresh failed (status ${r.status})`);
+  return await r.json();
+}
+
 export async function recommend(p: ProjectInput, retries = 1): Promise<RecommendResponse> {
   try {
     const r = await fetch(`${BASE}/recommend`, {

@@ -6,6 +6,7 @@ import { CurrencySelector } from "../../components/CurrencySelector";
 import { CurrencyProvider } from "../../lib/currency";
 import { StickyGithubBadge } from "../../components/StickyGithubBadge";
 import { CommandPalette } from "../../components/CommandPalette";
+import { HackMaxxCopilot } from "../../components/HackMaxxCopilot";
 import { UserButton } from "@clerk/nextjs";
 import { IconZap } from "../../components/Icons";
 
@@ -22,6 +23,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   return (
     <CurrencyProvider>
       <CommandPalette />
+      <HackMaxxCopilot />
       {/* Sticky frosted glass header */}
       <header className="sticky top-0 z-50 backdrop-blur-xl bg-card/85 border-b border-border/80">
         <div className="mx-auto max-w-6xl px-3 sm:px-6 h-16 flex items-center justify-between gap-2 sm:gap-4">

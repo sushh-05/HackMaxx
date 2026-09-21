@@ -39,6 +39,7 @@ import {
   X,
   SlidersVertical,
   RotateCcw,
+  RefreshCw,
   Flame,
   Gauge,
   Target,
@@ -64,6 +65,8 @@ import {
   BookmarkPlus,
   Trash2,
   ChartGantt,
+  User,
+  Settings,
 } from "lucide-react";
 
 // Bun's isolated linker can expose two identical @types/react paths. Cast at
@@ -121,6 +124,7 @@ export const IconSearch = appIcon(Search);
 export const IconFilters = appIcon(SlidersVertical);
 export const IconSliders = IconFilters;
 export const IconReset = appIcon(RotateCcw);
+export const IconRefresh = appIcon(RefreshCw);
 export const IconCopy = appIcon(Copy);
 export const IconCheck = appIcon(Check);
 export const IconX = appIcon(X);
@@ -138,6 +142,8 @@ export const IconCommand = appIcon(Command);
 export const IconSave = appIcon(BookmarkPlus);
 export const IconTrash = appIcon(Trash2);
 export const IconPortfolio = appIcon(Briefcase);
+export const IconUser = appIcon(User);
+export const IconSettings = appIcon(Settings);
 
 // --- status ---
 export const IconCheckCircle = appIcon(CircleCheck);

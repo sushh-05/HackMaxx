@@ -86,10 +86,8 @@ export async function listHackathons(): Promise<Hackathon[]> {
       const result = await ddb.send(new ScanCommand({ TableName: TABLE }));
       const items = (result.Items ?? []) as Hackathon[];
       if (items.length > 0) return items;
-      // Fallback to seed if DynamoDB returns empty
-      return loadSeed();
     } catch {
-      return loadSeed();
+      // fall through to seed
     }
   }
   return loadSeed();
